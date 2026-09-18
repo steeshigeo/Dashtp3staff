@@ -30,7 +30,7 @@
     "receipt": "100042643",
     "net_price": 6749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "01-08-2026",
@@ -217,7 +217,7 @@
     "receipt": "100042661",
     "net_price": 14499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "01-08-2026",
@@ -932,7 +932,7 @@
     "receipt": "100042657",
     "net_price": 4949000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "01-08-2026",
@@ -1020,7 +1020,7 @@
     "receipt": "100042657",
     "net_price": 269000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "01-08-2026",
@@ -1207,7 +1207,7 @@
     "receipt": "100042689",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "02-08-2026",
@@ -1218,7 +1218,7 @@
     "receipt": "100042717",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "02-08-2026",
@@ -1229,7 +1229,7 @@
     "receipt": "100042706",
     "net_price": 7099000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "02-08-2026",
@@ -1361,7 +1361,7 @@
     "receipt": "100042686",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "02-08-2026",
@@ -1834,7 +1834,7 @@
     "receipt": "100042707",
     "net_price": 12299000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "02-08-2026",
@@ -1966,7 +1966,7 @@
     "receipt": "100042672",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "02-08-2026",
@@ -1977,7 +1977,7 @@
     "receipt": "100042701",
     "net_price": 12299000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "02-08-2026",
@@ -2659,7 +2659,7 @@
     "receipt": "100042750",
     "net_price": 1029000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "03-08-2026",
@@ -2725,7 +2725,7 @@
     "receipt": "100042725",
     "net_price": 631200.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "04-08-2026",
@@ -2813,7 +2813,7 @@
     "receipt": "100042765",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "04-08-2026",
@@ -2901,7 +2901,7 @@
     "receipt": "100042757",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "04-08-2026",
@@ -2945,7 +2945,7 @@
     "receipt": "100042752",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "05-08-2026",
@@ -3451,7 +3451,7 @@
     "receipt": "100042798",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "05-08-2026",
@@ -3462,7 +3462,7 @@
     "receipt": "100042784",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "05-08-2026",
@@ -3649,7 +3649,7 @@
     "receipt": "100042820",
     "net_price": 899000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "06-08-2026",
@@ -3968,7 +3968,7 @@
     "receipt": "100042819",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "06-08-2026",
@@ -4012,7 +4012,7 @@
     "receipt": "100042832",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "07-08-2026",
@@ -4309,7 +4309,7 @@
     "receipt": "100042830",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "07-08-2026",
@@ -4353,7 +4353,7 @@
     "receipt": "100042834",
     "net_price": 4299000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "07-08-2026",
@@ -4584,7 +4584,7 @@
     "receipt": "100042903",
     "net_price": 4299000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "08-08-2026",
@@ -4595,7 +4595,7 @@
     "receipt": "100042872",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "08-08-2026",
@@ -4606,7 +4606,7 @@
     "receipt": "100042874",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "08-08-2026",
@@ -5057,7 +5057,7 @@
     "receipt": "100042867",
     "net_price": 10499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "08-08-2026",
@@ -5112,7 +5112,7 @@
     "receipt": "100042906",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "08-08-2026",
@@ -5123,7 +5123,7 @@
     "receipt": "100042902",
     "net_price": 10999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "08-08-2026",
@@ -5266,7 +5266,7 @@
     "receipt": "100042882",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "08-08-2026",
@@ -5420,7 +5420,7 @@
     "receipt": "100042885",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "08-08-2026",
@@ -5431,7 +5431,7 @@
     "receipt": "100042905",
     "net_price": 4299000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "08-08-2026",
@@ -5706,7 +5706,7 @@
     "receipt": "100042954",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -5838,7 +5838,7 @@
     "receipt": "100042961",
     "net_price": 4299000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -5926,7 +5926,7 @@
     "receipt": "100042919",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "09-08-2026",
@@ -5981,7 +5981,7 @@
     "receipt": "100042963",
     "net_price": 4299000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6113,7 +6113,7 @@
     "receipt": "100042962",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "09-08-2026",
@@ -6124,7 +6124,7 @@
     "receipt": "100042958",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6135,7 +6135,7 @@
     "receipt": "100042964",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6146,7 +6146,7 @@
     "receipt": "100042939",
     "net_price": 7399000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6157,7 +6157,7 @@
     "receipt": "100042939",
     "net_price": 1799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6201,7 +6201,7 @@
     "receipt": "100042939",
     "net_price": 859000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6212,7 +6212,7 @@
     "receipt": "100042939",
     "net_price": 859000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6278,7 +6278,7 @@
     "receipt": "100042958",
     "net_price": 379000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6289,7 +6289,7 @@
     "receipt": "100042958",
     "net_price": 849000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6311,7 +6311,7 @@
     "receipt": "100042922",
     "net_price": 10999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "09-08-2026",
@@ -6443,7 +6443,7 @@
     "receipt": "100042922",
     "net_price": 725000.0,
     "category": "Device",
-    "lob_focus": "iPad A16"
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "09-08-2026",
@@ -6487,7 +6487,7 @@
     "receipt": "100042923",
     "net_price": 13499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "09-08-2026",
@@ -6597,7 +6597,7 @@
     "receipt": "100042979",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "10-08-2026",
@@ -6608,7 +6608,7 @@
     "receipt": "100042985",
     "net_price": 4299000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "10-08-2026",
@@ -6817,7 +6817,7 @@
     "receipt": "100042991",
     "net_price": 7399000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "10-08-2026",
@@ -7169,7 +7169,7 @@
     "receipt": "100043003",
     "net_price": 11999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "11-08-2026",
@@ -7488,7 +7488,7 @@
     "receipt": "100043032",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "12-08-2026",
@@ -7499,7 +7499,7 @@
     "receipt": "100043029",
     "net_price": 4899000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "12-08-2026",
@@ -7576,7 +7576,7 @@
     "receipt": "100043020",
     "net_price": 1799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "12-08-2026",
@@ -7620,7 +7620,7 @@
     "receipt": "100043030",
     "net_price": 4899000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "12-08-2026",
@@ -7730,7 +7730,7 @@
     "receipt": "100043049",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "13-08-2026",
@@ -7763,7 +7763,7 @@
     "receipt": "100043043",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "13-08-2026",
@@ -7785,7 +7785,7 @@
     "receipt": "100043040",
     "net_price": 13499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "13-08-2026",
@@ -8049,7 +8049,7 @@
     "receipt": "100043056",
     "net_price": 4899000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "14-08-2026",
@@ -8126,7 +8126,7 @@
     "receipt": "100043067",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "14-08-2026",
@@ -8225,7 +8225,7 @@
     "receipt": "100043066",
     "net_price": 4299000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "14-08-2026",
@@ -8269,7 +8269,7 @@
     "receipt": "100043069",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "14-08-2026",
@@ -8302,7 +8302,7 @@
     "receipt": "100043070",
     "net_price": 269000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "15-08-2026",
@@ -8423,7 +8423,7 @@
     "receipt": "100043089",
     "net_price": 11499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "15-08-2026",
@@ -8555,7 +8555,7 @@
     "receipt": "100043092",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "15-08-2026",
@@ -8566,7 +8566,7 @@
     "receipt": "100043092",
     "net_price": 7399000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "15-08-2026",
@@ -8753,7 +8753,7 @@
     "receipt": "100043090",
     "net_price": 10499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "15-08-2026",
@@ -8808,7 +8808,7 @@
     "receipt": "100043109",
     "net_price": 10999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "15-08-2026",
@@ -8918,7 +8918,7 @@
     "receipt": "100043109",
     "net_price": 725000.0,
     "category": "Device",
-    "lob_focus": "iPad A16"
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "15-08-2026",
@@ -9039,7 +9039,7 @@
     "receipt": "100043073",
     "net_price": 859000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "15-08-2026",
@@ -9160,7 +9160,7 @@
     "receipt": "100043125",
     "net_price": 10999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "16-08-2026",
@@ -9325,7 +9325,7 @@
     "receipt": "100043123",
     "net_price": 289000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "16-08-2026",
@@ -9644,7 +9644,7 @@
     "receipt": "100043139",
     "net_price": 6799000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "16-08-2026",
@@ -9930,7 +9930,7 @@
     "receipt": "100043115",
     "net_price": 859000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "16-08-2026",
@@ -10546,7 +10546,7 @@
     "receipt": "100043188",
     "net_price": 4281000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "17-08-2026",
@@ -10689,7 +10689,7 @@
     "receipt": "100043183",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "17-08-2026",
@@ -10744,7 +10744,7 @@
     "receipt": "100043171",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "17-08-2026",
@@ -10755,7 +10755,7 @@
     "receipt": "100043163",
     "net_price": 13481000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "17-08-2026",
@@ -11008,7 +11008,7 @@
     "receipt": "100043217",
     "net_price": 8749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "18-08-2026",
@@ -11261,7 +11261,7 @@
     "receipt": "100043204",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "18-08-2026",
@@ -11272,7 +11272,7 @@
     "receipt": "100043197",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "18-08-2026",
@@ -11459,7 +11459,7 @@
     "receipt": "100043228",
     "net_price": 6749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "19-08-2026",
@@ -11503,7 +11503,7 @@
     "receipt": "100043228",
     "net_price": 289000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "19-08-2026",
@@ -11525,7 +11525,7 @@
     "receipt": "100043244",
     "net_price": 6749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "19-08-2026",
@@ -11536,7 +11536,7 @@
     "receipt": "100043235",
     "net_price": 6749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "19-08-2026",
@@ -11547,7 +11547,7 @@
     "receipt": "100043236",
     "net_price": 6749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "19-08-2026",
@@ -11602,7 +11602,7 @@
     "receipt": "100043244",
     "net_price": 859000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "19-08-2026",
@@ -11668,7 +11668,7 @@
     "receipt": "100043245",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "19-08-2026",
@@ -11866,7 +11866,7 @@
     "receipt": "100043246",
     "net_price": 6749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "19-08-2026",
@@ -12526,7 +12526,7 @@
     "receipt": "100043285",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "21-08-2026",
@@ -12581,7 +12581,7 @@
     "receipt": "100043292",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "21-08-2026",
@@ -12592,7 +12592,7 @@
     "receipt": "100043293",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "21-08-2026",
@@ -12823,7 +12823,7 @@
     "receipt": "100043290",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "21-08-2026",
@@ -12944,7 +12944,7 @@
     "receipt": "100043316",
     "net_price": 4349000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "22-08-2026",
@@ -12955,7 +12955,7 @@
     "receipt": "100043308",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "22-08-2026",
@@ -13098,7 +13098,7 @@
     "receipt": "100043304",
     "net_price": 6749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "22-08-2026",
@@ -13142,7 +13142,7 @@
     "receipt": "100043311",
     "net_price": 4349000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "22-08-2026",
@@ -13153,7 +13153,7 @@
     "receipt": "100043322",
     "net_price": 6749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "22-08-2026",
@@ -13406,7 +13406,7 @@
     "receipt": "100043337",
     "net_price": 10999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "23-08-2026",
@@ -13505,7 +13505,7 @@
     "receipt": "100043336",
     "net_price": 13499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "23-08-2026",
@@ -13615,7 +13615,7 @@
     "receipt": "100043334",
     "net_price": 489000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "23-08-2026",
@@ -13626,7 +13626,7 @@
     "receipt": "100043360",
     "net_price": 4349000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "23-08-2026",
@@ -13637,7 +13637,7 @@
     "receipt": "100043372",
     "net_price": 6749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "23-08-2026",
@@ -13747,7 +13747,7 @@
     "receipt": "100043373",
     "net_price": 489000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "23-08-2026",
@@ -13758,7 +13758,7 @@
     "receipt": "100043373",
     "net_price": 849000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "23-08-2026",
@@ -13923,7 +13923,7 @@
     "receipt": "100043371",
     "net_price": 4349000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "23-08-2026",
@@ -14044,7 +14044,7 @@
     "receipt": "100043333",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "23-08-2026",
@@ -14066,7 +14066,7 @@
     "receipt": "100043340",
     "net_price": 4349000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "23-08-2026",
@@ -14077,7 +14077,7 @@
     "receipt": "100043339",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "23-08-2026",
@@ -14297,7 +14297,7 @@
     "receipt": "100043394",
     "net_price": 13499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "24-08-2026",
@@ -14363,7 +14363,7 @@
     "receipt": "100043403",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "24-08-2026",
@@ -14440,7 +14440,7 @@
     "receipt": "100043378",
     "net_price": 849000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "24-08-2026",
@@ -14495,7 +14495,7 @@
     "receipt": "100043402",
     "net_price": 15499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "24-08-2026",
@@ -14561,7 +14561,7 @@
     "receipt": "100043389",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "24-08-2026",
@@ -14638,7 +14638,7 @@
     "receipt": "100043389",
     "net_price": 725000.0,
     "category": "Device",
-    "lob_focus": "iPad A16"
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "24-08-2026",
@@ -14836,7 +14836,7 @@
     "receipt": "100043410",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "25-08-2026",
@@ -14924,7 +14924,7 @@
     "receipt": "100043439",
     "net_price": 8999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "25-08-2026",
@@ -14935,7 +14935,7 @@
     "receipt": "100043424",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "25-08-2026",
@@ -14990,7 +14990,7 @@
     "receipt": "100043407",
     "net_price": 10499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "25-08-2026",
@@ -15078,7 +15078,7 @@
     "receipt": "100043415",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "25-08-2026",
@@ -15188,7 +15188,7 @@
     "receipt": "100043431",
     "net_price": 429000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "25-08-2026",
@@ -15386,7 +15386,7 @@
     "receipt": "100043460",
     "net_price": 4949000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "26-08-2026",
@@ -15463,7 +15463,7 @@
     "receipt": "100043454",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "26-08-2026",
@@ -15518,7 +15518,7 @@
     "receipt": "100043447",
     "net_price": 13499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "26-08-2026",
@@ -15650,7 +15650,7 @@
     "receipt": "100043469",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "26-08-2026",
@@ -15661,7 +15661,7 @@
     "receipt": "100043465",
     "net_price": 4349000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "26-08-2026",
@@ -15716,7 +15716,7 @@
     "receipt": "100043459",
     "net_price": 8499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "26-08-2026",
@@ -15727,7 +15727,7 @@
     "receipt": "100043458",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "26-08-2026",
@@ -15925,7 +15925,7 @@
     "receipt": "100043480",
     "net_price": 4349000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "27-08-2026",
@@ -16002,7 +16002,7 @@
     "receipt": "100043479",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "27-08-2026",
@@ -16057,7 +16057,7 @@
     "receipt": "100043478",
     "net_price": 4049000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "27-08-2026",
@@ -16266,7 +16266,7 @@
     "receipt": "100043508",
     "net_price": 4349000.0,
     "category": "Device",
-    "lob_focus": "AW SE"
+    "lob_focus": "AW"
   },
   {
     "date": "28-08-2026",
@@ -16387,7 +16387,7 @@
     "receipt": "100043494",
     "net_price": 6149000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "28-08-2026",
@@ -16409,7 +16409,7 @@
     "receipt": "100043502",
     "net_price": 4499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "28-08-2026",
@@ -16475,7 +16475,7 @@
     "receipt": "100043494",
     "net_price": 289000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "29-08-2026",
@@ -16794,7 +16794,7 @@
     "receipt": "100043538",
     "net_price": 10749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "iPad 11th"
   },
   {
     "date": "29-08-2026",
@@ -17003,7 +17003,7 @@
     "receipt": "100043530",
     "net_price": 319000.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "AW"
   },
   {
     "date": "29-08-2026",
