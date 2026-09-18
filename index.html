@@ -676,6 +676,57 @@
 
         const fmtRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
 
+        // Strict & Robust Category Classification Function
+        function classifyItemCategory(productName, article, groupCol) {
+            const p = String(productName || '').toUpperCase();
+            const art = String(article || '').toUpperCase();
+            const grp = String(groupCol || '').toUpperCase();
+
+            // 1. Check VAS Keywords
+            const vasKeywords = ['KLA', 'TSL', 'IDT', 'XXL', 'QOALA', 'TELKOMSEL', 'INDOSAT', 'XL', 'ESIM', 'MYPRIO', 'PROTEKSI', 'HCI'];
+            if (art !== 'MKLNEOSLEEVE' && vasKeywords.some(kw => art.includes(kw) || p.includes(kw))) {
+                return 'VAS';
+            }
+
+            // 2. Explicit Accessory Articles Override
+            const explicitAccArticles = new Set([
+                'UNQ8886463692554', 'UNQ8886463689141', 'ST1222-476GX-01', 'AUMA11-NL-BK-SL-M',
+                'UNQ8886463692561', 'PKEPL3SS-10-24', 'UNQ8886463688731', 'UNQ8886463692585',
+                'UNQ8886463688724', 'KOASP-MBA136', 'UNQ8886463692547', 'UNQ8886463688717',
+                'APPSWXY2Z/A', 'MKLNEOSLEEVE'
+            ]);
+            if (explicitAccArticles.has(art)) {
+                return 'Accessories';
+            }
+
+            // 3. Absolute Accessory Block Keywords (Anti-Bocor ke Device)
+            const accessoryBlockKeywords = [
+                'GLASS', 'TEMPERED', 'PROTECTOR', 'PROT', 'CASE', 'SLEEVE', 'SLVE', 'SCREEN', 
+                'KEYBOARD', 'MAGIC KEYBOARD', 'PENCIL', 'CABLE', 'ADAPTER', 'STRAP', 'BAND', 
+                'POUCH', 'BAG', 'HUB', 'AIRTAG', 'MOUSE', 'STAND', 'HOLDER', 'COVER', 'GUARD', 
+                'BATTERY', 'CHARGER', 'EARPODS', 'EARPOD', 'CAMDEN', 'MOVEN', 'UNIQ', 'STM', 'AUM A11', 'AC PLUS'
+            ];
+            if (accessoryBlockKeywords.some(ak => p.includes(ak))) {
+                return 'Accessories';
+            }
+
+            // 4. Check Device Keywords (iPhone, iPad, Mac/MBN/MBA/MBP, Apple Watch, AirPods)
+            const deviceKeywords = [
+                'IPHONE', 'IPAD', 'MACBOOK', 'IMAC', 'MACMINI', 'MAC MINI', 'MAC PRO', 'MACSTUDIO', 
+                'MBA', 'MBP', 'MBN', 'APPLE WATCH', 'WATCH ULTRA', 'WATCH SE', 'WATCH 11', 'WATCH 10', 
+                'WATCH 9', 'AIRPODS', 'AIRPOD'
+            ];
+            if (deviceKeywords.some(dk => p.includes(dk))) {
+                return 'Device';
+            }
+
+            // 5. Fallback to Source Group Column if available
+            if (grp.includes('DEVICES')) return 'Device';
+            if (grp.includes('ACCESSORIES')) return 'Accessories';
+
+            return 'Accessories';
+        }
+
         // Theme Switcher
         function initTheme() {
             const savedTheme = localStorage.getItem('theme');
@@ -740,7 +791,11 @@
                 const res = await fetch('data.json');
                 if (res.ok) {
                     const data = await res.json();
-                    rawData = data.filter(item => item.net_price > 0);
+                    // Re-classify item category strictly using our robust function
+                    rawData = data.filter(item => item.net_price > 0).map(item => ({
+                        ...item,
+                        category: classifyItemCategory(item.product_name, item.article, item.category)
+                    }));
                     initStaffSelector();
                     autoCalcTargets();
                     resetEqualStaffPercentages();
