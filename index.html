@@ -932,9 +932,16 @@
             const accSales = dayTx.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
             const vasSales = dayTx.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
 
-            // Mac = Device yang mengandung MBA, MBP, MBN, IMAC, MACMINI, MAC STUDIO
-            const macRegex = /\b(MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MAC STUDIO|MACSTUDIO)\b/i;
-            const macQty = dayTx.filter(r => r.category === 'Device' && macRegex.test(r.product_name)).length;
+            // Mac = Device yang mengandung MBA, MBP, MBN, IMAC, MACMINI, MAC STUDIO (dan bukan aksesori case/sleeve/screen)
+            const macRegex = /\b(MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MAC STUDIO|MACSTUDIO|MACBOOK|MAC)\b/i;
+            const macQty = dayTx.filter(r => {
+                if (r.category !== 'Device') return false;
+                const p = r.product_name.toUpperCase();
+                if (p.includes('SLEEVE') || p.includes('SLVE') || p.includes('CASE') || p.includes('SCREEN') || p.includes('PROTECTOR') || p.includes('BAG')) {
+                    return false;
+                }
+                return macRegex.test(r.product_name);
+            }).length;
 
             const ipadQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPAD')).length;
             const iphoneQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPHONE')).length;
