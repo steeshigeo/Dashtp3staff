@@ -1020,7 +1020,7 @@
     "receipt": "100043687",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "03-09-2026",
@@ -1240,7 +1240,7 @@
     "receipt": "100043691",
     "net_price": 25099000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "04-09-2026",
@@ -1724,7 +1724,7 @@
     "receipt": "100043719",
     "net_price": 28749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "05-09-2026",
@@ -1812,7 +1812,7 @@
     "receipt": "100043721",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "05-09-2026",
@@ -2252,7 +2252,7 @@
     "receipt": "100043720",
     "net_price": 31249000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "05-09-2026",
@@ -2604,7 +2604,7 @@
     "receipt": "100043761",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "06-09-2026",
@@ -2615,7 +2615,7 @@
     "receipt": "100043766",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "06-09-2026",
@@ -2879,7 +2879,7 @@
     "receipt": "100043765",
     "net_price": 38999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "06-09-2026",
@@ -2967,7 +2967,7 @@
     "receipt": "100043786",
     "net_price": 495200.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "07-09-2026",
@@ -3077,7 +3077,7 @@
     "receipt": "100043813",
     "net_price": 35249000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "07-09-2026",
@@ -3088,7 +3088,7 @@
     "receipt": "100043810",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "07-09-2026",
@@ -3363,7 +3363,7 @@
     "receipt": "100043830",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "08-09-2026",
@@ -3825,7 +3825,7 @@
     "receipt": "100043863",
     "net_price": 28749000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "09-09-2026",
@@ -4078,7 +4078,7 @@
     "receipt": "100043851",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "09-09-2026",
@@ -4661,7 +4661,7 @@
     "receipt": "100043903",
     "net_price": 38999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "11-09-2026",
@@ -4705,7 +4705,7 @@
     "receipt": "100043915",
     "net_price": 35249000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "11-09-2026",
@@ -4991,7 +4991,7 @@
     "receipt": "100043907",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "11-09-2026",
@@ -6124,7 +6124,7 @@
     "receipt": "100043951",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "12-09-2026",
@@ -6267,7 +6267,7 @@
     "receipt": "100043956",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "12-09-2026",
@@ -6586,7 +6586,7 @@
     "receipt": "100043996",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "13-09-2026",
@@ -6641,7 +6641,7 @@
     "receipt": "100043993",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "13-09-2026",
@@ -6949,7 +6949,7 @@
     "receipt": "100043997",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "13-09-2026",
@@ -7147,7 +7147,7 @@
     "receipt": "100044019",
     "net_price": 58499000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "13-09-2026",
@@ -7279,7 +7279,7 @@
     "receipt": "100044028",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "14-09-2026",
@@ -7554,7 +7554,7 @@
     "receipt": "100044033",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "14-09-2026",
@@ -7620,7 +7620,7 @@
     "receipt": "100044023",
     "net_price": 35249000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "14-09-2026",
@@ -7818,7 +7818,7 @@
     "receipt": "100044051",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "15-09-2026",
@@ -8115,7 +8115,7 @@
     "receipt": "100044077",
     "net_price": 495200.0,
     "category": "Accessories",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "17-09-2026",
@@ -8346,7 +8346,7 @@
     "receipt": "100044074",
     "net_price": 24999000.0,
     "category": "Device",
-    "lob_focus": null
+    "lob_focus": "MBN"
   },
   {
     "date": "17-09-2026",
