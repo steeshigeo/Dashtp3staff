@@ -932,19 +932,21 @@
             const accSales = dayTx.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
             const vasSales = dayTx.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
 
-            // Device Specific Quantities (Mac, iPad, iPhone, AW, AirPods)
-            const macRegex = /\b(MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MACPRO|MAC PRO)\b/i;
+            // Mac = Device yang merupakan MACBOOK / MAC (MBA, MBP, MBN, IMAC, MACMINI, MACPRO)
+            const macRegex = /\b(MACBOOK|MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MACPRO|MAC PRO|MAC)\b/i;
             const macQty = dayTx.filter(r => r.category === 'Device' && macRegex.test(r.product_name)).length;
+
             const ipadQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPAD')).length;
             const iphoneQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPHONE')).length;
             const awQty = dayTx.filter(r => r.category === 'Device' && (r.product_name.toUpperCase().includes('WATCH') || r.product_name.toUpperCase().includes('AW'))).length;
             const airpodsQty = dayTx.filter(r => r.product_name.toUpperCase().includes('AIRPOD')).length;
 
             // VAS Breakdown Nominal
-            const qoalaRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('QOALA'))).reduce((acc, r) => acc + r.net_price, 0);
-            const tslRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TELKOMSEL'))).reduce((acc, r) => acc + r.net_price, 0);
-            const idtRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('INDOSAT'))).reduce((acc, r) => acc + r.net_price, 0);
-            const xxlRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XL'))).reduce((acc, r) => acc + r.net_price, 0);
+            const vasItems = dayTx.filter(r => r.category === 'VAS');
+            const qoalaRp = vasItems.filter(r => r.article.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('QOALA')).reduce((acc, r) => acc + r.net_price, 0);
+            const tslRp = vasItems.filter(r => r.article.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TELKOMSEL')).reduce((acc, r) => acc + r.net_price, 0);
+            const idtRp = vasItems.filter(r => r.article.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('INDOSAT')).reduce((acc, r) => acc + r.net_price, 0);
+            const xxlRp = vasItems.filter(r => r.article.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XL')).reduce((acc, r) => acc + r.net_price, 0);
 
             const reportStr = `*M121 - Closing Report ${dateStr}*
 
