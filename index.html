@@ -457,20 +457,34 @@
         <!-- ==================== VIEW 8: TRANSACTIONS ==================== -->
         <div id="view-transactions" class="space-y-6 hidden">
             <div class="liquid-glass rounded-3xl p-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                    <div class="flex items-center gap-3">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+                    <div class="flex items-center gap-3 w-full lg:w-auto">
                         <i data-lucide="user" class="w-5 h-5 text-cyan-400"></i>
                         <select id="staffSelect" onchange="updateDashboard()" class="bg-slate-900/80 border border-white/20 rounded-2xl px-4 py-2.5 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="ALL">ALL STAFF</option>
                         </select>
                     </div>
 
-                    <!-- TABS CATEGORY FILTER -->
-                    <div class="liquid-glass p-1.5 rounded-2xl flex gap-1 overflow-x-auto w-full sm:w-auto">
-                        <button onclick="switchTab('ALL')" id="tab-ALL" class="ios-tab-active px-4 py-1.5 rounded-xl text-xs font-bold text-white whitespace-nowrap">Semua Items</button>
-                        <button onclick="switchTab('Device')" id="tab-Device" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">Device</button>
-                        <button onclick="switchTab('Accessories')" id="tab-Accessories" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">Accessories</button>
-                        <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">VAS</button>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full lg:w-auto">
+                        <!-- TABS CATEGORY FILTER -->
+                        <div class="liquid-glass p-1.5 rounded-2xl flex gap-1 overflow-x-auto w-full sm:w-auto">
+                            <button onclick="switchTab('ALL')" id="tab-ALL" class="ios-tab-active px-4 py-1.5 rounded-xl text-xs font-bold text-white whitespace-nowrap">Semua Items</button>
+                            <button onclick="switchTab('Device')" id="tab-Device" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">Device</button>
+                            <button onclick="switchTab('Accessories')" id="tab-Accessories" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">Accessories</button>
+                            <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">VAS</button>
+                        </div>
+
+                        <!-- SORTING BUTTON CONTROLS -->
+                        <div class="flex items-center gap-1.5 overflow-x-auto py-1 w-full sm:w-auto">
+                            <span class="text-xs font-bold opacity-60 whitespace-nowrap flex items-center gap-1">
+                                <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-indigo-400"></i> Sort:
+                            </span>
+                            <button onclick="setTxSort('name-asc')" id="sortBtn-name-asc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 transition whitespace-nowrap">Name A-Z</button>
+                            <button onclick="setTxSort('name-desc')" id="sortBtn-name-desc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 transition whitespace-nowrap">Name Z-A</button>
+                            <button onclick="setTxSort('amount-desc')" id="sortBtn-amount-desc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 transition whitespace-nowrap">Amount ↓</button>
+                            <button onclick="setTxSort('amount-asc')" id="sortBtn-amount-asc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 transition whitespace-nowrap">Amount ↑</button>
+                            <button onclick="setTxSort('date-desc')" id="sortBtn-date-desc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-indigo-500 text-white transition whitespace-nowrap">Date ↓</button>
+                        </div>
                     </div>
                 </div>
 
@@ -478,7 +492,7 @@
                     <h3 class="text-sm font-bold flex items-center gap-2">
                         <i data-lucide="list" class="w-4 h-4 text-blue-400"></i> Detail Item Terjual
                     </h3>
-                    <span id="itemCount" class="text-xs opacity-70">0 Item</span>
+                    <span id="itemCount" class="text-xs opacity-70 font-bold text-indigo-300">0 Item</span>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -591,28 +605,48 @@
         </div>
     </div>
 
-    <!-- MODAL 2: CLOSING REPORT DAILY TAP -->
+    <!-- MODAL 2: CLOSING REPORT & TRACKER REPORT DAILY TAP -->
     <div id="closingReportModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="liquid-glass rounded-3xl p-6 max-w-md w-full border border-white/20 shadow-2xl relative space-y-4">
+        <div class="liquid-glass rounded-3xl p-6 max-w-2xl w-full border border-white/20 shadow-2xl relative space-y-5 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-white/10 pb-3">
-                <h3 class="text-sm font-bold flex items-center gap-2">
-                    <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i> Closing Report
+                <h3 class="text-sm font-bold flex items-center gap-2 text-white">
+                    <i data-lucide="file-text" class="w-5 h-5 text-emerald-400"></i> Closing & Tracker Report
                 </h3>
                 <button onclick="toggleClosingModal(false)" class="opacity-70 hover:opacity-100 transition">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <!-- CLOSING REPORT TEXT FORMATTED -->
-            <div class="bg-slate-900/90 p-4 rounded-2xl border border-white/10 font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed select-all" id="closingReportText">
-                <!-- Dynamic Closing Report Content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- BOX 1: STANDARD CLOSING REPORT -->
+                <div class="space-y-3 bg-slate-900/80 p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block mb-2">1. M121 - Closing Report</span>
+                        <div class="font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed select-all" id="closingReportText">
+                            <!-- Dynamic Standard Closing Report -->
+                        </div>
+                    </div>
+                    <button onclick="copyClosingReportText()" id="btnCopyClosing" class="w-full mt-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-xs py-2 rounded-xl shadow-lg transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Closing Report
+                    </button>
+                </div>
+
+                <!-- BOX 2: CLOSING FOR TRACKER REPORT -->
+                <div class="space-y-3 bg-slate-900/80 p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block mb-2">2. M121 - Closing For Tracker</span>
+                        <div class="font-mono text-xs text-cyan-300 whitespace-pre-wrap leading-relaxed select-all" id="closingTrackerReportText">
+                            <!-- Dynamic Closing For Tracker Report -->
+                        </div>
+                    </div>
+                    <button onclick="copyTrackerReportText()" id="btnCopyTracker" class="w-full mt-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold text-xs py-2 rounded-xl shadow-lg transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Tracker Report
+                    </button>
+                </div>
             </div>
 
-            <div class="flex justify-end gap-2 pt-2">
-                <button onclick="toggleClosingModal(false)" class="px-4 py-2 rounded-xl text-xs font-semibold opacity-70 hover:opacity-100 bg-white/5 transition">Tutup</button>
-                <button onclick="copyClosingReportText()" id="btnCopyClosing" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-xs px-5 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5">
-                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Teks
-                </button>
+            <div class="flex justify-end pt-2 border-t border-white/10">
+                <button onclick="toggleClosingModal(false)" class="px-6 py-2 rounded-xl text-xs font-semibold opacity-80 hover:opacity-100 bg-white/10 transition">Tutup</button>
             </div>
         </div>
     </div>
@@ -660,6 +694,7 @@
         let rawData = [];
         let currentTab = 'ALL';
         let currentMainView = 'overview';
+        let currentTxSort = 'date-desc';
 
         let removedStaffs = new Set();
         let staffPercentConfig = {};
@@ -791,6 +826,20 @@
             document.getElementById('targetDay').value = Math.round(tMonth / 30);
         }
 
+        function setTxSort(sortType) {
+            currentTxSort = sortType;
+            ['name-asc', 'name-desc', 'amount-desc', 'amount-asc', 'date-desc'].forEach(st => {
+                const btn = document.getElementById(`sortBtn-${st}`);
+                if (!btn) return;
+                if (st === sortType) {
+                    btn.className = "px-2.5 py-1 rounded-xl text-[11px] font-bold bg-indigo-500 text-white shadow-md transition whitespace-nowrap";
+                } else {
+                    btn.className = "px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 opacity-70 transition whitespace-nowrap";
+                }
+            });
+            updateDashboard();
+        }
+
         window.addEventListener('DOMContentLoaded', async () => {
             initTheme();
             try {
@@ -807,7 +856,7 @@
                     }).map(item => ({
                         ...item,
                         category: classifyItemCategory(item.product_name, item.article, item.category)
-                    }));
+                    })).filter(item => item.category !== 'EXCLUDE');
 
                     initStaffSelector();
                     autoCalcTargets();
@@ -985,7 +1034,7 @@
             renderLobConfigInputs();
         }
 
-        // ==================== CLOSING REPORT MODAL POPUP ====================
+        // ==================== CLOSING REPORT & TRACKER MODAL POPUP ====================
         function toggleClosingModal(show) {
             const modal = document.getElementById('closingReportModal');
             if (show) modal.classList.remove('hidden');
@@ -1000,7 +1049,7 @@
             const accSales = dayTx.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
             const vasSales = dayTx.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
 
-            // Mac = Device yang mengandung MBA, MBP, MBN, IMAC, MACMINI, MAC STUDIO (dan bukan aksesori case/sleeve/screen)
+            // Mac = Device yang mengandung MBA, MBP, MBN, IMAC, MACMINI, MAC STUDIO (dan bukan aksesori)
             const macRegex = /\b(MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MAC STUDIO|MACSTUDIO|MACBOOK|MAC)\b/i;
             const macQty = dayTx.filter(r => {
                 if (r.category !== 'Device') return false;
@@ -1014,7 +1063,7 @@
             const ipadQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPAD')).length;
             const iphoneQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPHONE')).length;
             const awQty = dayTx.filter(r => r.category === 'Device' && (r.product_name.toUpperCase().includes('WATCH') || r.product_name.toUpperCase().includes('AW'))).length;
-            const airpodsQty = dayTx.filter(r => r.product_name.toUpperCase().includes('AIRPOD')).length;
+            const airpodsQtySummary = dayTx.filter(r => r.product_name.toUpperCase().includes('AIRPOD')).length;
 
             // VAS Breakdown Nominal
             const vasItems = dayTx.filter(r => r.category === 'VAS');
@@ -1023,6 +1072,7 @@
             const idtRp = vasItems.filter(r => r.article.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('INDOSAT')).reduce((acc, r) => acc + r.net_price, 0);
             const xxlRp = vasItems.filter(r => r.article.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XL')).reduce((acc, r) => acc + r.net_price, 0);
 
+            // LAPORAN 1: STANDARD CLOSING REPORT
             const reportStr = `*M121 - Closing Report ${dateStr}*
 
 Total Sales : ${fmtRp(totalSales)}
@@ -1034,14 +1084,53 @@ Mac : ${macQty}
 iPad : ${ipadQty}
 iPhone : ${iphoneQty}
 Apple Watch : ${awQty}
-AirPods : ${airpodsQty}
+AirPods : ${airpodsQtySummary}
 
 Qoala : ${fmtRp(qoalaRp)}
 Telkomsel : ${fmtRp(tslRp)}
 Indosat : ${fmtRp(idtRp)}
 XL : ${fmtRp(xxlRp)}`;
 
+            // LAPORAN 2: CLOSING FOR TRACKER REPORT
+            const airpodsItems = dayTx.filter(r => r.product_name.toUpperCase().includes('AIRPOD'));
+            const airpodsQty = airpodsItems.length;
+            const airpodsGroup = {};
+            airpodsItems.forEach(r => {
+                const name = r.product_name.trim();
+                airpodsGroup[name] = (airpodsGroup[name] || 0) + 1;
+            });
+            const airpodsListStr = Object.entries(airpodsGroup).map(([name, qty]) => `${name} (${qty})`).join(', ');
+            const airpodsDetailLine = airpodsQty > 0 ? `Airpods : ${airpodsQty} - ${airpodsListStr}` : `Airpods : 0 - None`;
+
+            const ipadItems = dayTx.filter(r => {
+                if (r.category !== 'Device') return false;
+                const p = r.product_name.toUpperCase();
+                if (p.includes('SLEEVE') || p.includes('SLVE') || p.includes('CASE') || p.includes('SCREEN') || p.includes('PROTECTOR') || p.includes('BAG') || p.includes('VERO') || p.includes('UNIQ') || p.includes('FOLIO') || p.includes('GLASS') || p.includes('KEYBOARD')) {
+                    return false;
+                }
+                return p.includes('IPAD');
+            });
+            const ipadQtyTracker = ipadItems.length;
+            const ipadGroup = {};
+            ipadItems.forEach(r => {
+                const name = r.product_name.trim();
+                ipadGroup[name] = (ipadGroup[name] || 0) + 1;
+            });
+            const ipadListStr = Object.entries(ipadGroup).map(([name, qty]) => `${name} (${qty})`).join(', ');
+            const ipadDetailLine = ipadQtyTracker > 0 ? `iPad : ${ipadQtyTracker} - ${ipadListStr}` : `iPad : 0 - None`;
+
+            const uniqueReceipts = new Set(
+                dayTx.map(r => r.receipt ? String(r.receipt).trim() : null)
+                     .filter(rc => rc && rc !== 'undefined' && rc !== 'null')
+            );
+
+            const trackerReportStr = `*M121  - Closing For Tracker ${dateStr}*
+${airpodsDetailLine}
+${ipadDetailLine}
+Total QTY Invoice : ${uniqueReceipts.size}`;
+
             document.getElementById('closingReportText').textContent = reportStr;
+            document.getElementById('closingTrackerReportText').textContent = trackerReportStr;
             toggleClosingModal(true);
         }
 
@@ -1052,7 +1141,20 @@ XL : ${fmtRp(xxlRp)}`;
                 btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Tersalin!`;
                 lucide.createIcons();
                 setTimeout(() => {
-                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Teks`;
+                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Closing Report`;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        function copyTrackerReportText() {
+            const text = document.getElementById('closingTrackerReportText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('btnCopyTracker');
+                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Tersalin!`;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Tracker Report`;
                     lucide.createIcons();
                 }, 2000);
             });
@@ -1176,6 +1278,16 @@ XL : ${fmtRp(xxlRp)}`;
             if (currentTab !== 'ALL') {
                 filtered = filtered.filter(r => r.category === currentTab);
             }
+
+            // Apply Sorting to Detail Item Terjual
+            filtered = [...filtered].sort((a, b) => {
+                if (currentTxSort === 'name-asc') return a.product_name.localeCompare(b.product_name);
+                if (currentTxSort === 'name-desc') return b.product_name.localeCompare(a.product_name);
+                if (currentTxSort === 'amount-desc') return b.net_price - a.net_price;
+                if (currentTxSort === 'amount-asc') return a.net_price - b.net_price;
+                if (currentTxSort === 'date-desc') return b.date.localeCompare(a.date);
+                return 0;
+            });
 
             const storeDataAll = rawData;
             const totalMonthStore = storeDataAll.reduce((acc, r) => acc + r.net_price, 0);
@@ -1468,19 +1580,31 @@ XL : ${fmtRp(xxlRp)}`;
             lobItemsConfig.forEach((lobItem) => {
                 const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
 
-                const storeTotalSold = storeDataAll.filter(matchFn).length;
-                const storeTotalTarget = lobItem.target * activeStaffs.length;
-                const storePct = storeTotalTarget ? Math.min(Math.round((storeTotalSold / storeTotalTarget) * 100), 100) : 0;
-                const storeRemaining = Math.max(storeTotalTarget - storeTotalSold, 0);
+                const lobSalesStore = storeDataAll.filter(matchFn);
+                const storeTotalSoldQty = lobSalesStore.length;
+                const storeTotalSoldNominal = lobSalesStore.reduce((acc, r) => acc + r.net_price, 0);
+
+                const storeTotalTargetQty = lobItem.target * activeStaffs.length;
+                const avgUnitPrice = storeTotalSoldQty > 0 ? (storeTotalSoldNominal / storeTotalSoldQty) : 15000000;
+                const storeTotalTargetNominal = storeTotalTargetQty * avgUnitPrice;
+
+                const storePct = storeTotalTargetQty ? Math.min(Math.round((storeTotalSoldQty / storeTotalTargetQty) * 100), 100) : 0;
+                const storeRemainingNominal = Math.max(storeTotalTargetNominal - storeTotalSoldNominal, 0);
 
                 const displayName = lobItem.name === 'iPad 11th' ? 'iPad A16' : lobItem.name;
 
                 let staffContributionRows = '';
                 activeStaffs.forEach(stf => {
                     const sData = rawData.filter(r => r.staff === stf);
-                    const staffSold = sData.filter(matchFn).length;
-                    const staffTarget = lobItem.target;
-                    const staffRem = Math.max(staffTarget - staffSold, 0);
+                    const staffSoldItems = sData.filter(matchFn);
+                    const staffSoldQty = staffSoldItems.length;
+                    const staffSoldNominal = staffSoldItems.reduce((acc, r) => acc + r.net_price, 0);
+
+                    const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
+                    const staffTargetQty = Math.round((storeTotalTargetQty * pctShare) / 100) || lobItem.target;
+                    const staffTargetNominal = staffTargetQty * avgUnitPrice;
+
+                    const staffRemNominal = Math.max(staffTargetNominal - staffSoldNominal, 0);
                     const role = staffRoleConfig[stf] || 'SA';
 
                     const sW1 = sData.filter(r => weekIntervals[0] && weekIntervals[0].dates.includes(r.date) && matchFn(r)).length;
@@ -1491,15 +1615,21 @@ XL : ${fmtRp(xxlRp)}`;
                     staffContributionRows += `
                         <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
                             <td class="py-2.5 px-3 font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold ml-1">(${role})</span></td>
-                            <td class="py-2.5 px-3 text-center opacity-70 font-mono">${staffTarget} Item</td>
-                            <td class="py-2.5 px-3 text-center font-bold text-purple-300 font-mono">${staffSold} Item</td>
+                            <td class="py-2.5 px-3 text-right font-bold text-indigo-300">
+                                ${fmtRp(staffTargetNominal)}
+                                <span class="text-[10px] opacity-60 font-normal block font-mono">(${staffTargetQty} Item)</span>
+                            </td>
+                            <td class="py-2.5 px-3 text-right font-bold text-purple-300 font-mono">
+                                ${fmtRp(staffSoldNominal)}
+                                <span class="text-[10px] opacity-60 font-normal block font-mono">(${staffSoldQty} Item)</span>
+                            </td>
                             <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW1}</td>
                             <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW2}</td>
                             <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW3}</td>
                             <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW4}</td>
                             <td class="py-2.5 px-3 text-center">
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${staffRem === 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-purple-500/20 text-purple-300'}">
-                                    ${staffRem === 0 ? 'Achieved!' : `Sisa: ${staffRem}`}
+                                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${staffRemNominal === 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-purple-500/20 text-purple-300'}">
+                                    ${staffRemNominal === 0 ? 'Achieved!' : `Sisa: ${fmtRp(staffRemNominal)}`}
                                 </span>
                             </td>
                         </tr>
@@ -1522,9 +1652,9 @@ XL : ${fmtRp(xxlRp)}`;
 
                         <div class="flex items-center gap-6">
                             <div class="text-right">
-                                <span class="text-2xl font-black">${storeTotalSold} <span class="text-xs font-normal opacity-70">/ ${storeTotalTarget} Item</span></span>
-                                <p class="text-[11px] font-semibold ${storeRemaining === 0 ? 'text-emerald-400' : 'text-purple-300'}">
-                                    ${storeRemaining === 0 ? 'Target Store Achieved!' : `Sisa Store: ${storeRemaining} Item`}
+                                <span class="text-xl font-black">${fmtRp(storeTotalSoldNominal)} <span class="text-xs font-normal opacity-70">(${storeTotalSoldQty} / ${storeTotalTargetQty} Item)</span></span>
+                                <p class="text-[11px] font-semibold ${storeRemainingNominal === 0 ? 'text-emerald-400' : 'text-purple-300'}">
+                                    ${storeRemainingNominal === 0 ? 'Target Store Achieved!' : `Sisa Store: ${fmtRp(storeRemainingNominal)}`}
                                 </p>
                             </div>
                             <span class="text-xs font-black px-3 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${storePct}% Store</span>
@@ -1536,18 +1666,18 @@ XL : ${fmtRp(xxlRp)}`;
                     </div>
 
                     <div class="pt-2">
-                        <h4 class="text-xs font-bold uppercase opacity-70 tracking-wider mb-3">Detail Kontribusi & Target Breakdown Per Staff:</h4>
+                        <h4 class="text-xs font-bold uppercase opacity-70 tracking-wider mb-3">Detail Breakdown Target Individual (Nominal Amount) Per Staff:</h4>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="opacity-70 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
                                         <th class="pb-2 px-3">Nama Staff</th>
-                                        <th class="pb-2 px-3 text-center">Target Individual</th>
-                                        <th class="pb-2 px-3 text-center">Total Terjual</th>
-                                        <th class="pb-2 px-3 text-center">W1</th>
-                                        <th class="pb-2 px-3 text-center">W2</th>
-                                        <th class="pb-2 px-3 text-center">W3</th>
-                                        <th class="pb-2 px-3 text-center">W4</th>
+                                        <th class="pb-2 px-3 text-right">Target Individual (Rp)</th>
+                                        <th class="pb-2 px-3 text-right">Total Terjual (Rp)</th>
+                                        <th class="pb-2 px-3 text-center">W1 Qty</th>
+                                        <th class="pb-2 px-3 text-center">W2 Qty</th>
+                                        <th class="pb-2 px-3 text-center">W3 Qty</th>
+                                        <th class="pb-2 px-3 text-center">W4 Qty</th>
                                         <th class="pb-2 px-3 text-center">Status</th>
                                     </tr>
                                 </thead>
