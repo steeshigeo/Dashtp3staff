@@ -493,7 +493,7 @@
                             <button onclick="toggleSortDropdown()" id="sortDropdownToggleBtn" class="liquid-glass px-4 py-2 rounded-2xl text-xs font-bold text-white flex items-center justify-between gap-2 border border-white/10 hover:border-indigo-500/40 transition w-full sm:w-auto">
                                 <span class="flex items-center gap-1.5">
                                     <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-indigo-400"></i>
-                                    <span id="currentSortLabel">Date ↓</span>
+                                    <span id="currentSortLabel">Date Terbaru (↓)</span>
                                 </span>
                                 <i data-lucide="chevron-down" id="sortChevronIcon" class="w-3.5 h-3.5 opacity-70 transition-transform duration-300"></i>
                             </button>
@@ -549,7 +549,7 @@
 
     </div>
 
-    <!-- MODAL 1: CONFIG TARGET & STAFF PERCENTAGE -->
+    <!-- MODAL 1: CONFIG TARGET & STAFF PERCENTAGE & CLOUD SYNC -->
     <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="liquid-glass rounded-3xl p-6 max-w-3xl w-full border border-white/20 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
@@ -561,12 +561,35 @@
                 </button>
             </div>
 
+            <!-- ONLINE CLOUD SYNC CONTROL SECTION -->
+            <div class="space-y-3 bg-indigo-950/40 p-4 rounded-2xl border border-indigo-500/30">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="cloud" class="w-4 h-4 text-indigo-400"></i> Online Progress Sync (Multi-Device)
+                    </h3>
+                    <span id="cloudStatusLbl" class="text-[10px] font-bold text-emerald-400">Synced Local</span>
+                </div>
+                <p class="text-[11px] opacity-70">Gunakan Kode Toko yang sama di device lain agar progres target & config tidak hilang.</p>
+
+                <div class="flex flex-col sm:flex-row items-center gap-2">
+                    <input type="text" id="storeSyncCode" value="M121-STORE" class="w-full sm:w-1/2 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-indigo-500" placeholder="Kode Toko (contoh: M121-STORE)">
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <button onclick="pushToCloudSync()" id="btnPushCloud" class="flex-1 sm:flex-none bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition flex items-center justify-center gap-1">
+                            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Push to Cloud
+                        </button>
+                        <button onclick="pullFromCloudSync()" id="btnPullCloud" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 text-white border border-white/10 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center justify-center gap-1">
+                            <i data-lucide="download-cloud" class="w-3.5 h-3.5 text-cyan-400"></i> Pull from Cloud
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- 1. TARGET REVENUE STORE -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
                 <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">1. Target Sales Revenue Store (Rp)</h3>
                 <div>
                     <label class="text-xs opacity-70">Target Month Store (Rp)</label>
-                    <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets(); renderStaffPercentInputs();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets(); renderStaffPercentInputs(); saveConfigToLocal();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -586,15 +609,15 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                         <label class="text-xs opacity-70">Target Device Store (Rp)</label>
-                        <input type="number" id="targetDevice" value="75000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetDevice" value="75000000" onchange="saveConfigToLocal();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
                         <label class="text-xs opacity-70">Target Aksesori Store (Rp)</label>
-                        <input type="number" id="targetAccessories" value="15000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetAccessories" value="15000000" onchange="saveConfigToLocal();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
                         <label class="text-xs opacity-70">Target VAS Store (Rp)</label>
-                        <input type="number" id="targetVAS" value="10000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetVAS" value="10000000" onchange="saveConfigToLocal();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                 </div>
             </div>
@@ -686,7 +709,7 @@
         </div>
     </div>
 
-    <!-- MODAL 3: DETAIL ITEMS STAFF TAP -->
+    <!-- MODAL 3: DETAIL ITEMS STAFF TAP WITH COPY BUTTON -->
     <div id="staffItemsModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="liquid-glass rounded-3xl p-6 max-w-2xl w-full border border-white/20 shadow-2xl relative space-y-4 max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center border-b border-white/10 pb-3">
@@ -717,9 +740,15 @@
                 </table>
             </div>
 
-            <div class="flex justify-between items-center border-t border-white/10 pt-3">
-                <span id="staffModalTotalQty" class="text-xs font-bold opacity-70">Total: 0 Item</span>
-                <span id="staffModalTotalNominal" class="text-xs font-black text-emerald-400">Rp 0</span>
+            <div class="flex justify-between items-center border-t border-white/10 pt-3 gap-2">
+                <div class="flex flex-col">
+                    <span id="staffModalTotalQty" class="text-xs font-bold opacity-70">Total: 0 Item</span>
+                    <span id="staffModalTotalNominal" class="text-xs font-black text-emerald-400">Rp 0</span>
+                </div>
+                <!-- SALIN BUTTON ON POPUP MODAL -->
+                <button onclick="copyStaffModalItems()" id="btnCopyStaffModal" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Rincian Item
+                </button>
             </div>
         </div>
     </div>
@@ -803,6 +832,112 @@
             return 'Accessories';
         }
 
+        // ==================== PERSISTENCE & LOCAL STORAGE ENGINE ====================
+        function saveConfigToLocal() {
+            const configData = {
+                targetMonth: document.getElementById('targetMonth').value,
+                targetDevice: document.getElementById('targetDevice').value,
+                targetAccessories: document.getElementById('targetAccessories').value,
+                targetVAS: document.getElementById('targetVAS').value,
+                staffPercentConfig,
+                staffRoleConfig,
+                lobItemsConfig,
+                removedStaffs: Array.from(removedStaffs),
+                storeSyncCode: document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE'
+            };
+            localStorage.setItem('m121_sales_config', JSON.stringify(configData));
+        }
+
+        function loadConfigFromLocal() {
+            const saved = localStorage.getItem('m121_sales_config');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.targetMonth) document.getElementById('targetMonth').value = parsed.targetMonth;
+                    if (parsed.targetDevice) document.getElementById('targetDevice').value = parsed.targetDevice;
+                    if (parsed.targetAccessories) document.getElementById('targetAccessories').value = parsed.targetAccessories;
+                    if (parsed.targetVAS) document.getElementById('targetVAS').value = parsed.targetVAS;
+                    if (parsed.staffPercentConfig) staffPercentConfig = parsed.staffPercentConfig;
+                    if (parsed.staffRoleConfig) staffRoleConfig = parsed.staffRoleConfig;
+                    if (parsed.lobItemsConfig) lobItemsConfig = parsed.lobItemsConfig;
+                    if (parsed.removedStaffs) removedStaffs = new Set(parsed.removedStaffs);
+                    if (parsed.storeSyncCode && document.getElementById('storeSyncCode')) {
+                        document.getElementById('storeSyncCode').value = parsed.storeSyncCode;
+                    }
+                    autoCalcTargets();
+                } catch(e) { console.error("Error loading config", e); }
+            }
+        }
+
+        // ONLINE CLOUD SYNC ENGINE (KV PUBLIC REST ENGINE)
+        async function pushToCloudSync() {
+            const syncCode = (document.getElementById('storeSyncCode').value || 'M121-STORE').trim().toUpperCase();
+            const btn = document.getElementById('btnPushCloud');
+            const lbl = document.getElementById('cloudStatusLbl');
+
+            saveConfigToLocal();
+            const payload = localStorage.getItem('m121_sales_config');
+
+            if (btn) btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Saving...`;
+            lucide.createIcons();
+
+            try {
+                const res = await fetch(`https://kvdb.io/2V1Y45uKkK83dM4M5w42Jz/${syncCode}`, {
+                    method: 'POST',
+                    body: payload
+                });
+                if (res.ok) {
+                    if (lbl) lbl.textContent = 'Synced Online ✓';
+                    if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Success!`;
+                } else {
+                    throw new Error('Push failed');
+                }
+            } catch(e) {
+                if (lbl) lbl.textContent = 'Local Saved Only';
+                if (btn) btn.innerHTML = `<i data-lucide="cloud-off" class="w-3.5 h-3.5 text-amber-300"></i> Local Saved`;
+            }
+
+            lucide.createIcons();
+            setTimeout(() => {
+                if (btn) btn.innerHTML = `<i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Push to Cloud`;
+                lucide.createIcons();
+            }, 2500);
+        }
+
+        async function pullFromCloudSync() {
+            const syncCode = (document.getElementById('storeSyncCode').value || 'M121-STORE').trim().toUpperCase();
+            const btn = document.getElementById('btnPullCloud');
+            const lbl = document.getElementById('cloudStatusLbl');
+
+            if (btn) btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-cyan-400"></i> Fetching...`;
+            lucide.createIcons();
+
+            try {
+                const res = await fetch(`https://kvdb.io/2V1Y45uKkK83dM4M5w42Jz/${syncCode}`);
+                if (res.ok) {
+                    const cloudDataStr = await res.text();
+                    if (cloudDataStr && cloudDataStr.startsWith('{')) {
+                        localStorage.setItem('m121_sales_config', cloudDataStr);
+                        loadConfigFromLocal();
+                        updateDashboard();
+                        if (lbl) lbl.textContent = 'Synced Online ✓';
+                        if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Updated!`;
+                    }
+                } else {
+                    throw new Error('No Cloud Data');
+                }
+            } catch(e) {
+                if (lbl) lbl.textContent = 'No Cloud Data';
+                if (btn) btn.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-rose-300"></i> Not Found`;
+            }
+
+            lucide.createIcons();
+            setTimeout(() => {
+                if (btn) btn.innerHTML = `<i data-lucide="download-cloud" class="w-3.5 h-3.5 text-cyan-400"></i> Pull from Cloud`;
+                lucide.createIcons();
+            }, 2500);
+        }
+
         // Theme Switcher
         function initTheme() {
             const savedTheme = localStorage.getItem('theme');
@@ -851,6 +986,7 @@
         }
 
         function saveConfigModal() {
+            saveConfigToLocal();
             toggleConfigModal(false);
             updateDashboard();
         }
@@ -918,6 +1054,8 @@
 
         window.addEventListener('DOMContentLoaded', async () => {
             initTheme();
+            loadConfigFromLocal();
+
             try {
                 const res = await fetch('data.json');
                 if (res.ok) {
@@ -936,7 +1074,9 @@
 
                     initStaffSelector();
                     autoCalcTargets();
-                    resetEqualStaffPercentages();
+                    if (Object.keys(staffPercentConfig).length === 0) {
+                        resetEqualStaffPercentages();
+                    }
                     updateDashboard();
                 }
             } catch (err) {
@@ -982,12 +1122,14 @@
             removedStaffs.add(staffName);
             delete staffPercentConfig[staffName];
             resetEqualStaffPercentages();
+            saveConfigToLocal();
             updateDashboard();
         }
 
         function restoreAllRemovedStaffs() {
             removedStaffs.clear();
             resetEqualStaffPercentages();
+            saveConfigToLocal();
             updateDashboard();
         }
 
@@ -1000,6 +1142,7 @@
                 if (!staffRoleConfig[s]) staffRoleConfig[s] = 'SA';
             });
             renderStaffPercentInputs();
+            saveConfigToLocal();
         }
 
         function renderStaffPercentInputs() {
@@ -1060,102 +1203,12 @@
         function updateStaffPct(staffName, val) {
             staffPercentConfig[staffName] = parseFloat(val) || 0;
             renderStaffPercentInputs();
+            saveConfigToLocal();
         }
 
         function updateStaffRole(staffName, val) {
             staffRoleConfig[staffName] = val.trim() || 'SA';
-        }
-
-        // ==================== CONFIG: LOB DYNAMIC & WEEKLY CALENDAR MANAGEMENT ====================
-        function renderLobConfigInputs() {
-            const container = document.getElementById('lobConfigListContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            lobItemsConfig.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = 'bg-slate-900/80 p-3.5 rounded-2xl border border-white/10 space-y-2.5 text-xs';
-                div.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <input type="text" value="${item.name}" onchange="updateLobItem(${index}, 'name', this.value)" class="flex-1 bg-slate-800 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-indigo-500" placeholder="Nama LOB">
-                        
-                        <div class="flex items-center gap-1">
-                            <span class="text-[10px] font-bold text-purple-300">Total Qty:</span>
-                            <input type="number" value="${item.target || 0}" onchange="updateLobItemTotalTarget(${index}, this.value)" class="w-16 bg-slate-800 border border-purple-500/50 rounded-xl px-2 py-1 text-center text-xs text-white focus:outline-none font-extrabold" title="Ubah total target per bulan">
-                        </div>
-
-                        <button onclick="deleteLobItem(${index})" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition" title="Hapus LOB">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-
-                    <div class="space-y-1">
-                        <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Breakdown Target Per Week (Apple Calendar W10 - W14):</span>
-                        <div class="grid grid-cols-5 gap-1.5">
-                            <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W10</span>
-                                <input type="number" value="${item.w10 || 0}" oninput="updateLobItemWeek(${index}, 'w10', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
-                            </div>
-                            <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W11</span>
-                                <input type="number" value="${item.w11 || 0}" oninput="updateLobItemWeek(${index}, 'w11', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
-                            </div>
-                            <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W12</span>
-                                <input type="number" value="${item.w12 || 0}" oninput="updateLobItemWeek(${index}, 'w12', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
-                            </div>
-                            <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W13</span>
-                                <input type="number" value="${item.w13 || 0}" oninput="updateLobItemWeek(${index}, 'w13', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
-                            </div>
-                            <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W14</span>
-                                <input type="number" value="${item.w14 || 0}" oninput="updateLobItemWeek(${index}, 'w14', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-            lucide.createIcons();
-        }
-
-        function addLobItemConfig() {
-            const newId = 'lob_' + Date.now();
-            lobItemsConfig.push({ id: newId, name: 'Item LOB Baru', key: 'Item LOB Baru', target: 25, w10: 5, w11: 5, w12: 5, w13: 5, w14: 5 });
-            renderLobConfigInputs();
-        }
-
-        function updateLobItem(index, field, val) {
-            lobItemsConfig[index][field] = val;
-            if (field === 'name') lobItemsConfig[index].key = val;
-        }
-
-        function updateLobItemWeek(index, weekKey, val) {
-            lobItemsConfig[index][weekKey] = parseInt(val) || 0;
-            // Sum all weeks to update Total Target automatically
-            const item = lobItemsConfig[index];
-            item.target = (item.w10 || 0) + (item.w11 || 0) + (item.w12 || 0) + (item.w13 || 0) + (item.w14 || 0);
-            renderLobConfigInputs();
-        }
-
-        function updateLobItemTotalTarget(index, val) {
-            const total = parseInt(val) || 0;
-            lobItemsConfig[index].target = total;
-            // Auto distribute target to W10 - W14
-            const base = Math.floor(total / 5);
-            const rem = total % 5;
-            lobItemsConfig[index].w10 = base + rem;
-            lobItemsConfig[index].w11 = base;
-            lobItemsConfig[index].w12 = base;
-            lobItemsConfig[index].w13 = base;
-            lobItemsConfig[index].w14 = base;
-            renderLobConfigInputs();
-        }
-
-        function deleteLobItem(index) {
-            lobItemsConfig.splice(index, 1);
-            renderLobConfigInputs();
+            saveConfigToLocal();
         }
 
         // ==================== CLOSING REPORT & TRACKER MODAL POPUP ====================
@@ -1213,8 +1266,15 @@ Telkomsel : ${fmtRp(tslRp)}
 Indosat : ${fmtRp(idtRp)}
 XL : ${fmtRp(xxlRp)}`;
 
-            // LAPORAN 2: CLOSING FOR TRACKER REPORT
-            const airpodsItems = dayTx.filter(r => r.product_name.toUpperCase().includes('AIRPOD'));
+            // LAPORAN 2: CLOSING FOR TRACKER REPORT (KETAT MEMBLOKIR CASE / COVER / CLYDE SEPERTI CLYDE AIRPODS)
+            const airpodsBlockKws = ['CASE', 'COVER', 'SLEEVE', 'SLVE', 'CLYDE', 'POUCH', 'BAG', 'STRAP', 'HOOK', 'HOLDER', 'PROTECTOR', 'GLASS', 'SKIN', 'ARMOR'];
+            const airpodsItems = dayTx.filter(r => {
+                const p = r.product_name.toUpperCase();
+                if (!p.includes('AIRPOD')) return false;
+                if (airpodsBlockKws.some(kw => p.includes(kw))) return false;
+                return true;
+            });
+
             const airpodsQty = airpodsItems.length;
             const airpodsGroup = {};
             airpodsItems.forEach(r => {
@@ -1282,7 +1342,7 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
             });
         }
 
-        // ==================== STAFF ITEMS DETAIL POPUP MODAL ====================
+        // ==================== STAFF ITEMS DETAIL POPUP MODAL & COPY ENGINE ====================
         function toggleStaffItemsModal(show) {
             const modal = document.getElementById('staffItemsModal');
             if (show) modal.classList.remove('hidden');
@@ -1328,6 +1388,45 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
 
             toggleStaffItemsModal(true);
             lucide.createIcons();
+        }
+
+        // FUNCTION UNTUK SALIN / COPY ISI MODAL POPUP
+        function copyStaffModalItems() {
+            const title = document.getElementById('staffModalTitle').innerText;
+            const sub = document.getElementById('staffModalSub').innerText;
+            const totalQty = document.getElementById('staffModalTotalQty').innerText;
+            const totalNominal = document.getElementById('staffModalTotalNominal').innerText;
+
+            const rows = document.querySelectorAll('#staffItemsTableBody tr');
+            let textList = [];
+            rows.forEach((row, idx) => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length >= 4) {
+                    const date = cells[0].innerText;
+                    const pName = cells[1].innerText;
+                    const art = cells[2].innerText;
+                    const amt = cells[3].innerText;
+                    textList.push(`${idx + 1}. [${date}] ${pName} (${art}) - ${amt}`);
+                }
+            });
+
+            const fullText = `*${title}*
+${sub}
+${totalQty} | Total Amount: ${totalNominal}
+
+${textList.join('\n')}`;
+
+            navigator.clipboard.writeText(fullText).then(() => {
+                const btn = document.getElementById('btnCopyStaffModal');
+                if (btn) {
+                    btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Tersalin!`;
+                    lucide.createIcons();
+                    setTimeout(() => {
+                        btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Rincian Item`;
+                        lucide.createIcons();
+                    }, 2000);
+                }
+            });
         }
 
         // ==================== DASHBOARD UPDATE ENGINE ====================
@@ -1388,7 +1487,7 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
                         startDate: wDates[0],
                         endDate: wDates[wDates.length - 1],
                         dates: wDates,
-                        label: `${wDates[0]} s/d ${wDates[wDates.length - 1]}` // DIBUANG TEKS DUPLIKAT W10 NYA
+                        label: `${wDates[0]} s/d ${wDates[wDates.length - 1]}` // TEKS W10 PADA STRING TANGGAL TELAH DIBUANG
                     });
                 }
             }
