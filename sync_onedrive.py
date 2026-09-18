@@ -1,17 +1,17 @@
 import os
 import re
+import sys
 import json
 import base64
 import requests
 import pandas as pd
 
-# Link OneDrive Anda
+# Link OneDrive default milik Anda
 DEFAULT_ONEDRIVE_URL = "https://1drv.ms/x/c/426713E72C49EDEB/IQBD3oB0QQCkTZRPXh7HhhWoAQ8oQIHav9BkCWSKDtwxFXI?e=zoQ86E"
 
 def get_direct_download_url(share_url):
     """Mengonversi link sharing OneDrive menjadi direct download link."""
     try:
-        # Trik Base64 Graph API OneDrive
         encoded = base64.b64encode(share_url.encode('utf-8')).decode('utf-8')
         encoded_safe = encoded.rstrip('=').replace('/', '_').replace('+', '-')
         return f"https://api.onedrive.com/v1.0/shares/u!{encoded_safe}/root/content"
@@ -53,13 +53,13 @@ def parse_sales_xls(file_path):
         c0 = str(df.iloc[i, 0]).strip() if pd.notna(df.iloc[i, 0]) else ''
         c1 = str(df.iloc[i, 1]).strip() if pd.notna(df.iloc[i, 1]) else ''
         
-        # Deteksi Baris Tanggal (format DD-MM-YYYY)
+        # Deteksi Baris Tanggal (DD-MM-YYYY)
         if re.match(r'^\d{2}-\d{2}-\d{4}$', c0):
             current_date = c0
             i += 1
             continue
             
-        # Deteksi Baris Staff (contoh: "22013473 / DEWI ANDANSARI")
+        # Deteksi Baris Staff
         if '/' in c0 and not c0.startswith('Total For') and not re.match(r'^\d{2}-', c0):
             parts = c0.split('/')
             if len(parts) == 2 and parts[0].strip().isdigit():
@@ -84,7 +84,6 @@ def parse_sales_xls(file_path):
                 rc1 = str(df.iloc[i, 1]).strip() if pd.notna(df.iloc[i, 1]) else ''
                 rc2 = df.iloc[i, 2] if pd.notna(df.iloc[i, 2]) else None
                 
-                # Cek jika berganti produk atau staff/tanggal baru
                 if rc0.startswith('Total For') or ('/' in rc0 and rc0.split('/')[0].strip().isdigit()) or re.match(r'^\d{2}-\d{2}-\d{4}$', rc0):
                     break
                     
@@ -92,7 +91,6 @@ def parse_sales_xls(file_path):
                     price = float(rc0)
                     net_price = float(rc2) if rc2 is not None else price
                     
-                    # Pengkategorian Kategori
                     p_lower = product_name.lower()
                     art_lower = article.lower()
                     
@@ -102,7 +100,6 @@ def parse_sales_xls(file_path):
                     elif any(dk in p_lower for dk in device_keywords):
                         category = "Device"
                         
-                    # Deteksi LOB Focus Item
                     lob_focus = None
                     if 'iphone 15' in p_lower:
                         lob_focus = 'iPhone 15'
@@ -137,7 +134,11 @@ def parse_sales_xls(file_path):
     return records
 
 def main():
-    onedrive_url = os.environ.get("ONEDRIVE_URL", DEFAULT_ONEDRIVE_URL)
+    # Menggunakan DEFAULT_ONEDRIVE_URL jika variabel environment kosong
+    onedrive_url = os.environ.get("ONEDRIVE_URL")
+    if not onedrive_url or onedrive_url.strip() == "":
+        onedrive_url = DEFAULT_ONEDRIVE_URL
+        
     xls_filename = "salespersonwise.xls"
     json_filename = "data.json"
     
@@ -146,6 +147,9 @@ def main():
         with open(json_filename, 'w', encoding='utf-8') as f:
             json.dump(sales_data, f, indent=2, ensure_ascii=False)
         print(f"[✓] Data JSON diperbarui ke {json_filename}")
+    else:
+        print("[!] Download gagal, menghentikan eksekusi.")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
