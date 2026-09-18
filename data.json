@@ -139,7 +139,7 @@
     "price": 12999000.0,
     "receipt": "100043612",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -381,7 +381,7 @@
     "price": 649000.0,
     "receipt": "100043631",
     "net_price": 649000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -469,7 +469,7 @@
     "price": 1.0,
     "receipt": "100043644",
     "net_price": 1.0,
-    "category": "Accessories",
+    "category": "VAS",
     "lob_focus": null
   },
   {
@@ -711,7 +711,7 @@
     "price": 745000.0,
     "receipt": "100043660",
     "net_price": 745000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -975,7 +975,7 @@
     "price": 349000.0,
     "receipt": "100043682",
     "net_price": 349000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -1019,7 +1019,7 @@
     "price": 24999000.0,
     "receipt": "100043687",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -1239,7 +1239,7 @@
     "price": 25099000.0,
     "receipt": "100043691",
     "net_price": 25099000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -1283,7 +1283,7 @@
     "price": 12999000.0,
     "receipt": "100043708",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -1547,7 +1547,7 @@
     "price": 7249000.0,
     "receipt": "100043696",
     "net_price": 7249000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -1635,7 +1635,7 @@
     "price": 889000.0,
     "receipt": "100043748",
     "net_price": 889000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "MBN"
   },
   {
@@ -1723,7 +1723,7 @@
     "price": 28749000.0,
     "receipt": "100043719",
     "net_price": 28749000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -1811,7 +1811,7 @@
     "price": 24999000.0,
     "receipt": "100043721",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -1954,7 +1954,7 @@
     "price": 1169000.0,
     "receipt": "100043754",
     "net_price": 969000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -2009,7 +2009,7 @@
     "price": 7849000.0,
     "receipt": "100043743",
     "net_price": 7349000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -2251,7 +2251,7 @@
     "price": 31249000.0,
     "receipt": "100043720",
     "net_price": 31249000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -2295,7 +2295,7 @@
     "price": 249000.0,
     "receipt": "100043730",
     "net_price": 249000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "iPhone 15"
   },
   {
@@ -2339,7 +2339,7 @@
     "price": 849000.0,
     "receipt": "100043731",
     "net_price": 849000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "AW"
   },
   {
@@ -2416,7 +2416,7 @@
     "price": 6749000.0,
     "receipt": "100043762",
     "net_price": 6749000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -2460,7 +2460,7 @@
     "price": 725000.0,
     "receipt": "100043777",
     "net_price": 725000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "iPad 11th"
   },
   {
@@ -2471,7 +2471,7 @@
     "price": 6999000.0,
     "receipt": "100043769",
     "net_price": 6999000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -2537,7 +2537,7 @@
     "price": 8349000.0,
     "receipt": "100043785",
     "net_price": 7849000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -2592,7 +2592,7 @@
     "price": 749000.0,
     "receipt": "100043781",
     "net_price": 749000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "MBN"
   },
   {
@@ -2603,7 +2603,7 @@
     "price": 24999000.0,
     "receipt": "100043761",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -2614,7 +2614,7 @@
     "price": 24999000.0,
     "receipt": "100043766",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -2658,7 +2658,7 @@
     "price": 15249000.0,
     "receipt": "100043772",
     "net_price": 15249000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -2878,7 +2878,7 @@
     "price": 38999000.0,
     "receipt": "100043765",
     "net_price": 38999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -2955,7 +2955,7 @@
     "price": 889000.0,
     "receipt": "100043765",
     "net_price": 889000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "MBN"
   },
   {
@@ -2988,7 +2988,7 @@
     "price": 12999000.0,
     "receipt": "100043804",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -3076,7 +3076,7 @@
     "price": 35249000.0,
     "receipt": "100043813",
     "net_price": 35249000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -3087,7 +3087,7 @@
     "price": 24999000.0,
     "receipt": "100043810",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -3208,7 +3208,7 @@
     "price": 12999000.0,
     "receipt": "100043812",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -3362,7 +3362,7 @@
     "price": 24999000.0,
     "receipt": "100043830",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -3406,7 +3406,7 @@
     "price": 889000.0,
     "receipt": "100043836",
     "net_price": 889000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "MBN"
   },
   {
@@ -3428,7 +3428,7 @@
     "price": 12999000.0,
     "receipt": "100043841",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -3505,7 +3505,7 @@
     "price": 12999000.0,
     "receipt": "100043840",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -3659,7 +3659,7 @@
     "price": 15249000.0,
     "receipt": "100043837",
     "net_price": 15249000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -3824,7 +3824,7 @@
     "price": 28749000.0,
     "receipt": "100043863",
     "net_price": 28749000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -3923,7 +3923,7 @@
     "price": 7499000.0,
     "receipt": "100043866",
     "net_price": 6999000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -4000,7 +4000,7 @@
     "price": 875000.0,
     "receipt": "100043866",
     "net_price": 875000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -4077,7 +4077,7 @@
     "price": 24999000.0,
     "receipt": "100043851",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -4099,7 +4099,7 @@
     "price": 12999000.0,
     "receipt": "100043848",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -4308,7 +4308,7 @@
     "price": 6999000.0,
     "receipt": "100043893",
     "net_price": 6999000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -4330,7 +4330,7 @@
     "price": 745000.0,
     "receipt": "100043893",
     "net_price": 745000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -4660,7 +4660,7 @@
     "price": 38999000.0,
     "receipt": "100043903",
     "net_price": 38999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -4704,7 +4704,7 @@
     "price": 35249000.0,
     "receipt": "100043915",
     "net_price": 35249000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -4990,7 +4990,7 @@
     "price": 24999000.0,
     "receipt": "100043907",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -5067,7 +5067,7 @@
     "price": 745000.0,
     "receipt": "100043916",
     "net_price": 745000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -5177,7 +5177,7 @@
     "price": 1169000.0,
     "receipt": "100043952",
     "net_price": 1169000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -5287,7 +5287,7 @@
     "price": 12999000.0,
     "receipt": "100043943",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -5661,7 +5661,7 @@
     "price": 1.0,
     "receipt": "100043965",
     "net_price": 1.0,
-    "category": "Accessories",
+    "category": "VAS",
     "lob_focus": null
   },
   {
@@ -5683,7 +5683,7 @@
     "price": 249000.0,
     "receipt": "100043953",
     "net_price": 249000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "iPhone 15"
   },
   {
@@ -5815,7 +5815,7 @@
     "price": 745000.0,
     "receipt": "100043941",
     "net_price": 745000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -5925,7 +5925,7 @@
     "price": 7849000.0,
     "receipt": "100043938",
     "net_price": 7349000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -6057,7 +6057,7 @@
     "price": 1169000.0,
     "receipt": "100043949",
     "net_price": 1169000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -6123,7 +6123,7 @@
     "price": 24999000.0,
     "receipt": "100043951",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -6266,7 +6266,7 @@
     "price": 24999000.0,
     "receipt": "100043956",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -6398,7 +6398,7 @@
     "price": 249000.0,
     "receipt": "100043969",
     "net_price": 249000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "iPhone 15"
   },
   {
@@ -6574,7 +6574,7 @@
     "price": 889000.0,
     "receipt": "100043967",
     "net_price": 889000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "MBN"
   },
   {
@@ -6585,7 +6585,7 @@
     "price": 24999000.0,
     "receipt": "100043996",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -6640,7 +6640,7 @@
     "price": 24999000.0,
     "receipt": "100043993",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -6915,7 +6915,7 @@
     "price": 12999000.0,
     "receipt": "100043986",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -6937,7 +6937,7 @@
     "price": 1.0,
     "receipt": "100043995",
     "net_price": 1.0,
-    "category": "Accessories",
+    "category": "VAS",
     "lob_focus": null
   },
   {
@@ -6948,7 +6948,7 @@
     "price": 24999000.0,
     "receipt": "100043997",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -6970,7 +6970,7 @@
     "price": 15249000.0,
     "receipt": "100044007",
     "net_price": 15249000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -6992,7 +6992,7 @@
     "price": 1.0,
     "receipt": "100044007",
     "net_price": 1.0,
-    "category": "Accessories",
+    "category": "VAS",
     "lob_focus": null
   },
   {
@@ -7146,7 +7146,7 @@
     "price": 58499000.0,
     "receipt": "100044019",
     "net_price": 58499000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -7278,7 +7278,7 @@
     "price": 24999000.0,
     "receipt": "100044028",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -7311,7 +7311,7 @@
     "price": 12999000.0,
     "receipt": "100044021",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -7322,7 +7322,7 @@
     "price": 12999000.0,
     "receipt": "100044025",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -7333,7 +7333,7 @@
     "price": 12999000.0,
     "receipt": "100044025",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -7487,7 +7487,7 @@
     "price": 12999000.0,
     "receipt": "100044029",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -7553,7 +7553,7 @@
     "price": 24999000.0,
     "receipt": "100044033",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -7575,7 +7575,7 @@
     "price": 1369000.0,
     "receipt": "100044048",
     "net_price": 1169000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -7619,7 +7619,7 @@
     "price": 35249000.0,
     "receipt": "100044023",
     "net_price": 35249000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -7795,7 +7795,7 @@
     "price": 849000.0,
     "receipt": "100044056",
     "net_price": 849000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "AW"
   },
   {
@@ -7817,7 +7817,7 @@
     "price": 24999000.0,
     "receipt": "100044051",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
@@ -7905,7 +7905,7 @@
     "price": 12999000.0,
     "receipt": "100044062",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -8015,7 +8015,7 @@
     "price": 15249000.0,
     "receipt": "100044071",
     "net_price": 15249000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -8037,7 +8037,7 @@
     "price": 449000.0,
     "receipt": "100044071",
     "net_price": 449000.0,
-    "category": "Accessories",
+    "category": "VAS",
     "lob_focus": null
   },
   {
@@ -8147,7 +8147,7 @@
     "price": 12999000.0,
     "receipt": "100044075",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -8169,7 +8169,7 @@
     "price": 12999000.0,
     "receipt": "100044081",
     "net_price": 12999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -8202,7 +8202,7 @@
     "price": 2399000.0,
     "receipt": "100044076",
     "net_price": 2399000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -8345,7 +8345,7 @@
     "price": 24999000.0,
     "receipt": "100044074",
     "net_price": 24999000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": null
   },
   {
