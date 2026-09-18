@@ -13,6 +13,7 @@
 
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -23,42 +24,68 @@
         }
     </script>
     <style>
-        body {
-            background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #0f172a 60%, #020617 100%);
-            background-attachment: fixed;
-            color: #f8fafc;
-            min-height: 100vh;
+        :root {
+            --bg-gradient: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #0f172a 60%, #020617 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --nav-bg: rgba(15, 23, 42, 0.85);
         }
+
+        .light-mode {
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --card-border: rgba(203, 213, 225, 0.6);
+            --text-main: #0f172a;
+            --text-sub: #475569;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
         .liquid-glass {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--glass-bg);
             backdrop-filter: blur(30px) saturate(210%);
             -webkit-backdrop-filter: blur(30px) saturate(210%);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
         }
+
         .liquid-glass-card {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--card-bg);
             backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--card-border);
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .liquid-glass-card:hover {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: rgba(255, 255, 255, 0.22);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
         }
+
         .floating-nav {
-            background: rgba(15, 23, 42, 0.75);
+            background: var(--nav-bg);
             backdrop-filter: blur(25px) saturate(200%);
             -webkit-backdrop-filter: blur(25px) saturate(200%);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
         }
+
         .nav-tab-active {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.35) 0%, rgba(168, 85, 247, 0.35) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #ffffff;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(168, 85, 247, 0.4) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff !important;
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
         }
     </style>
@@ -73,23 +100,35 @@
                     <i data-lucide="layout-dashboard" class="w-8 h-8 text-white"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-300 bg-clip-text text-transparent">
                         Sales Progress Dashboard
                     </h1>
-                    <p class="text-xs md:text-sm text-slate-400">Staff Achievement Tracker</p>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <p class="text-xs md:text-sm opacity-70">Staff Achievement Tracker</p>
+                        <!-- WATERMARK -->
+                        <span class="text-[10px] opacity-40 font-medium tracking-wider">made with ❤️ by frans</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex items-center gap-4">
-                <button onclick="toggleConfigModal(true)" class="liquid-glass-card hover:bg-white/10 text-xs font-bold px-5 py-3 rounded-2xl flex items-center gap-2 border border-indigo-500/30 text-indigo-300 shadow-lg shadow-indigo-500/10 transition">
+            <div class="flex items-center gap-3">
+                <!-- THEME TOGGLE BUTTON -->
+                <button onclick="toggleTheme()" class="liquid-glass-card p-3 rounded-2xl flex items-center justify-center hover:bg-white/10 transition" title="Switch Dark/Light Theme">
+                    <i id="themeIcon" data-lucide="moon" class="w-4 h-4 text-amber-400"></i>
+                </button>
+
+                <!-- BUTTON CONFIG -->
+                <button onclick="toggleConfigModal(true)" class="liquid-glass-card hover:bg-white/10 text-xs font-bold px-5 py-3 rounded-2xl flex items-center gap-2 border border-indigo-500/30 text-indigo-400 shadow-lg shadow-indigo-500/10 transition">
                     <i data-lucide="settings" class="w-4 h-4 text-indigo-400"></i>
                     Config Target & Staff %
                 </button>
 
+                <!-- DATE SYNCED STATUS -->
                 <div class="text-right border-l border-white/10 pl-4">
-                    <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold">Status Data</span>
+                    <span class="block text-[10px] opacity-60 uppercase tracking-wider font-bold">Latest Date Synced</span>
                     <span id="dataStatus" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Auto Synced
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span id="syncDateLbl">--</span>
                     </span>
                 </div>
             </div>
@@ -98,22 +137,25 @@
         <!-- FLOATING iOS 27 MAIN NAVIGATION TABS -->
         <div class="sticky top-4 z-40 flex justify-center">
             <nav class="floating-nav p-2 rounded-3xl flex gap-1.5 overflow-x-auto max-w-full shadow-2xl">
-                <button onclick="switchMainTab('overview')" id="mainTab-overview" class="nav-tab-active px-5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition">
+                <button onclick="switchMainTab('overview')" id="mainTab-overview" class="nav-tab-active px-4 py-2 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="pie-chart" class="w-4 h-4"></i> Store Overview
                 </button>
-                <button onclick="switchMainTab('matrix')" id="mainTab-matrix" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                <button onclick="switchMainTab('matrix')" id="mainTab-matrix" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="users" class="w-4 h-4"></i> Staff Performance
                 </button>
-                <button onclick="switchMainTab('lfl')" id="mainTab-lfl" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                <button onclick="switchMainTab('lfl')" id="mainTab-lfl" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="trending-up" class="w-4 h-4"></i> LFL Per Staff
                 </button>
-                <button onclick="switchMainTab('lob')" id="mainTab-lob" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                <button onclick="switchMainTab('lob')" id="mainTab-lob" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="smartphone" class="w-4 h-4"></i> LOB Focus Staff
                 </button>
-                <button onclick="switchMainTab('vas')" id="mainTab-vas" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                <button onclick="switchMainTab('aksesoris')" id="mainTab-aksesoris" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="headphones" class="w-4 h-4"></i> Aksesoris Staff
+                </button>
+                <button onclick="switchMainTab('vas')" id="mainTab-vas" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="shield-check" class="w-4 h-4"></i> VAS Staff
                 </button>
-                <button onclick="switchMainTab('transactions')" id="mainTab-transactions" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                <button onclick="switchMainTab('transactions')" id="mainTab-transactions" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="list" class="w-4 h-4"></i> Data Transaksi
                 </button>
             </nav>
@@ -126,14 +168,14 @@
                 <!-- Monthly Progress -->
                 <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN MONTH STORE</span>
-                        <span id="badgeMonth" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">0%</span>
+                        <span class="text-xs font-bold opacity-70 uppercase tracking-wider">PENCAPAIAN MONTH STORE</span>
+                        <span id="badgeMonth" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">0%</span>
                     </div>
                     <div class="mt-4">
-                        <h2 id="achMonth" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
-                        <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetMonth" class="text-slate-200">Rp 0</span></p>
+                        <h2 id="achMonth" class="text-2xl md:text-3xl font-black">Rp 0</h2>
+                        <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetMonth" class="font-semibold">Rp 0</span></p>
                     </div>
-                    <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
+                    <div class="w-full bg-slate-800/40 rounded-full h-2.5 mt-4 overflow-hidden">
                         <div id="barMonth" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
@@ -141,14 +183,14 @@
                 <!-- Weekly Progress -->
                 <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN WEEK STORE</span>
-                        <span id="badgeWeek" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">0%</span>
+                        <span class="text-xs font-bold opacity-70 uppercase tracking-wider">PENCAPAIAN WEEK STORE</span>
+                        <span id="badgeWeek" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">0%</span>
                     </div>
                     <div class="mt-4">
-                        <h2 id="achWeek" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
-                        <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetWeek" class="text-slate-200">Rp 0</span></p>
+                        <h2 id="achWeek" class="text-2xl md:text-3xl font-black">Rp 0</h2>
+                        <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetWeek" class="font-semibold">Rp 0</span></p>
                     </div>
-                    <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
+                    <div class="w-full bg-slate-800/40 rounded-full h-2.5 mt-4 overflow-hidden">
                         <div id="barWeek" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
@@ -156,40 +198,40 @@
                 <!-- Daily Progress -->
                 <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN DAY STORE</span>
-                        <span id="badgeDay" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">0%</span>
+                        <span class="text-xs font-bold opacity-70 uppercase tracking-wider">PENCAPAIAN DAY STORE</span>
+                        <span id="badgeDay" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">0%</span>
                     </div>
                     <div class="mt-4">
-                        <h2 id="achDay" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
-                        <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetDay" class="text-slate-200">Rp 0</span></p>
+                        <h2 id="achDay" class="text-2xl md:text-3xl font-black">Rp 0</h2>
+                        <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetDay" class="font-semibold">Rp 0</span></p>
                     </div>
-                    <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
+                    <div class="w-full bg-slate-800/40 rounded-full h-2.5 mt-4 overflow-hidden">
                         <div id="barDay" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- CATEGORY TARGET CARDS (AKSESORI & VAS IN AMOUNT Rp) -->
+            <!-- CATEGORY TARGET CARDS -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Aksesori Card -->
                 <div class="liquid-glass rounded-3xl p-6">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-2">
                             <i data-lucide="headphones" class="w-5 h-5 text-cyan-400"></i>
-                            <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian Aksesori (Rp)</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">Pencapaian Aksesori (Rp)</span>
                         </div>
-                        <span id="badgeAcc" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">0%</span>
+                        <span id="badgeAcc" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">0%</span>
                     </div>
                     <div class="mt-4 flex justify-between items-end">
                         <div>
-                            <h3 id="achAcc" class="text-2xl font-black text-white">Rp 0</h3>
-                            <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetAcc" class="text-slate-200">Rp 0</span></p>
+                            <h3 id="achAcc" class="text-2xl font-black">Rp 0</h3>
+                            <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetAcc" class="font-semibold">Rp 0</span></p>
                         </div>
                         <div class="text-right">
                             <span id="remAcc" class="text-xs font-semibold text-cyan-400">Sisa: Rp 0</span>
                         </div>
                     </div>
-                    <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
+                    <div class="w-full bg-slate-800/40 rounded-full h-2 mt-3 overflow-hidden">
                         <div id="barAcc" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
@@ -199,22 +241,35 @@
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-2">
                             <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i>
-                            <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian VAS (Rp)</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">Pencapaian VAS (Rp)</span>
                         </div>
-                        <span id="badgeVAS" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">0%</span>
+                        <span id="badgeVAS" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30">0%</span>
                     </div>
                     <div class="mt-4 flex justify-between items-end">
                         <div>
-                            <h3 id="achVAS" class="text-2xl font-black text-white">Rp 0</h3>
-                            <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetVAS" class="text-slate-200">Rp 0</span></p>
+                            <h3 id="achVAS" class="text-2xl font-black">Rp 0</h3>
+                            <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetVAS" class="font-semibold">Rp 0</span></p>
                         </div>
                         <div class="text-right">
                             <span id="remVAS" class="text-xs font-semibold text-purple-400">Sisa: Rp 0</span>
                         </div>
                     </div>
-                    <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
+                    <div class="w-full bg-slate-800/40 rounded-full h-2 mt-3 overflow-hidden">
                         <div id="barVAS" class="bg-gradient-to-r from-purple-400 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
+                </div>
+            </div>
+
+            <!-- DAILY INVOICE COUNT (COLUMN B PREFIX 1000 UNIQ COUNT) -->
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i> Total Qty Invoice Per Tanggal (Kalender Berjalan)
+                    </h3>
+                    <span id="totalUniqueInvoicesLabel" class="text-xs font-extrabold text-emerald-400">0 Unique Invoices</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3" id="dailyInvoiceGrid">
+                    <!-- Dynamic Daily Invoice Count Cards -->
                 </div>
             </div>
 
@@ -223,18 +278,18 @@
                 <!-- Store LFL -->
                 <div class="liquid-glass rounded-3xl p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
                             <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> Store LFL (Week Sebelumnya vs Week Berjalan)
                         </h3>
                         <span id="lflGrowthStore" class="text-xs font-bold px-2.5 py-1 rounded-full bg-white/10 text-emerald-400">0% WoW</span>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="liquid-glass-card p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400">Week Sebelumnya (W-1)</span>
-                            <p id="lflPrevStore" class="text-lg font-bold text-slate-200 mt-1">Rp 0</p>
+                            <span class="text-xs opacity-70">Week Sebelumnya (W-1)</span>
+                            <p id="lflPrevStore" class="text-lg font-bold mt-1">Rp 0</p>
                         </div>
                         <div class="liquid-glass-card p-4 rounded-2xl">
-                            <span class="text-xs text-slate-400">Week Berjalan (W-0)</span>
+                            <span class="text-xs opacity-70">Week Berjalan (W-0)</span>
                             <p id="lflCurrStore" class="text-lg font-bold text-emerald-400 mt-1">Rp 0</p>
                         </div>
                     </div>
@@ -243,10 +298,10 @@
                 <!-- Store VAS Summary -->
                 <div class="liquid-glass rounded-3xl p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
                             <i data-lucide="shield" class="w-4 h-4 text-purple-400"></i> Summary Penjualan VAS Store
                         </h3>
-                        <span id="vasTotalSummary" class="text-xs font-bold text-purple-300">Total: 0 Pcs</span>
+                        <span id="vasTotalSummary" class="text-xs font-bold text-purple-400">Total: 0 Item</span>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="vasKeywordCardsStore">
                         <!-- Dynamic Store VAS Cards -->
@@ -260,7 +315,7 @@
             <!-- MONTHLY OVERVIEW TABLE PER STAFF -->
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
                         <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> Ringkasan Total Month Per Staff
                     </h3>
                 </div>
@@ -268,27 +323,26 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
+                            <tr class="border-b border-white/10 opacity-70 font-semibold uppercase tracking-wider">
                                 <th class="pb-3 px-3">Staff</th>
+                                <th class="pb-3 px-3 text-center">Jabatan</th>
                                 <th class="pb-3 px-3 text-center">Share %</th>
                                 <th class="pb-3 px-3 text-right">Target Month</th>
                                 <th class="pb-3 px-3 text-right">Ach Month</th>
                                 <th class="pb-3 px-3 text-center">% Ach Month</th>
-                                <th class="pb-3 px-3 text-right">Target Day</th>
-                                <th class="pb-3 px-3 text-right">Ach Day</th>
                             </tr>
                         </thead>
-                        <tbody id="staffMonthlySummaryBody" class="divide-y divide-white/5 text-slate-300 font-medium">
+                        <tbody id="staffMonthlySummaryBody" class="divide-y divide-white/5 font-medium">
                             <!-- Dynamic Staff Monthly Summary Rows -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- WEEKLY CAPSULE CARDS SECTION -->
+            <!-- WEEKLY BREAKDOWN WITH TARGET DAY & RUNNING CALENDAR PROJECTION -->
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
                         <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i> Breakdown Pencapaian Per Week
                     </h3>
                 </div>
@@ -299,11 +353,11 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 3: LFL PER STAFF (TAB BARU TERPISAH) ==================== -->
+        <!-- ==================== VIEW 3: LFL PER STAFF ==================== -->
         <div id="view-lfl" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
                         <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> LFL (Week Sebelumnya vs Week Berjalan) Per Staff
                     </h3>
                 </div>
@@ -314,11 +368,11 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 4: LOB FOCUS STAFF (PER ITEM LOB) ==================== -->
+        <!-- ==================== VIEW 4: LOB FOCUS STAFF ==================== -->
         <div id="view-lob" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
                         <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Pencapaian Per Staff
                     </h3>
                 </div>
@@ -329,11 +383,26 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 5: VAS STAFF ==================== -->
+        <!-- ==================== VIEW 5: AKSESORIS STAFF (NEW TAB) ==================== -->
+        <div id="view-aksesoris" class="space-y-6 hidden">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="headphones" class="w-4 h-4 text-cyan-400"></i> Detail Rincian Aksesori Per Staff
+                    </h3>
+                </div>
+
+                <div class="space-y-6" id="aksesorisWeeklyCapsulesContainer">
+                    <!-- Dynamic Weekly Aksesori Cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 6: VAS STAFF ==================== -->
         <div id="view-vas" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
                         <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i> Detail Rincian VAS (KLA, TSL, IDT, XXL) Per Staff
                     </h3>
                 </div>
@@ -344,7 +413,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 6: TRANSACTIONS ==================== -->
+        <!-- ==================== VIEW 7: TRANSACTIONS ==================== -->
         <div id="view-transactions" class="space-y-6 hidden">
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -358,23 +427,23 @@
                     <!-- TABS CATEGORY FILTER -->
                     <div class="liquid-glass p-1.5 rounded-2xl flex gap-1 overflow-x-auto w-full sm:w-auto">
                         <button onclick="switchTab('ALL')" id="tab-ALL" class="ios-tab-active px-4 py-1.5 rounded-xl text-xs font-bold text-white whitespace-nowrap">Semua Items</button>
-                        <button onclick="switchTab('Device')" id="tab-Device" class="px-4 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">Device</button>
-                        <button onclick="switchTab('Accessories')" id="tab-Accessories" class="px-4 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">Accessories</button>
-                        <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">VAS</button>
+                        <button onclick="switchTab('Device')" id="tab-Device" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">Device</button>
+                        <button onclick="switchTab('Accessories')" id="tab-Accessories" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">Accessories</button>
+                        <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">VAS</button>
                     </div>
                 </div>
 
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
                         <i data-lucide="list" class="w-4 h-4 text-blue-400"></i> Detail Item Terjual
                     </h3>
-                    <span id="itemCount" class="text-xs text-slate-400">0 Items</span>
+                    <span id="itemCount" class="text-xs opacity-70">0 Item</span>
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
+                            <tr class="border-b border-white/10 opacity-70 font-semibold uppercase tracking-wider">
                                 <th class="pb-3 px-2">Tanggal</th>
                                 <th class="pb-3 px-2">Staff</th>
                                 <th class="pb-3 px-2">Nama Produk</th>
@@ -383,7 +452,7 @@
                                 <th class="pb-3 px-2 text-right">Harga Net</th>
                             </tr>
                         </thead>
-                        <tbody id="transactionBody" class="divide-y divide-white/5 text-slate-300">
+                        <tbody id="transactionBody" class="divide-y divide-white/5">
                             <!-- Dynamic Rows -->
                         </tbody>
                     </table>
@@ -397,69 +466,69 @@
     <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="liquid-glass rounded-3xl p-6 max-w-3xl w-full border border-white/20 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
-                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                <h2 class="text-lg font-bold flex items-center gap-2">
                     <i data-lucide="settings" class="w-5 h-5 text-indigo-400"></i> Set Config Target Sales & Alokasi Staff
                 </h2>
-                <button onclick="toggleConfigModal(false)" class="text-slate-400 hover:text-white transition">
+                <button onclick="toggleConfigModal(false)" class="opacity-70 hover:opacity-100 transition">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
 
             <!-- 1. TARGET REVENUE STORE -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
-                <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">1. Target Sales Revenue Store (Rp)</h3>
+                <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">1. Target Sales Revenue Store (Rp)</h3>
                 <div>
-                    <label class="text-xs text-slate-400">Target Month Store (Rp)</label>
+                    <label class="text-xs opacity-70">Target Month Store (Rp)</label>
                     <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets(); renderStaffPercentInputs();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-xs text-slate-400">Target Week Store (Auto /4)</label>
-                        <input type="number" id="targetWeek" value="25000000" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-slate-400 cursor-not-allowed">
+                        <label class="text-xs opacity-70">Target Week Store (Auto /4)</label>
+                        <input type="number" id="targetWeek" value="25000000" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm opacity-60 cursor-not-allowed">
                     </div>
                     <div>
-                        <label class="text-xs text-slate-400">Target Day Store (Auto /30)</label>
-                        <input type="number" id="targetDay" value="3333333" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-slate-400 cursor-not-allowed">
+                        <label class="text-xs opacity-70">Target Day Store (Auto /30)</label>
+                        <input type="number" id="targetDay" value="3333333" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm opacity-60 cursor-not-allowed">
                     </div>
                 </div>
             </div>
 
-            <!-- 2. TARGET CATEGORY -->
+            <!-- 2. TARGET CATEGORY STORE -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
-                <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">2. Target Category Store (Rp)</h3>
+                <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">2. Target Category Store (Rp)</h3>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="text-xs text-slate-400">Target Aksesori (Rp)</label>
+                        <label class="text-xs opacity-70">Target Aksesori Store (Rp)</label>
                         <input type="number" id="targetAccessories" value="15000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
-                        <label class="text-xs text-slate-400">Target VAS (Rp)</label>
+                        <label class="text-xs opacity-70">Target VAS Store (Rp)</label>
                         <input type="number" id="targetVAS" value="10000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                 </div>
             </div>
 
-            <!-- 3. MANUAL ALOKASI TARGET PER STAFF (%) HAS REMOVE BUTTON -->
+            <!-- 3. MANUAL ALOKASI TARGET & JABATAN PER STAFF (%) -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">3. Alokasi Pembagian Target Per Staff (%)</h3>
+                    <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">3. Alokasi Pembagian Target & Jabatan Staff (%)</h3>
                     <div class="flex items-center gap-2">
                         <span id="totalPercentBadge" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Total: 100%</span>
-                        <button onclick="resetEqualStaffPercentages()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 transition">Reset Sama Rata</button>
-                        <button onclick="restoreAllRemovedStaffs()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition">Restore All Staff</button>
+                        <button onclick="resetEqualStaffPercentages()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition">Reset Sama Rata</button>
+                        <button onclick="restoreAllRemovedStaffs()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition">Restore All Staff</button>
                     </div>
                 </div>
-                <p class="text-[11px] text-slate-400">Klik tombol sampah jika ingin mengecualikan/menghapus staff tertentu dari target. Sisa persentase akan otomatis terbagi merata ke staff aktif.</p>
+                <p class="text-[11px] opacity-70">Atur Jabatan (misal SA, IC) dan persentase target. Klik tombol sampah untuk menghapus staff dari target (persentase auto terbagi merata ke sisa staff).</p>
 
-                <div class="space-y-2 max-h-48 overflow-y-auto pr-1" id="staffPercentInputsContainer">
-                    <!-- Dynamic Inputs Staff Percent -->
+                <div class="space-y-2 max-h-56 overflow-y-auto pr-1" id="staffPercentInputsContainer">
+                    <!-- Dynamic Inputs Staff Percent + Jabatan -->
                 </div>
             </div>
 
-            <!-- 4. MANAJEMEN LOB FOCUS ITEMS DINAMIS -->
+            <!-- 4. DYNAMIC LOB FOCUS ITEMS -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">4. Dynamic LOB Focus Items & Target Qty Per Staff</h3>
+                    <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">4. Dynamic LOB Focus Items</h3>
                     <button onclick="addLobItemConfig()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 transition flex items-center gap-1">
                         <i data-lucide="plus" class="w-3 h-3"></i> Tambah Item LOB
                     </button>
@@ -471,7 +540,7 @@
             </div>
 
             <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
-                <button onclick="toggleConfigModal(false)" class="px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-white/5 transition">Batal</button>
+                <button onclick="toggleConfigModal(false)" class="px-5 py-2.5 rounded-xl text-xs font-semibold opacity-70 hover:opacity-100 bg-white/5 transition">Batal</button>
                 <button onclick="saveConfigModal()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-lg transition">Simpan Config</button>
             </div>
         </div>
@@ -485,10 +554,12 @@
 
         let removedStaffs = new Set();
         let staffPercentConfig = {};
+        let staffRoleConfig = {}; // Jabatan staff
 
+        // Dynamic LOB Items List
         let lobItemsConfig = [
             { id: 'iphone15', name: 'iPhone 15', key: 'iPhone 15', target: 10 },
-            { id: 'ipad11th', name: 'iPad 11th', key: 'iPad 11th', target: 5 },
+            { id: 'ipad11th', name: 'iPad A16', key: 'iPad 11th', target: 5 },
             { id: 'mbn', name: 'MBN', key: 'MBN', target: 8 },
             { id: 'aw', name: 'AW', key: 'AW', target: 6 },
             { id: 'airpods', name: 'AirPods', key: 'AirPods', target: 15 }
@@ -496,16 +567,36 @@
 
         const fmtRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
 
+        // Theme Switcher
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light' || (!savedTheme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+                document.documentElement.classList.add('light-mode');
+                document.getElementById('themeIcon').setAttribute('data-lucide', 'sun');
+            } else {
+                document.documentElement.classList.remove('light-mode');
+                document.getElementById('themeIcon').setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        }
+
+        function toggleTheme() {
+            const isLight = document.documentElement.classList.toggle('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            document.getElementById('themeIcon').setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+            lucide.createIcons();
+        }
+
         function switchMainTab(viewName) {
             currentMainView = viewName;
-            ['overview', 'matrix', 'lfl', 'lob', 'vas', 'transactions'].forEach(v => {
+            ['overview', 'matrix', 'lfl', 'lob', 'aksesoris', 'vas', 'transactions'].forEach(v => {
                 const btn = document.getElementById(`mainTab-${v}`);
                 const view = document.getElementById(`view-${v}`);
                 if (v === viewName) {
-                    btn.className = "nav-tab-active px-5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition";
+                    btn.className = "nav-tab-active px-4 py-2 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition";
                     if (view) view.classList.remove('hidden');
                 } else {
-                    btn.className = "px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition";
+                    btn.className = "px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition";
                     if (view) view.classList.add('hidden');
                 }
             });
@@ -535,7 +626,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
-            lucide.createIcons();
+            initTheme();
             try {
                 const res = await fetch('data.json');
                 if (res.ok) {
@@ -578,13 +669,13 @@
                 if (t === tab) {
                     btn.className = "ios-tab-active px-4 py-1.5 rounded-xl text-xs font-bold text-white whitespace-nowrap";
                 } else {
-                    btn.className = "px-4 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap";
+                    btn.className = "px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap";
                 }
             });
             updateDashboard();
         }
 
-        // ==================== CONFIG: STAFF PERCENTAGE & REMOVE MANAGEMENT ====================
+        // ==================== CONFIG: STAFF PERCENTAGE & JABATAN MANAGEMENT ====================
         function removeStaffFromTarget(staffName) {
             removedStaffs.add(staffName);
             delete staffPercentConfig[staffName];
@@ -604,6 +695,7 @@
             const equalPct = (100 / activeStaffs.length).toFixed(2);
             activeStaffs.forEach(s => {
                 staffPercentConfig[s] = parseFloat(equalPct);
+                if (!staffRoleConfig[s]) staffRoleConfig[s] = 'SA'; // Default Role
             });
             renderStaffPercentInputs();
         }
@@ -621,24 +713,31 @@
                 if (staffPercentConfig[s] === undefined) {
                     staffPercentConfig[s] = (100 / activeStaffs.length);
                 }
+                if (!staffRoleConfig[s]) staffRoleConfig[s] = 'SA';
+
                 const pct = staffPercentConfig[s] || 0;
                 sumPct += parseFloat(pct);
 
                 const nominalMonth = Math.round((tStoreMonth * pct) / 100);
 
                 const div = document.createElement('div');
-                div.className = 'flex items-center justify-between gap-3 bg-slate-900/60 p-2.5 rounded-xl border border-white/5 text-xs';
+                div.className = 'flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-slate-900/60 p-2.5 rounded-xl border border-white/5 text-xs';
                 div.innerHTML = `
-                    <div class="flex items-center gap-2 truncate max-w-[200px]">
+                    <div class="flex items-center gap-2 truncate max-w-[220px]">
                         <button onclick="removeStaffFromTarget('${s}')" class="text-rose-400 hover:text-rose-300 transition p-1 hover:bg-rose-500/10 rounded-lg" title="Hapus staff dari target">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                         </button>
                         <span class="font-bold text-white truncate">${s.split('/')[1] || s}</span>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-slate-400 text-[10px] hidden sm:inline">${fmtRp(nominalMonth)}</span>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                        <!-- JABATAN INPUT -->
+                        <input type="text" value="${staffRoleConfig[s]}" onchange="updateStaffRole('${s}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-indigo-300 font-bold focus:outline-none focus:border-indigo-500" placeholder="Jabatan">
+                        
+                        <span class="text-slate-400 text-[10px] hidden sm:inline font-mono">${fmtRp(nominalMonth)}</span>
+                        
                         <div class="flex items-center gap-1">
-                            <input type="number" step="0.1" value="${pct}" oninput="updateStaffPct('${s}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-right text-xs text-white focus:outline-none focus:border-indigo-500">
+                            <input type="number" step="0.1" value="${pct}" oninput="updateStaffPct('${s}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-right text-xs text-white focus:outline-none focus:border-indigo-500 font-bold">
                             <span class="text-slate-400 font-bold">%</span>
                         </div>
                     </div>
@@ -662,6 +761,10 @@
             renderStaffPercentInputs();
         }
 
+        function updateStaffRole(staffName, val) {
+            staffRoleConfig[staffName] = val.trim() || 'SA';
+        }
+
         // ==================== CONFIG: LOB DYNAMIC MANAGEMENT ====================
         function renderLobConfigInputs() {
             const container = document.getElementById('lobConfigListContainer');
@@ -674,8 +777,8 @@
                 div.innerHTML = `
                     <input type="text" value="${item.name}" onchange="updateLobItem(${index}, 'name', this.value)" class="flex-1 bg-slate-800 border border-white/10 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-indigo-500" placeholder="Nama LOB">
                     <div class="flex items-center gap-1">
-                        <span class="text-[10px] text-slate-400">Target Qty:</span>
-                        <input type="number" value="${item.target}" onchange="updateLobItem(${index}, 'target', this.value)" class="w-14 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <span class="text-[10px] opacity-70">Target Qty:</span>
+                        <input type="number" value="${item.target}" onchange="updateLobItem(${index}, 'target', this.value)" class="w-14 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-white focus:outline-none focus:border-indigo-500 font-bold">
                     </div>
                     <button onclick="deleteLobItem(${index})" class="text-rose-400 hover:text-rose-300 p-1 rounded-lg hover:bg-rose-500/10 transition">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -721,9 +824,14 @@
 
             // DATES & WEEK BREAKDOWN LOGIC
             const uniqueDates = [...new Set(rawData.map(r => r.date))].sort();
-            const latestDate = uniqueDates[uniqueDates.length - 1];
+            const latestDate = uniqueDates[uniqueDates.length - 1] || '--';
 
-            // Build strictly 4 week intervals (7 days per week)
+            // Set Date Synced Label in Header
+            if (document.getElementById('syncDateLbl')) {
+                document.getElementById('syncDateLbl').textContent = latestDate;
+            }
+
+            // Build strictly 4 week intervals
             const weekIntervals = [];
             for (let i = 0; i < 4; i++) {
                 const startIdx = i * 7;
@@ -803,6 +911,32 @@
             document.getElementById('badgeVAS').textContent = `${pVAS}%`;
             document.getElementById('barVAS').style.width = `${pVAS}%`;
 
+            // STORE DAILY INVOICE COUNT (COL B UNIQUE RECEIPT PREFIX 1000)
+            const dailyInvoiceGrid = document.getElementById('dailyInvoiceGrid');
+            dailyInvoiceGrid.innerHTML = '';
+            let totalStoreUniqueInvoices = 0;
+
+            uniqueDates.forEach(dt => {
+                const dayTx = storeDataAll.filter(r => r.date === dt);
+                // Unique invoices with receipt starting with 1000 or any non-empty receipt
+                const uniqueReceipts = new Set(
+                    dayTx.map(r => r.receipt ? String(r.receipt).trim() : null)
+                         .filter(rc => rc && rc !== 'undefined' && rc !== 'null')
+                );
+                const invCount = uniqueReceipts.size;
+                totalStoreUniqueInvoices += invCount;
+
+                const card = document.createElement('div');
+                card.className = 'liquid-glass-card p-3 rounded-2xl text-center flex flex-col justify-between';
+                card.innerHTML = `
+                    <span class="text-[10px] font-mono opacity-70 block">${dt}</span>
+                    <div class="text-base font-black text-emerald-400 mt-1">${invCount} <span class="text-[9px] font-normal opacity-60">Inv</span></div>
+                `;
+                dailyInvoiceGrid.appendChild(card);
+            });
+
+            document.getElementById('totalUniqueInvoicesLabel').textContent = `${totalStoreUniqueInvoices} Unique Invoices`;
+
             // Store LFL
             document.getElementById('lflPrevStore').textContent = fmtRp(totalWeek1Store);
             document.getElementById('lflCurrStore').textContent = fmtRp(totalWeek0Store);
@@ -817,7 +951,7 @@
             vasContainerStore.innerHTML = '';
 
             const vasItemsStore = storeDataAll.filter(r => r.category === 'VAS');
-            document.getElementById('vasTotalSummary').textContent = `Total VAS Store: ${vasItemsStore.length} Pcs (${fmtRp(vasAmountStore)})`;
+            document.getElementById('vasTotalSummary').textContent = `Total VAS Store: ${vasItemsStore.length} Item (${fmtRp(vasAmountStore)})`;
 
             vasKeywords.forEach(kw => {
                 const matched = vasItemsStore.filter(r => 
@@ -831,51 +965,49 @@
                 card.innerHTML = `
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-black uppercase text-purple-300 tracking-wider">${kw.toUpperCase()}</span>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Pcs</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Item</span>
                     </div>
                     <div class="mt-2">
-                        <p class="text-base font-extrabold text-white">${fmtRp(sum)}</p>
+                        <p class="text-base font-extrabold">${fmtRp(sum)}</p>
                     </div>
                 `;
                 vasContainerStore.appendChild(card);
             });
 
 
-            // ==================== 2. STAFF PERFORMANCE: MONTHLY SUMMARY & WEEKLY CAPSULES ====================
+            // ==================== 2. STAFF PERFORMANCE: MONTHLY SUMMARY & WEEKLY TABLES ====================
             const summaryBody = document.getElementById('staffMonthlySummaryBody');
             summaryBody.innerHTML = '';
 
             activeStaffs.forEach(stf => {
                 const sData = rawData.filter(r => r.staff === stf);
                 const sAchM = sData.reduce((acc, r) => acc + r.net_price, 0);
-                const sAchD = sData.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
 
                 const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
                 const tStaffM = Math.round((tStoreMonth * pctShare) / 100);
-                const tStaffD = Math.round(tStaffM / 30);
                 const pctM = tStaffM ? Math.round((sAchM / tStaffM) * 100) : 0;
+                const role = staffRoleConfig[stf] || 'SA';
 
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-white/5 transition';
                 tr.innerHTML = `
-                    <td class="py-3 px-3 font-bold text-white">${stf.split('/')[1] || stf}</td>
-                    <td class="py-3 px-3 text-center text-slate-400 font-mono">${pctShare}%</td>
-                    <td class="py-3 px-3 text-right text-slate-400">${fmtRp(tStaffM)}</td>
-                    <td class="py-3 px-3 text-right font-bold text-indigo-300">${fmtRp(sAchM)}</td>
+                    <td class="py-3 px-3 font-bold">${stf.split('/')[1] || stf}</td>
+                    <td class="py-3 px-3 text-center"><span class="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 text-[10px] font-bold border border-indigo-500/30">${role}</span></td>
+                    <td class="py-3 px-3 text-center opacity-70 font-mono">${pctShare}%</td>
+                    <td class="py-3 px-3 text-right opacity-70">${fmtRp(tStaffM)}</td>
+                    <td class="py-3 px-3 text-right font-bold text-indigo-400">${fmtRp(sAchM)}</td>
                     <td class="py-3 px-3 text-center font-bold ${pctM >= 100 ? 'text-emerald-400' : 'text-indigo-400'}">${pctM}%</td>
-                    <td class="py-3 px-3 text-right text-slate-400">${fmtRp(tStaffD)}</td>
-                    <td class="py-3 px-3 text-right font-bold text-emerald-300">${fmtRp(sAchD)}</td>
                 `;
                 summaryBody.appendChild(tr);
             });
 
-            // GENERATE SEPARATE WEEKLY TABLES FOR STAFF REVENUE (WITHOUT WORD CAPSULE)
+            // WEEKLY TABLES WITH TARGET DAY & RUNNING CALENDAR PROJECTION
             const weeklyCapsulesContainer = document.getElementById('weeklyCapsulesContainer');
             weeklyCapsulesContainer.innerHTML = '';
 
             weekIntervals.forEach((wk) => {
                 const capsuleCard = document.createElement('div');
-                capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+                capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-5';
 
                 let rowsHtml = '';
                 activeStaffs.forEach(stf => {
@@ -885,32 +1017,57 @@
                     const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
                     const tStaffM = Math.round((tStoreMonth * pctShare) / 100);
                     const tStaffW = Math.round(tStaffM / 4);
+                    const tStaffD = Math.round(tStaffM / 30);
                     const pctW = tStaffW ? Math.round((sAchWeek / tStaffW) * 100) : 0;
+                    const role = staffRoleConfig[stf] || 'SA';
 
                     rowsHtml += `
                         <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
-                            <td class="py-2.5 px-3 font-bold text-white">${stf.split('/')[1] || stf}</td>
-                            <td class="py-2.5 px-3 text-right text-slate-400">${fmtRp(tStaffW)}</td>
-                            <td class="py-2.5 px-2 text-right font-bold text-cyan-300">${fmtRp(sAchWeek)}</td>
+                            <td class="py-2.5 px-3 font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold ml-1">(${role})</span></td>
+                            <td class="py-2.5 px-3 text-right opacity-70">${fmtRp(tStaffW)}</td>
+                            <td class="py-2.5 px-3 text-right opacity-70 font-mono text-cyan-400">${fmtRp(tStaffD)}</td>
+                            <td class="py-2.5 px-3 text-right font-bold text-cyan-300">${fmtRp(sAchWeek)}</td>
                             <td class="py-2.5 px-3 text-center font-bold ${pctW >= 100 ? 'text-emerald-400' : 'text-cyan-400'}">${pctW}%</td>
                         </tr>
+                    `;
+                });
+
+                // Running calendar dates projection for this week
+                let calendarDatesHtml = '';
+                wk.dates.forEach(dt => {
+                    const dayAch = storeDataAll.filter(r => r.date === dt).reduce((acc, r) => acc + r.net_price, 0);
+                    calendarDatesHtml += `
+                        <div class="liquid-glass-card p-2.5 rounded-xl text-center">
+                            <span class="text-[10px] font-mono opacity-60 block">${dt}</span>
+                            <span class="text-xs font-bold text-emerald-400 mt-0.5 block">${fmtRp(dayAch)}</span>
+                        </div>
                     `;
                 });
 
                 capsuleCard.innerHTML = `
                     <div class="flex justify-between items-center border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-black uppercase text-cyan-300 tracking-wider">Week ${wk.num}</span>
+                            <span class="text-xs font-black uppercase text-cyan-400 tracking-wider">Week ${wk.num}</span>
                             <span class="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">${wk.label}</span>
                         </div>
-                        <span class="text-xs font-bold text-slate-400">${wk.dates.length} Days</span>
+                        <span class="text-xs font-bold opacity-70">${wk.dates.length} Days</span>
                     </div>
-                    <div class="overflow-x-auto">
+
+                    <!-- RUNNING CALENDAR PROJECTION -->
+                    <div class="space-y-1.5">
+                        <span class="text-[10px] uppercase font-bold opacity-60">Pencapaian Harian Kalender Berjalan (Store):</span>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+                            ${calendarDatesHtml}
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto pt-2">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="text-slate-400 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
+                                <tr class="opacity-70 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
                                     <th class="pb-2 px-3">Staff</th>
                                     <th class="pb-2 px-3 text-right">Target Week</th>
+                                    <th class="pb-2 px-3 text-right">Target Day</th>
                                     <th class="pb-2 px-3 text-right">Ach Week</th>
                                     <th class="pb-2 px-3 text-center">% Achieved</th>
                                 </tr>
@@ -946,11 +1103,12 @@
 
                     const diff = achCurr - achPrev;
                     const lflVal = achPrev ? (((achCurr - achPrev) / achPrev) * 100).toFixed(1) : 0;
+                    const role = staffRoleConfig[stf] || 'SA';
 
                     rowsHtml += `
                         <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
-                            <td class="py-2.5 px-3 font-bold text-white">${stf.split('/')[1] || stf}</td>
-                            <td class="py-2.5 px-3 text-right text-slate-300">${fmtRp(achPrev)}</td>
+                            <td class="py-2.5 px-3 font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold ml-1">(${role})</span></td>
+                            <td class="py-2.5 px-3 text-right opacity-80">${fmtRp(achPrev)}</td>
                             <td class="py-2.5 px-3 text-right font-bold text-emerald-400">${fmtRp(achCurr)}</td>
                             <td class="py-2.5 px-3 text-right font-mono ${diff >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${diff >= 0 ? '+' : ''}${fmtRp(diff)}</td>
                             <td class="py-2.5 px-3 text-center">
@@ -966,18 +1124,18 @@
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
                             <i data-lucide="git-compare" class="w-4 h-4 text-emerald-400"></i>
-                            <span class="text-xs font-black uppercase text-emerald-300 tracking-wider">LFL Comparison Pair ${i+1}</span>
+                            <span class="text-xs font-black uppercase text-emerald-400 tracking-wider">LFL Comparison Pair ${i+1}</span>
                         </div>
                         <div class="flex items-center gap-2 text-xs font-semibold">
-                            <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-white/10">${wPrev.label} (Week ${wPrev.num})</span>
+                            <span class="px-3 py-1 rounded-full bg-slate-800 opacity-80 border border-white/10">${wPrev.label} (Week ${wPrev.num})</span>
                             <span class="text-emerald-400 font-bold">VS</span>
-                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">${wCurr.label} (Week ${wCurr.num})</span>
+                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">${wCurr.label} (Week ${wCurr.num})</span>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="text-slate-400 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
+                                <tr class="opacity-70 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
                                     <th class="pb-2 px-3">Staff</th>
                                     <th class="pb-2 px-3 text-right">${wPrev.label}</th>
                                     <th class="pb-2 px-3 text-right">${wCurr.label}</th>
@@ -995,7 +1153,7 @@
             }
 
 
-            // ==================== 4. LOB FOCUS (GROUPED BY LOB ITEM WITH STORE TOTAL + STAFF BREAKDOWN) ====================
+            // ==================== 4. LOB FOCUS (GROUPED BY LOB ITEM, iPad A16 DISPLAY LABEL) ====================
             const lobItemsContainer = document.getElementById('lobItemsContainer');
             lobItemsContainer.innerHTML = '';
 
@@ -1003,18 +1161,21 @@
                 const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
 
                 const storeTotalSold = storeDataAll.filter(matchFn).length;
-                const storeTotalTarget = lobItem.target * activeStaffs.length; // Total Store Target = Target per staff * Active Staff Count
+                const storeTotalTarget = lobItem.target * activeStaffs.length;
                 const storePct = storeTotalTarget ? Math.min(Math.round((storeTotalSold / storeTotalTarget) * 100), 100) : 0;
                 const storeRemaining = Math.max(storeTotalTarget - storeTotalSold, 0);
+
+                // Display Name Override: iPad 11th displays as iPad A16
+                const displayName = lobItem.name === 'iPad 11th' ? 'iPad A16' : lobItem.name;
 
                 let staffContributionRows = '';
                 activeStaffs.forEach(stf => {
                     const sData = rawData.filter(r => r.staff === stf);
                     const staffSold = sData.filter(matchFn).length;
-                    const staffTarget = lobItem.target;
+                    const staffTarget = lobItem.target; // Calculated breakdown target from dynamic config
                     const staffRem = Math.max(staffTarget - staffSold, 0);
+                    const role = staffRoleConfig[stf] || 'SA';
 
-                    // Weekly breakdown for this staff
                     const sW1 = sData.filter(r => weekIntervals[0] && weekIntervals[0].dates.includes(r.date) && matchFn(r)).length;
                     const sW2 = sData.filter(r => weekIntervals[1] && weekIntervals[1].dates.includes(r.date) && matchFn(r)).length;
                     const sW3 = sData.filter(r => weekIntervals[2] && weekIntervals[2].dates.includes(r.date) && matchFn(r)).length;
@@ -1022,13 +1183,13 @@
 
                     staffContributionRows += `
                         <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
-                            <td class="py-2.5 px-3 font-bold text-white">${stf.split('/')[1] || stf}</td>
-                            <td class="py-2.5 px-3 text-center text-slate-400 font-mono">${staffTarget} Pcs</td>
-                            <td class="py-2.5 px-3 text-center font-bold text-purple-300 font-mono">${staffSold} Pcs</td>
-                            <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${sW1}</td>
-                            <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${sW2}</td>
-                            <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${sW3}</td>
-                            <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${sW4}</td>
+                            <td class="py-2.5 px-3 font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold ml-1">(${role})</span></td>
+                            <td class="py-2.5 px-3 text-center opacity-70 font-mono">${staffTarget} Item</td>
+                            <td class="py-2.5 px-3 text-center font-bold text-purple-300 font-mono">${staffSold} Item</td>
+                            <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW1}</td>
+                            <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW2}</td>
+                            <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW3}</td>
+                            <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW4}</td>
                             <td class="py-2.5 px-3 text-center">
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${staffRem === 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-purple-500/20 text-purple-300'}">
                                     ${staffRem === 0 ? 'Achieved!' : `Sisa: ${staffRem}`}
@@ -1041,41 +1202,38 @@
                 const lobCard = document.createElement('div');
                 lobCard.className = 'liquid-glass rounded-3xl p-6 space-y-5';
                 lobCard.innerHTML = `
-                    <!-- STORE TOTAL HEADER FOR LOB ITEM -->
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/10 pb-4">
                         <div class="flex items-center gap-3">
                             <div class="p-3 bg-purple-500/20 rounded-2xl border border-purple-500/30">
                                 <i data-lucide="smartphone" class="w-6 h-6 text-purple-400"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-extrabold text-white">${lobItem.name}</h3>
-                                <p class="text-xs text-slate-400">Pencapaian Total Keseluruhan Store</p>
+                                <h3 class="text-lg font-extrabold">${displayName}</h3>
+                                <p class="text-xs opacity-70">Pencapaian Total Keseluruhan Store</p>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-6">
                             <div class="text-right">
-                                <span class="text-2xl font-black text-white">${storeTotalSold} <span class="text-xs font-normal text-slate-400">/ ${storeTotalTarget} Pcs</span></span>
+                                <span class="text-2xl font-black">${storeTotalSold} <span class="text-xs font-normal opacity-70">/ ${storeTotalTarget} Item</span></span>
                                 <p class="text-[11px] font-semibold ${storeRemaining === 0 ? 'text-emerald-400' : 'text-purple-300'}">
-                                    ${storeRemaining === 0 ? 'Target Store Achieved!' : `Sisa Store: ${storeRemaining} Pcs`}
+                                    ${storeRemaining === 0 ? 'Target Store Achieved!' : `Sisa Store: ${storeRemaining} Item`}
                                 </p>
                             </div>
                             <span class="text-xs font-black px-3 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${storePct}% Store</span>
                         </div>
                     </div>
 
-                    <!-- PROGRESS BAR STORE -->
-                    <div class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden">
+                    <div class="w-full bg-slate-800/40 rounded-full h-2 overflow-hidden">
                         <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: ${storePct}%"></div>
                     </div>
 
-                    <!-- STAFF CONTRIBUTION BREAKDOWN DETAIL -->
                     <div class="pt-2">
-                        <h4 class="text-xs font-bold uppercase text-slate-400 tracking-wider mb-3">Detail Kontribusi & Target Breakdown Per Staff:</h4>
+                        <h4 class="text-xs font-bold uppercase opacity-70 tracking-wider mb-3">Detail Kontribusi & Target Breakdown Per Staff:</h4>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
-                                    <tr class="text-slate-400 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
+                                    <tr class="opacity-70 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
                                         <th class="pb-2 px-3">Nama Staff</th>
                                         <th class="pb-2 px-3 text-center">Target Individual</th>
                                         <th class="pb-2 px-3 text-center">Total Terjual</th>
@@ -1097,7 +1255,57 @@
             });
 
 
-            // ==================== 5. VAS STAFF (SEPARATE WEEKLY CARDS WITHOUT WORD CAPSULE) ====================
+            // ==================== 5. AKSESORIS STAFF (NEW TAB UI MIRIP VAS) ====================
+            const aksesorisWeeklyContainer = document.getElementById('aksesorisWeeklyCapsulesContainer');
+            aksesorisWeeklyContainer.innerHTML = '';
+
+            weekIntervals.forEach((wk) => {
+                const capsuleCard = document.createElement('div');
+                capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+
+                let staffCardsHtml = '';
+                activeStaffs.forEach(stf => {
+                    const sData = rawData.filter(r => r.staff === stf && r.category === 'Accessories' && wk.dates.includes(r.date));
+                    const sAccTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
+
+                    const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
+                    const tStaffAccM = Math.round((tAcc * pctShare) / 100);
+                    const tStaffAccW = Math.round(tStaffAccM / 4);
+                    const role = staffRoleConfig[stf] || 'SA';
+
+                    staffCardsHtml += `
+                        <div class="liquid-glass-card p-4 rounded-2xl space-y-3">
+                            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                <div>
+                                    <h4 class="text-xs font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span></h4>
+                                    <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
+                                </div>
+                                <div class="text-right">
+                                    <!-- FORMAT: Rp Achieved (X Item) / Rp Target -->
+                                    <span class="text-xs font-black text-cyan-400">${fmtRp(sAccTotal)} (${sData.length} Item)</span>
+                                    <span class="text-[10px] block opacity-60">Target: ${fmtRp(tStaffAccW)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                capsuleCard.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black uppercase text-cyan-400 tracking-wider">Aksesoris Week ${wk.num}</span>
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">${wk.label}</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${staffCardsHtml}
+                    </div>
+                `;
+                aksesorisWeeklyContainer.appendChild(capsuleCard);
+            });
+
+
+            // ==================== 6. VAS STAFF (TARGET BREAKDOWN RP OVER RP TARGET, ITEM LABEL) ====================
             const vasWeeklyContainer = document.getElementById('vasWeeklyCapsulesContainer');
             vasWeeklyContainer.innerHTML = '';
 
@@ -1109,6 +1317,11 @@
                 activeStaffs.forEach(stf => {
                     const sData = rawData.filter(r => r.staff === stf && r.category === 'VAS' && wk.dates.includes(r.date));
                     const sVasTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
+
+                    const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
+                    const tStaffVasM = Math.round((tVAS * pctShare) / 100);
+                    const tStaffVasW = Math.round(tStaffVasM / 4);
+                    const role = staffRoleConfig[stf] || 'SA';
 
                     let vasKwHtml = '';
                     vasKeywords.forEach(kw => {
@@ -1122,9 +1335,9 @@
                             <div class="bg-white/5 p-2 rounded-xl flex justify-between items-center text-xs">
                                 <div>
                                     <span class="font-bold text-purple-300 uppercase text-[10px] block">${kw.toUpperCase()}</span>
-                                    <span class="text-slate-200 font-semibold">${fmtRp(sum)}</span>
+                                    <span class="font-semibold">${fmtRp(sum)}</span>
                                 </div>
-                                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Pcs</span>
+                                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Item</span>
                             </div>
                         `;
                     });
@@ -1132,8 +1345,15 @@
                     staffCardsHtml += `
                         <div class="liquid-glass-card p-4 rounded-2xl space-y-2">
                             <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                                <h4 class="text-xs font-bold text-white">${stf.split('/')[1] || stf}</h4>
-                                <span class="text-xs font-black text-purple-300">${fmtRp(sVasTotal)} (${sData.length} Pcs)</span>
+                                <div>
+                                    <h4 class="text-xs font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span></h4>
+                                    <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
+                                </div>
+                                <div class="text-right">
+                                    <!-- FORMAT: Rp Achieved (X Item) / Rp Target -->
+                                    <span class="text-xs font-black text-purple-300">${fmtRp(sVasTotal)} (${sData.length} Item)</span>
+                                    <span class="text-[10px] block opacity-60">Target: ${fmtRp(tStaffVasW)}</span>
+                                </div>
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 ${vasKwHtml}
@@ -1157,19 +1377,19 @@
             });
 
 
-            // ==================== 6. TRANSACTIONS TABLE ====================
+            // ==================== 7. TRANSACTIONS TABLE ====================
             const tbody = document.getElementById('transactionBody');
             tbody.innerHTML = '';
-            document.getElementById('itemCount').textContent = `${filtered.length} Items`;
+            document.getElementById('itemCount').textContent = `${filtered.length} Item`;
 
             filtered.forEach(r => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-white/5 transition';
                 tr.innerHTML = `
-                    <td class="py-2.5 px-2 font-mono text-[11px] text-slate-400">${r.date}</td>
-                    <td class="py-2.5 px-2 font-medium text-slate-200">${r.staff.split('/')[1] || r.staff}</td>
-                    <td class="py-2.5 px-2 font-semibold text-white">${r.product_name}</td>
-                    <td class="py-2.5 px-2 font-mono text-[11px] text-slate-400">${r.article}</td>
+                    <td class="py-2.5 px-2 font-mono text-[11px] opacity-70">${r.date}</td>
+                    <td class="py-2.5 px-2 font-medium">${r.staff.split('/')[1] || r.staff}</td>
+                    <td class="py-2.5 px-2 font-semibold">${r.product_name}</td>
+                    <td class="py-2.5 px-2 font-mono text-[11px] opacity-70">${r.article}</td>
                     <td class="py-2.5 px-2">
                         <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${r.category === 'Device' ? 'bg-blue-500/20 text-blue-300' : r.category === 'VAS' ? 'bg-purple-500/20 text-purple-300' : 'bg-slate-500/20 text-slate-300'}">
                             ${r.category}
