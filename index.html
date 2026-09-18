@@ -102,7 +102,10 @@
                     <i data-lucide="pie-chart" class="w-4 h-4"></i> Store Overview
                 </button>
                 <button onclick="switchMainTab('matrix')" id="mainTab-matrix" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
-                    <i data-lucide="users" class="w-4 h-4"></i> Staff & LFL
+                    <i data-lucide="users" class="w-4 h-4"></i> Staff Performance
+                </button>
+                <button onclick="switchMainTab('lfl')" id="mainTab-lfl" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="trending-up" class="w-4 h-4"></i> LFL Per Staff
                 </button>
                 <button onclick="switchMainTab('lob')" id="mainTab-lob" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="smartphone" class="w-4 h-4"></i> LOB Focus Staff
@@ -252,13 +255,13 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 2: STAFF PERFORMANCE & LFL ==================== -->
+        <!-- ==================== VIEW 2: STAFF PERFORMANCE ==================== -->
         <div id="view-matrix" class="space-y-6 hidden">
             <!-- MONTHLY OVERVIEW TABLE PER STAFF -->
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> Ringkasan Total Month Per Staff (Sesuai Alokasi % Share)
+                        <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> Ringkasan Total Month Per Staff
                     </h3>
                 </div>
 
@@ -282,24 +285,26 @@
                 </div>
             </div>
 
-            <!-- WEEKLY CAPSULE CARDS SECTION (PER MINGGU SEPARATE CAPSULES) -->
+            <!-- WEEKLY CAPSULE CARDS SECTION -->
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i> Breakdown Pencapaian Per Week (Kapsul Terpisah Per Minggu)
+                        <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i> Breakdown Pencapaian Per Week
                     </h3>
                 </div>
 
                 <div class="space-y-6" id="weeklyCapsulesContainer">
-                    <!-- Dynamic Weekly Capsule Tables -->
+                    <!-- Dynamic Weekly Tables -->
                 </div>
             </div>
+        </div>
 
-            <!-- LFL COMPARISON PER MASYING-MASING STAFF (PASANGAN 2-WEEK CAPSULES) -->
+        <!-- ==================== VIEW 3: LFL PER STAFF (TAB BARU TERPISAH) ==================== -->
+        <div id="view-lfl" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> LFL (Week Sebelumnya vs Week Berjalan) Per Staff (Kapsul Pasangan 2-Week)
+                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> LFL (Week Sebelumnya vs Week Berjalan) Per Staff
                     </h3>
                 </div>
 
@@ -309,27 +314,27 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 3: LOB FOCUS STAFF ==================== -->
+        <!-- ==================== VIEW 4: LOB FOCUS STAFF (PER ITEM LOB) ==================== -->
         <div id="view-lob" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Pencapaian Per Staff (Kapsul Terpisah Per Week)
+                        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Pencapaian Per Staff
                     </h3>
                 </div>
 
-                <div class="space-y-6" id="lobWeeklyCapsulesContainer">
-                    <!-- Dynamic Weekly LOB Capsules -->
+                <div class="space-y-6" id="lobItemsContainer">
+                    <!-- Dynamic LOB Item Cards (Store total + Staff breakdown) -->
                 </div>
             </div>
         </div>
 
-        <!-- ==================== VIEW 4: VAS STAFF ==================== -->
+        <!-- ==================== VIEW 5: VAS STAFF ==================== -->
         <div id="view-vas" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i> Detail Rincian VAS (KLA, TSL, IDT, XXL) Per Staff (Kapsul Terpisah Per Week)
+                        <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i> Detail Rincian VAS (KLA, TSL, IDT, XXL) Per Staff
                     </h3>
                 </div>
 
@@ -339,7 +344,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 5: TRANSACTIONS ==================== -->
+        <!-- ==================== VIEW 6: TRANSACTIONS ==================== -->
         <div id="view-transactions" class="space-y-6 hidden">
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -493,7 +498,7 @@
 
         function switchMainTab(viewName) {
             currentMainView = viewName;
-            ['overview', 'matrix', 'lob', 'vas', 'transactions'].forEach(v => {
+            ['overview', 'matrix', 'lfl', 'lob', 'vas', 'transactions'].forEach(v => {
                 const btn = document.getElementById(`mainTab-${v}`);
                 const view = document.getElementById(`view-${v}`);
                 if (v === viewName) {
@@ -729,7 +734,7 @@
                     wDates = uniqueDates.slice(startIdx, startIdx + 7);
                 }
                 if (wDates.length > 0) {
-                    weekIntervals.append = weekIntervals.push({
+                    weekIntervals.push({
                         num: i + 1,
                         startDate: wDates[0],
                         endDate: wDates[wDates.length - 1],
@@ -864,7 +869,7 @@
                 summaryBody.appendChild(tr);
             });
 
-            // GENERATE SEPARATE WEEKLY CAPSULES FOR STAFF REVENUE
+            // GENERATE SEPARATE WEEKLY TABLES FOR STAFF REVENUE (WITHOUT WORD CAPSULE)
             const weeklyCapsulesContainer = document.getElementById('weeklyCapsulesContainer');
             weeklyCapsulesContainer.innerHTML = '';
 
@@ -895,7 +900,7 @@
                 capsuleCard.innerHTML = `
                     <div class="flex justify-between items-center border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-black uppercase text-cyan-300 tracking-wider">Week ${wk.num} Capsule</span>
+                            <span class="text-xs font-black uppercase text-cyan-300 tracking-wider">Week ${wk.num}</span>
                             <span class="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">${wk.label}</span>
                         </div>
                         <span class="text-xs font-bold text-slate-400">${wk.dates.length} Days</span>
@@ -920,7 +925,7 @@
             });
 
 
-            // ==================== 2. LFL COMPARISON (2-WEEK PAIR CAPSULES) ====================
+            // ==================== 3. LFL COMPARISON IN SEPARATE TAB ====================
             const lflPairContainer = document.getElementById('lflPairCapsulesContainer');
             lflPairContainer.innerHTML = '';
 
@@ -961,12 +966,12 @@
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
                             <i data-lucide="git-compare" class="w-4 h-4 text-emerald-400"></i>
-                            <span class="text-xs font-black uppercase text-emerald-300 tracking-wider">LFL Pair Capsule ${i+1}</span>
+                            <span class="text-xs font-black uppercase text-emerald-300 tracking-wider">LFL Comparison Pair ${i+1}</span>
                         </div>
                         <div class="flex items-center gap-2 text-xs font-semibold">
-                            <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-white/10">${wPrev.label} (W${wPrev.num})</span>
+                            <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-white/10">${wPrev.label} (Week ${wPrev.num})</span>
                             <span class="text-emerald-400 font-bold">VS</span>
-                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">${wCurr.label} (W${wCurr.num})</span>
+                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">${wCurr.label} (Week ${wCurr.num})</span>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
@@ -990,61 +995,109 @@
             }
 
 
-            // ==================== 3. LOB FOCUS STAFF (SEPARATE WEEKLY CAPSULES) ====================
-            const lobWeeklyContainer = document.getElementById('lobWeeklyCapsulesContainer');
-            lobWeeklyContainer.innerHTML = '';
+            // ==================== 4. LOB FOCUS (GROUPED BY LOB ITEM WITH STORE TOTAL + STAFF BREAKDOWN) ====================
+            const lobItemsContainer = document.getElementById('lobItemsContainer');
+            lobItemsContainer.innerHTML = '';
 
-            weekIntervals.forEach((wk) => {
-                const capsuleCard = document.createElement('div');
-                capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+            lobItemsConfig.forEach((lobItem) => {
+                const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
 
-                let rowsHtml = '';
+                const storeTotalSold = storeDataAll.filter(matchFn).length;
+                const storeTotalTarget = lobItem.target * activeStaffs.length; // Total Store Target = Target per staff * Active Staff Count
+                const storePct = storeTotalTarget ? Math.min(Math.round((storeTotalSold / storeTotalTarget) * 100), 100) : 0;
+                const storeRemaining = Math.max(storeTotalTarget - storeTotalSold, 0);
+
+                let staffContributionRows = '';
                 activeStaffs.forEach(stf => {
-                    const sData = rawData.filter(r => r.staff === stf && wk.dates.includes(r.date));
+                    const sData = rawData.filter(r => r.staff === stf);
+                    const staffSold = sData.filter(matchFn).length;
+                    const staffTarget = lobItem.target;
+                    const staffRem = Math.max(staffTarget - staffSold, 0);
 
-                    lobItemsConfig.forEach((lobItem) => {
-                        const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
-                        const soldQty = sData.filter(matchFn).length;
+                    // Weekly breakdown for this staff
+                    const sW1 = sData.filter(r => weekIntervals[0] && weekIntervals[0].dates.includes(r.date) && matchFn(r)).length;
+                    const sW2 = sData.filter(r => weekIntervals[1] && weekIntervals[1].dates.includes(r.date) && matchFn(r)).length;
+                    const sW3 = sData.filter(r => weekIntervals[2] && weekIntervals[2].dates.includes(r.date) && matchFn(r)).length;
+                    const sW4 = sData.filter(r => weekIntervals[3] && weekIntervals[3].dates.includes(r.date) && matchFn(r)).length;
 
-                        rowsHtml += `
-                            <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
-                                <td class="py-2.5 px-3 font-bold text-white">${stf.split('/')[1] || stf}</td>
-                                <td class="py-2.5 px-3 font-semibold text-purple-300">${lobItem.name}</td>
-                                <td class="py-2.5 px-3 text-center text-slate-400 font-mono">${lobItem.target}</td>
-                                <td class="py-2.5 px-3 text-center font-bold text-emerald-400 font-mono">${soldQty} Pcs</td>
-                            </tr>
-                        `;
-                    });
+                    staffContributionRows += `
+                        <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
+                            <td class="py-2.5 px-3 font-bold text-white">${stf.split('/')[1] || stf}</td>
+                            <td class="py-2.5 px-3 text-center text-slate-400 font-mono">${staffTarget} Pcs</td>
+                            <td class="py-2.5 px-3 text-center font-bold text-purple-300 font-mono">${staffSold} Pcs</td>
+                            <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${sW1}</td>
+                            <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${sW2}</td>
+                            <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${sW3}</td>
+                            <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${sW4}</td>
+                            <td class="py-2.5 px-3 text-center">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${staffRem === 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-purple-500/20 text-purple-300'}">
+                                    ${staffRem === 0 ? 'Achieved!' : `Sisa: ${staffRem}`}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
                 });
 
-                capsuleCard.innerHTML = `
-                    <div class="flex justify-between items-center border-b border-white/10 pb-3">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-black uppercase text-purple-300 tracking-wider">LOB Week ${wk.num} Capsule</span>
-                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${wk.label}</span>
+                const lobCard = document.createElement('div');
+                lobCard.className = 'liquid-glass rounded-3xl p-6 space-y-5';
+                lobCard.innerHTML = `
+                    <!-- STORE TOTAL HEADER FOR LOB ITEM -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/10 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-3 bg-purple-500/20 rounded-2xl border border-purple-500/30">
+                                <i data-lucide="smartphone" class="w-6 h-6 text-purple-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-extrabold text-white">${lobItem.name}</h3>
+                                <p class="text-xs text-slate-400">Pencapaian Total Keseluruhan Store</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-6">
+                            <div class="text-right">
+                                <span class="text-2xl font-black text-white">${storeTotalSold} <span class="text-xs font-normal text-slate-400">/ ${storeTotalTarget} Pcs</span></span>
+                                <p class="text-[11px] font-semibold ${storeRemaining === 0 ? 'text-emerald-400' : 'text-purple-300'}">
+                                    ${storeRemaining === 0 ? 'Target Store Achieved!' : `Sisa Store: ${storeRemaining} Pcs`}
+                                </p>
+                            </div>
+                            <span class="text-xs font-black px-3 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${storePct}% Store</span>
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="text-slate-400 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
-                                    <th class="pb-2 px-3">Staff</th>
-                                    <th class="pb-2 px-3">Item LOB</th>
-                                    <th class="pb-2 px-3 text-center">Target Store/Staff</th>
-                                    <th class="pb-2 px-3 text-center">Terjual (Week Ini)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${rowsHtml}
-                            </tbody>
-                        </table>
+
+                    <!-- PROGRESS BAR STORE -->
+                    <div class="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden">
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: ${storePct}%"></div>
+                    </div>
+
+                    <!-- STAFF CONTRIBUTION BREAKDOWN DETAIL -->
+                    <div class="pt-2">
+                        <h4 class="text-xs font-bold uppercase text-slate-400 tracking-wider mb-3">Detail Kontribusi & Target Breakdown Per Staff:</h4>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-slate-400 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
+                                        <th class="pb-2 px-3">Nama Staff</th>
+                                        <th class="pb-2 px-3 text-center">Target Individual</th>
+                                        <th class="pb-2 px-3 text-center">Total Terjual</th>
+                                        <th class="pb-2 px-3 text-center">W1</th>
+                                        <th class="pb-2 px-3 text-center">W2</th>
+                                        <th class="pb-2 px-3 text-center">W3</th>
+                                        <th class="pb-2 px-3 text-center">W4</th>
+                                        <th class="pb-2 px-3 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${staffContributionRows}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 `;
-                lobWeeklyContainer.appendChild(capsuleCard);
+                lobItemsContainer.appendChild(lobCard);
             });
 
 
-            // ==================== 4. VAS STAFF (SEPARATE WEEKLY CAPSULES) ====================
+            // ==================== 5. VAS STAFF (SEPARATE WEEKLY CARDS WITHOUT WORD CAPSULE) ====================
             const vasWeeklyContainer = document.getElementById('vasWeeklyCapsulesContainer');
             vasWeeklyContainer.innerHTML = '';
 
@@ -1092,7 +1145,7 @@
                 capsuleCard.innerHTML = `
                     <div class="flex justify-between items-center border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-black uppercase text-purple-300 tracking-wider">VAS Week ${wk.num} Capsule</span>
+                            <span class="text-xs font-black uppercase text-purple-300 tracking-wider">VAS Week ${wk.num}</span>
                             <span class="text-xs font-bold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${wk.label}</span>
                         </div>
                     </div>
@@ -1104,7 +1157,7 @@
             });
 
 
-            // ==================== 5. TRANSACTIONS TABLE ====================
+            // ==================== 6. TRANSACTIONS TABLE ====================
             const tbody = document.getElementById('transactionBody');
             tbody.innerHTML = '';
             document.getElementById('itemCount').textContent = `${filtered.length} Items`;
