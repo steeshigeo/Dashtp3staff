@@ -490,7 +490,7 @@
                                 <th class="pb-3 px-2">Nama Produk</th>
                                 <th class="pb-3 px-2">Article</th>
                                 <th class="pb-3 px-2">Kategori</th>
-                                <th class="pb-3 px-2 text-right">Harga Net</th>
+                                <th class="pb-3 px-2 text-right">AMOUNT</th>
                             </tr>
                         </thead>
                         <tbody id="transactionBody" class="divide-y divide-white/5">
@@ -639,7 +639,7 @@
                             <th class="pb-2 px-2">Tanggal</th>
                             <th class="pb-2 px-2">Nama Produk</th>
                             <th class="pb-2 px-2">Article</th>
-                            <th class="pb-2 px-2 text-right">Harga Net</th>
+                            <th class="pb-2 px-2 text-right">AMOUNT</th>
                         </tr>
                     </thead>
                     <tbody id="staffItemsTableBody" class="divide-y divide-white/5">
@@ -682,6 +682,11 @@
             const art = String(article || '').toUpperCase();
             const grp = String(groupCol || '').toUpperCase();
 
+            // 0. Hapus MAP VOUCHER secara mutlak dari klasifikasi apapun
+            if (p.includes('MAP VOUCHER') || art.includes('MAP VOUCHER')) {
+                return 'EXCLUDE';
+            }
+
             // 1. Check VAS Keywords
             const vasKeywords = ['KLA', 'TSL', 'IDT', 'XXL', 'QOALA', 'TELKOMSEL', 'INDOSAT', 'XL', 'ESIM', 'MYPRIO', 'PROTEKSI', 'HCI'];
             if (art !== 'MKLNEOSLEEVE' && vasKeywords.some(kw => art.includes(kw) || p.includes(kw))) {
@@ -693,28 +698,29 @@
                 'UNQ8886463692554', 'UNQ8886463689141', 'ST1222-476GX-01', 'AUMA11-NL-BK-SL-M',
                 'UNQ8886463692561', 'PKEPL3SS-10-24', 'UNQ8886463688731', 'UNQ8886463692585',
                 'UNQ8886463688724', 'KOASP-MBA136', 'UNQ8886463692547', 'UNQ8886463688717',
-                'APPSWXY2Z/A', 'MKLNEOSLEEVE'
+                'APPSWXY2Z/A', 'MKLNEOSLEEVE', 'UNQ8886463693117'
             ]);
             if (explicitAccArticles.has(art)) {
                 return 'Accessories';
             }
 
-            // 3. Absolute Accessory Block Keywords (Anti-Bocor ke Device)
+            // 3. Absolute Accessory Block Keywords (AIRPODS MAX, AIRPODS, AIRPOD, VERO, UNIQ, FOLIO, SMART FOLIO, GLASS, CASE, dll.)
             const accessoryBlockKeywords = [
                 'GLASS', 'TEMPERED', 'PROTECTOR', 'PROT', 'CASE', 'SLEEVE', 'SLVE', 'SCREEN', 
                 'KEYBOARD', 'MAGIC KEYBOARD', 'PENCIL', 'CABLE', 'ADAPTER', 'STRAP', 'BAND', 
                 'POUCH', 'BAG', 'HUB', 'AIRTAG', 'MOUSE', 'STAND', 'HOLDER', 'COVER', 'GUARD', 
-                'BATTERY', 'CHARGER', 'EARPODS', 'EARPOD', 'CAMDEN', 'MOVEN', 'UNIQ', 'STM', 'AUM A11', 'AC PLUS'
+                'BATTERY', 'CHARGER', 'EARPODS', 'EARPOD', 'CAMDEN', 'MOVEN', 'UNIQ', 'STM', 'AUM A11', 'AC PLUS',
+                'AIRPODS MAX', 'AIRPODS', 'AIRPOD', 'VERO', 'FOLIO', 'SMART FOLIO', 'CLEARVUE', 'COMBAT', 'ICE MGSF', 'MAGXEN', 'CLYDE', 'MACSHELL'
             ];
             if (accessoryBlockKeywords.some(ak => p.includes(ak))) {
                 return 'Accessories';
             }
 
-            // 4. Check Device Keywords (iPhone, iPad, Mac/MBN/MBA/MBP, Apple Watch, AirPods)
+            // 4. Check Device Keywords (iPhone, iPad, Mac/MBN/MBA/MBP, Apple Watch)
             const deviceKeywords = [
                 'IPHONE', 'IPAD', 'MACBOOK', 'IMAC', 'MACMINI', 'MAC MINI', 'MAC PRO', 'MACSTUDIO', 
                 'MBA', 'MBP', 'MBN', 'APPLE WATCH', 'WATCH ULTRA', 'WATCH SE', 'WATCH 11', 'WATCH 10', 
-                'WATCH 9', 'AIRPODS', 'AIRPOD'
+                'WATCH 9'
             ];
             if (deviceKeywords.some(dk => p.includes(dk))) {
                 return 'Device';
@@ -791,11 +797,18 @@
                 const res = await fetch('data.json');
                 if (res.ok) {
                     const data = await res.json();
-                    // Re-classify item category strictly using our robust function
-                    rawData = data.filter(item => item.net_price > 0).map(item => ({
+                    // Filter out MAP VOUCHER and non-positive price items completely
+                    rawData = data.filter(item => {
+                        if (!item || item.net_price <= 0) return false;
+                        const pName = String(item.product_name || '').toUpperCase();
+                        const art = String(item.article || '').toUpperCase();
+                        if (pName.includes('MAP VOUCHER') || art.includes('MAP VOUCHER')) return false;
+                        return true;
+                    }).map(item => ({
                         ...item,
                         category: classifyItemCategory(item.product_name, item.article, item.category)
                     }));
+
                     initStaffSelector();
                     autoCalcTargets();
                     resetEqualStaffPercentages();
@@ -992,7 +1005,7 @@
             const macQty = dayTx.filter(r => {
                 if (r.category !== 'Device') return false;
                 const p = r.product_name.toUpperCase();
-                if (p.includes('SLEEVE') || p.includes('SLVE') || p.includes('CASE') || p.includes('SCREEN') || p.includes('PROTECTOR') || p.includes('BAG')) {
+                if (p.includes('SLEEVE') || p.includes('SLVE') || p.includes('CASE') || p.includes('SCREEN') || p.includes('PROTECTOR') || p.includes('BAG') || p.includes('VERO') || p.includes('UNIQ') || p.includes('FOLIO')) {
                     return false;
                 }
                 return macRegex.test(r.product_name);
