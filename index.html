@@ -383,7 +383,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 5: AKSESORIS STAFF (NEW TAB) ==================== -->
+        <!-- ==================== VIEW 5: AKSESORIS STAFF ==================== -->
         <div id="view-aksesoris" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
@@ -695,7 +695,7 @@
             const equalPct = (100 / activeStaffs.length).toFixed(2);
             activeStaffs.forEach(s => {
                 staffPercentConfig[s] = parseFloat(equalPct);
-                if (!staffRoleConfig[s]) staffRoleConfig[s] = 'SA'; // Default Role
+                if (!staffRoleConfig[s]) staffRoleConfig[s] = 'SA';
             });
             renderStaffPercentInputs();
         }
@@ -731,7 +731,6 @@
                     </div>
 
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                        <!-- JABATAN INPUT -->
                         <input type="text" value="${staffRoleConfig[s]}" onchange="updateStaffRole('${s}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-indigo-300 font-bold focus:outline-none focus:border-indigo-500" placeholder="Jabatan">
                         
                         <span class="text-slate-400 text-[10px] hidden sm:inline font-mono">${fmtRp(nominalMonth)}</span>
@@ -822,24 +821,40 @@
             const tAcc = parseFloat(document.getElementById('targetAccessories').value) || 0;
             const tVAS = parseFloat(document.getElementById('targetVAS').value) || 0;
 
-            // DATES & WEEK BREAKDOWN LOGIC
-            const uniqueDates = [...new Set(rawData.map(r => r.date))].sort();
-            const latestDate = uniqueDates[uniqueDates.length - 1] || '--';
+            // DATES & WEEK BREAKDOWN LOGIC (FULL MONTH CALENDAR GENERATION)
+            const uniqueDatesFromData = [...new Set(rawData.map(r => r.date))].sort();
+            const latestDate = uniqueDatesFromData[uniqueDatesFromData.length - 1] || '--';
 
-            // Set Date Synced Label in Header
             if (document.getElementById('syncDateLbl')) {
                 document.getElementById('syncDateLbl').textContent = latestDate;
             }
 
-            // Build strictly 4 week intervals
+            // Generate full calendar dates for the month
+            let allMonthDates = [];
+            let sampleDate = uniqueDatesFromData[0] || '01-08-2026';
+            const dateParts = sampleDate.split('-');
+            if (dateParts.length === 3) {
+                const monthNum = parseInt(dateParts[1], 10);
+                const yearNum = parseInt(dateParts[2], 10);
+                const lastDay = new Date(yearNum, monthNum, 0).getDate();
+                for (let d = 1; d <= lastDay; d++) {
+                    const dd = String(d).padStart(2, '0');
+                    const mm = String(monthNum).padStart(2, '0');
+                    allMonthDates.push(`${dd}-${mm}-${yearNum}`);
+                }
+            } else {
+                allMonthDates = uniqueDatesFromData;
+            }
+
+            // Build strictly 4 week intervals (7 days per week)
             const weekIntervals = [];
             for (let i = 0; i < 4; i++) {
                 const startIdx = i * 7;
                 let wDates = [];
                 if (i === 3) {
-                    wDates = uniqueDates.slice(startIdx);
+                    wDates = allMonthDates.slice(startIdx);
                 } else {
-                    wDates = uniqueDates.slice(startIdx, startIdx + 7);
+                    wDates = allMonthDates.slice(startIdx, startIdx + 7);
                 }
                 if (wDates.length > 0) {
                     weekIntervals.push({
@@ -852,8 +867,8 @@
                 }
             }
 
-            const last7Dates = uniqueDates.slice(-7);
-            const prev7Dates = uniqueDates.slice(-14, -7);
+            const last7Dates = uniqueDatesFromData.slice(-7);
+            const prev7Dates = uniqueDatesFromData.slice(-14, -7);
 
             // Filter data
             let staffData = rawData;
@@ -916,9 +931,8 @@
             dailyInvoiceGrid.innerHTML = '';
             let totalStoreUniqueInvoices = 0;
 
-            uniqueDates.forEach(dt => {
+            allMonthDates.forEach(dt => {
                 const dayTx = storeDataAll.filter(r => r.date === dt);
-                // Unique invoices with receipt starting with 1000 or any non-empty receipt
                 const uniqueReceipts = new Set(
                     dayTx.map(r => r.receipt ? String(r.receipt).trim() : null)
                          .filter(rc => rc && rc !== 'undefined' && rc !== 'null')
@@ -927,10 +941,10 @@
                 totalStoreUniqueInvoices += invCount;
 
                 const card = document.createElement('div');
-                card.className = 'liquid-glass-card p-3 rounded-2xl text-center flex flex-col justify-between';
+                card.className = 'liquid-glass-card p-2 rounded-xl text-center flex flex-col justify-between';
                 card.innerHTML = `
-                    <span class="text-[10px] font-mono opacity-70 block">${dt}</span>
-                    <div class="text-base font-black text-emerald-400 mt-1">${invCount} <span class="text-[9px] font-normal opacity-60">Inv</span></div>
+                    <span class="text-[9px] font-mono opacity-60 block">${dt}</span>
+                    <div class="text-xs font-black text-emerald-400 mt-0.5">${invCount} <span class="text-[8px] font-normal opacity-60">Inv</span></div>
                 `;
                 dailyInvoiceGrid.appendChild(card);
             });
@@ -1001,7 +1015,7 @@
                 summaryBody.appendChild(tr);
             });
 
-            // WEEKLY TABLES WITH TARGET DAY & RUNNING CALENDAR PROJECTION
+            // WEEKLY TABLES WITH TARGET DAY & CLOSING HARIAN (STORE)
             const weeklyCapsulesContainer = document.getElementById('weeklyCapsulesContainer');
             weeklyCapsulesContainer.innerHTML = '';
 
@@ -1032,14 +1046,14 @@
                     `;
                 });
 
-                // Running calendar dates projection for this week
+                // CLOSING HARIAN (STORE) CALENDAR PROJECTION FOR THIS WEEK
                 let calendarDatesHtml = '';
                 wk.dates.forEach(dt => {
                     const dayAch = storeDataAll.filter(r => r.date === dt).reduce((acc, r) => acc + r.net_price, 0);
                     calendarDatesHtml += `
-                        <div class="liquid-glass-card p-2.5 rounded-xl text-center">
-                            <span class="text-[10px] font-mono opacity-60 block">${dt}</span>
-                            <span class="text-xs font-bold text-emerald-400 mt-0.5 block">${fmtRp(dayAch)}</span>
+                        <div class="liquid-glass-card p-2 rounded-xl text-center">
+                            <span class="text-[9px] font-mono opacity-60 block">${dt}</span>
+                            <span class="text-[10px] font-bold text-emerald-400 mt-0.5 block truncate">${fmtRp(dayAch)}</span>
                         </div>
                     `;
                 });
@@ -1053,9 +1067,9 @@
                         <span class="text-xs font-bold opacity-70">${wk.dates.length} Days</span>
                     </div>
 
-                    <!-- RUNNING CALENDAR PROJECTION -->
+                    <!-- CLOSING HARIAN (STORE) -->
                     <div class="space-y-1.5">
-                        <span class="text-[10px] uppercase font-bold opacity-60">Pencapaian Harian Kalender Berjalan (Store):</span>
+                        <span class="text-[10px] uppercase font-bold opacity-60">CLOSING HARIAN (STORE):</span>
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
                             ${calendarDatesHtml}
                         </div>
@@ -1165,14 +1179,13 @@
                 const storePct = storeTotalTarget ? Math.min(Math.round((storeTotalSold / storeTotalTarget) * 100), 100) : 0;
                 const storeRemaining = Math.max(storeTotalTarget - storeTotalSold, 0);
 
-                // Display Name Override: iPad 11th displays as iPad A16
                 const displayName = lobItem.name === 'iPad 11th' ? 'iPad A16' : lobItem.name;
 
                 let staffContributionRows = '';
                 activeStaffs.forEach(stf => {
                     const sData = rawData.filter(r => r.staff === stf);
                     const staffSold = sData.filter(matchFn).length;
-                    const staffTarget = lobItem.target; // Calculated breakdown target from dynamic config
+                    const staffTarget = lobItem.target;
                     const staffRem = Math.max(staffTarget - staffSold, 0);
                     const role = staffRoleConfig[stf] || 'SA';
 
@@ -1255,7 +1268,7 @@
             });
 
 
-            // ==================== 5. AKSESORIS STAFF (NEW TAB UI MIRIP VAS) ====================
+            // ==================== 5. AKSESORIS STAFF ====================
             const aksesorisWeeklyContainer = document.getElementById('aksesorisWeeklyCapsulesContainer');
             aksesorisWeeklyContainer.innerHTML = '';
 
@@ -1281,7 +1294,6 @@
                                     <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
                                 </div>
                                 <div class="text-right">
-                                    <!-- FORMAT: Rp Achieved (X Item) / Rp Target -->
                                     <span class="text-xs font-black text-cyan-400">${fmtRp(sAccTotal)} (${sData.length} Item)</span>
                                     <span class="text-[10px] block opacity-60">Target: ${fmtRp(tStaffAccW)}</span>
                                 </div>
@@ -1305,7 +1317,7 @@
             });
 
 
-            // ==================== 6. VAS STAFF (TARGET BREAKDOWN RP OVER RP TARGET, ITEM LABEL) ====================
+            // ==================== 6. VAS STAFF ====================
             const vasWeeklyContainer = document.getElementById('vasWeeklyCapsulesContainer');
             vasWeeklyContainer.innerHTML = '';
 
@@ -1350,7 +1362,6 @@
                                     <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
                                 </div>
                                 <div class="text-right">
-                                    <!-- FORMAT: Rp Achieved (X Item) / Rp Target -->
                                     <span class="text-xs font-black text-purple-300">${fmtRp(sVasTotal)} (${sData.length} Item)</span>
                                     <span class="text-[10px] block opacity-60">Target: ${fmtRp(tStaffVasW)}</span>
                                 </div>
