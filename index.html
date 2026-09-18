@@ -403,8 +403,22 @@
                     </h3>
                 </div>
 
+                <!-- LOB FOCUS PER ITEM CARDS -->
                 <div class="space-y-6" id="lobItemsContainer">
-                    <!-- Dynamic LOB Item Cards (Store total + Staff breakdown) -->
+                    <!-- Dynamic LOB Item Cards (Store total + Staff breakdown QTY) -->
+                </div>
+
+                <!-- LOB FOCUS WEEKLY CAPSULES BREAKDOWN PER WEEK -->
+                <div class="space-y-6 pt-4 border-t border-white/10">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-sm font-bold flex items-center gap-2 text-purple-300">
+                            <i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i> LOB Focus Breakdown Per Week
+                        </h3>
+                    </div>
+
+                    <div class="space-y-6" id="lobWeeklyCapsulesContainer">
+                        <!-- Dynamic LOB Focus Weekly Capsules -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -618,7 +632,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- BOX 1: STANDARD CLOSING REPORT -->
+                <!-- BOX 1: STANDARD CLOSING REPORT (TANPA AIRPODS) -->
                 <div class="space-y-3 bg-slate-900/80 p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
                     <div>
                         <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block mb-2">1. M121 - Closing Report</span>
@@ -1063,7 +1077,6 @@
             const ipadQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPAD')).length;
             const iphoneQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPHONE')).length;
             const awQty = dayTx.filter(r => r.category === 'Device' && (r.product_name.toUpperCase().includes('WATCH') || r.product_name.toUpperCase().includes('AW'))).length;
-            const airpodsQtySummary = dayTx.filter(r => r.product_name.toUpperCase().includes('AIRPOD')).length;
 
             // VAS Breakdown Nominal
             const vasItems = dayTx.filter(r => r.category === 'VAS');
@@ -1072,7 +1085,7 @@
             const idtRp = vasItems.filter(r => r.article.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('INDOSAT')).reduce((acc, r) => acc + r.net_price, 0);
             const xxlRp = vasItems.filter(r => r.article.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XL')).reduce((acc, r) => acc + r.net_price, 0);
 
-            // LAPORAN 1: STANDARD CLOSING REPORT
+            // LAPORAN 1: STANDARD CLOSING REPORT (AIRPODS DIHAPUS DARI LIST INI SESUAI REQUES)
             const reportStr = `*M121 - Closing Report ${dateStr}*
 
 Total Sales : ${fmtRp(totalSales)}
@@ -1084,7 +1097,6 @@ Mac : ${macQty}
 iPad : ${ipadQty}
 iPhone : ${iphoneQty}
 Apple Watch : ${awQty}
-AirPods : ${airpodsQtySummary}
 
 Qoala : ${fmtRp(qoalaRp)}
 Telkomsel : ${fmtRp(tslRp)}
@@ -1574,37 +1586,26 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
                 lflPairContainer.appendChild(pairCard);
             }
 
+            // ==================== LOB FOCUS TAB ENGINE ====================
             const lobItemsContainer = document.getElementById('lobItemsContainer');
             lobItemsContainer.innerHTML = '';
 
             lobItemsConfig.forEach((lobItem) => {
                 const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
 
-                const lobSalesStore = storeDataAll.filter(matchFn);
-                const storeTotalSoldQty = lobSalesStore.length;
-                const storeTotalSoldNominal = lobSalesStore.reduce((acc, r) => acc + r.net_price, 0);
-
+                const storeTotalSoldQty = storeDataAll.filter(matchFn).length;
                 const storeTotalTargetQty = lobItem.target * activeStaffs.length;
-                const avgUnitPrice = storeTotalSoldQty > 0 ? (storeTotalSoldNominal / storeTotalSoldQty) : 15000000;
-                const storeTotalTargetNominal = storeTotalTargetQty * avgUnitPrice;
-
                 const storePct = storeTotalTargetQty ? Math.min(Math.round((storeTotalSoldQty / storeTotalTargetQty) * 100), 100) : 0;
-                const storeRemainingNominal = Math.max(storeTotalTargetNominal - storeTotalSoldNominal, 0);
+                const storeRemainingQty = Math.max(storeTotalTargetQty - storeTotalSoldQty, 0);
 
                 const displayName = lobItem.name === 'iPad 11th' ? 'iPad A16' : lobItem.name;
 
                 let staffContributionRows = '';
                 activeStaffs.forEach(stf => {
                     const sData = rawData.filter(r => r.staff === stf);
-                    const staffSoldItems = sData.filter(matchFn);
-                    const staffSoldQty = staffSoldItems.length;
-                    const staffSoldNominal = staffSoldItems.reduce((acc, r) => acc + r.net_price, 0);
-
-                    const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
-                    const staffTargetQty = Math.round((storeTotalTargetQty * pctShare) / 100) || lobItem.target;
-                    const staffTargetNominal = staffTargetQty * avgUnitPrice;
-
-                    const staffRemNominal = Math.max(staffTargetNominal - staffSoldNominal, 0);
+                    const staffSoldQty = sData.filter(matchFn).length;
+                    const staffTargetQty = lobItem.target; // Target Qty dari config dynamic LOB Focus Items
+                    const staffRemQty = Math.max(staffTargetQty - staffSoldQty, 0);
                     const role = staffRoleConfig[stf] || 'SA';
 
                     const sW1 = sData.filter(r => weekIntervals[0] && weekIntervals[0].dates.includes(r.date) && matchFn(r)).length;
@@ -1615,21 +1616,15 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
                     staffContributionRows += `
                         <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
                             <td class="py-2.5 px-3 font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold ml-1">(${role})</span></td>
-                            <td class="py-2.5 px-3 text-right font-bold text-indigo-300">
-                                ${fmtRp(staffTargetNominal)}
-                                <span class="text-[10px] opacity-60 font-normal block font-mono">(${staffTargetQty} Item)</span>
-                            </td>
-                            <td class="py-2.5 px-3 text-right font-bold text-purple-300 font-mono">
-                                ${fmtRp(staffSoldNominal)}
-                                <span class="text-[10px] opacity-60 font-normal block font-mono">(${staffSoldQty} Item)</span>
-                            </td>
+                            <td class="py-2.5 px-3 text-center font-bold text-indigo-300 font-mono">${staffTargetQty} Item</td>
+                            <td class="py-2.5 px-3 text-center font-bold text-purple-300 font-mono">${staffSoldQty} Item</td>
                             <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW1}</td>
                             <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW2}</td>
                             <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW3}</td>
                             <td class="py-2.5 px-3 text-center opacity-80 font-mono">${sW4}</td>
                             <td class="py-2.5 px-3 text-center">
-                                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${staffRemNominal === 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-purple-500/20 text-purple-300'}">
-                                    ${staffRemNominal === 0 ? 'Achieved!' : `Sisa: ${fmtRp(staffRemNominal)}`}
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${staffRemQty === 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-purple-500/20 text-purple-300'}">
+                                    ${staffRemQty === 0 ? 'Achieved!' : `Sisa: ${staffRemQty} Item`}
                                 </span>
                             </td>
                         </tr>
@@ -1652,9 +1647,9 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
 
                         <div class="flex items-center gap-6">
                             <div class="text-right">
-                                <span class="text-xl font-black">${fmtRp(storeTotalSoldNominal)} <span class="text-xs font-normal opacity-70">(${storeTotalSoldQty} / ${storeTotalTargetQty} Item)</span></span>
-                                <p class="text-[11px] font-semibold ${storeRemainingNominal === 0 ? 'text-emerald-400' : 'text-purple-300'}">
-                                    ${storeRemainingNominal === 0 ? 'Target Store Achieved!' : `Sisa Store: ${fmtRp(storeRemainingNominal)}`}
+                                <span class="text-2xl font-black">${storeTotalSoldQty} <span class="text-xs font-normal opacity-70">/ ${storeTotalTargetQty} Item</span></span>
+                                <p class="text-[11px] font-semibold ${storeRemainingQty === 0 ? 'text-emerald-400' : 'text-purple-300'}">
+                                    ${storeRemainingQty === 0 ? 'Target Store Achieved!' : `Sisa Store: ${storeRemainingQty} Item`}
                                 </p>
                             </div>
                             <span class="text-xs font-black px-3 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${storePct}% Store</span>
@@ -1666,14 +1661,14 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
                     </div>
 
                     <div class="pt-2">
-                        <h4 class="text-xs font-bold uppercase opacity-70 tracking-wider mb-3">Detail Breakdown Target Individual (Nominal Amount) Per Staff:</h4>
+                        <h4 class="text-xs font-bold uppercase opacity-70 tracking-wider mb-3">Detail Breakdown Target Individual (Nominal QTY) Per Staff:</h4>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="opacity-70 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
                                         <th class="pb-2 px-3">Nama Staff</th>
-                                        <th class="pb-2 px-3 text-right">Target Individual (Rp)</th>
-                                        <th class="pb-2 px-3 text-right">Total Terjual (Rp)</th>
+                                        <th class="pb-2 px-3 text-center">Target Individual (QTY)</th>
+                                        <th class="pb-2 px-3 text-center">Total Terjual (QTY)</th>
                                         <th class="pb-2 px-3 text-center">W1 Qty</th>
                                         <th class="pb-2 px-3 text-center">W2 Qty</th>
                                         <th class="pb-2 px-3 text-center">W3 Qty</th>
@@ -1690,6 +1685,61 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
                 `;
                 lobItemsContainer.appendChild(lobCard);
             });
+
+            // LOB FOCUS WEEKLY CAPSULES CONTAINER (BREAKDOWN PER WEEK)
+            const lobWeeklyCapsulesContainer = document.getElementById('lobWeeklyCapsulesContainer');
+            if (lobWeeklyCapsulesContainer) {
+                lobWeeklyCapsulesContainer.innerHTML = '';
+                weekIntervals.forEach((wk) => {
+                    const capsuleCard = document.createElement('div');
+                    capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+
+                    let rowsHtml = '';
+                    activeStaffs.forEach(stf => {
+                        const role = staffRoleConfig[stf] || 'SA';
+                        let lobItemsHtml = '';
+
+                        lobItemsConfig.forEach(lobItem => {
+                            const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
+                            const wkSold = rawData.filter(r => r.staff === stf && wk.dates.includes(r.date) && matchFn(r)).length;
+                            const displayName = lobItem.name === 'iPad 11th' ? 'iPad A16' : lobItem.name;
+
+                            lobItemsHtml += `
+                                <div class="bg-white/5 px-2.5 py-1.5 rounded-xl flex justify-between items-center text-xs">
+                                    <span class="text-[10px] font-bold text-purple-300">${displayName}</span>
+                                    <span class="font-extrabold text-white font-mono">${wkSold} <span class="text-[9px] opacity-60 font-normal">Item</span></span>
+                                </div>
+                            `;
+                        });
+
+                        rowsHtml += `
+                            <div class="liquid-glass-card p-4 rounded-2xl space-y-2">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                    <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                                        ${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span>
+                                    </h4>
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 pt-1">
+                                    ${lobItemsHtml}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    capsuleCard.innerHTML = `
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-black uppercase text-purple-300 tracking-wider">LOB Focus Week ${wk.num}</span>
+                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${wk.label}</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${rowsHtml}
+                        </div>
+                    `;
+                    lobWeeklyCapsulesContainer.appendChild(capsuleCard);
+                });
+            }
 
             const deviceWeeklyContainer = document.getElementById('deviceWeeklyCapsulesContainer');
             if (deviceWeeklyContainer) {
