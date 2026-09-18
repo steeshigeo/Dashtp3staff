@@ -8,7 +8,7 @@ import pandas as pd
 DEFAULT_ONEDRIVE_URL = "https://1drv.ms/x/c/426713E72C49EDEB/IQBD3oB0QQCkTZRPXh7HhhWoAQ8oQIHav9BkCWSKDtwxFXI?e=zoQ86E"
 
 def get_download_url(share_url):
-    """Menambahkan parameter download=1 untuk bypass autentikasi Graph API 401."""
+    """Menggunakan parameter download=1 untuk bypass autentikasi Graph API 401."""
     if not share_url:
         return ""
     if "download=1" not in share_url:
@@ -99,38 +99,40 @@ def parse_sales_xls(file_path):
                     price = float(rc0)
                     net_price = float(rc2) if rc2 is not None else price
                     
-                    p_lower = product_name.lower()
-                    art_lower = article.lower()
-                    
-                    category = "Accessories"
-                    if any(kw in art_lower or kw in p_lower for kw in vas_keywords):
-                        category = "VAS"
-                    elif any(dk in p_lower for dk in device_keywords):
-                        category = "Device"
+                    # SYSTEM FILTER: HANYA MEMASUKKAN ITEM BERHARGA LEBIH DARI RP 0
+                    if net_price > 0:
+                        p_lower = product_name.lower()
+                        art_lower = article.lower()
                         
-                    lob_focus = None
-                    if 'iphone 15' in p_lower:
-                        lob_focus = 'iPhone 15'
-                    elif 'ipad' in p_lower and ('a16' in p_lower or '10th' in p_lower or '10.9' in p_lower):
-                        lob_focus = 'iPad A16'
-                    elif 'mbn' in p_lower or 'macbook' in p_lower:
-                        lob_focus = 'MBN'
-                    elif 'aw se' in p_lower or 'watch se' in p_lower:
-                        lob_focus = 'AW SE'
-                    elif 'airpods' in p_lower:
-                        lob_focus = 'AirPods'
+                        category = "Accessories"
+                        if any(kw in art_lower or kw in p_lower for kw in vas_keywords):
+                            category = "VAS"
+                        elif any(dk in p_lower for dk in device_keywords):
+                            category = "Device"
+                            
+                        lob_focus = None
+                        if 'iphone 15' in p_lower:
+                            lob_focus = 'iPhone 15'
+                        elif 'ipad' in p_lower and ('a16' in p_lower or '10th' in p_lower or '10.9' in p_lower):
+                            lob_focus = 'iPad A16'
+                        elif 'mbn' in p_lower or 'macbook' in p_lower:
+                            lob_focus = 'MBN'
+                        elif 'aw se' in p_lower or 'watch se' in p_lower:
+                            lob_focus = 'AW SE'
+                        elif 'airpods' in p_lower:
+                            lob_focus = 'AirPods'
 
-                    records.append({
-                        'date': current_date,
-                        'staff': current_staff,
-                        'product_name': product_name,
-                        'article': article,
-                        'price': price,
-                        'receipt': rc1,
-                        'net_price': net_price,
-                        'category': category,
-                        'lob_focus': lob_focus
-                    })
+                        records.append({
+                            'date': current_date,
+                            'staff': current_staff,
+                            'product_name': product_name,
+                            'article': article,
+                            'price': price,
+                            'receipt': rc1,
+                            'net_price': net_price,
+                            'category': category,
+                            'lob_focus': lob_focus
+                        })
                     i += 1
                 except ValueError:
                     break
@@ -138,7 +140,7 @@ def parse_sales_xls(file_path):
             
         i += 1
         
-    print(f"[✓] Berhasil memproses {len(records)} transaksi sales.")
+    print(f"[✓] Berhasil memproses {len(records)} transaksi sales (Excluding Rp0 items).")
     return records
 
 def main():
