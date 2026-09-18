@@ -409,7 +409,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 5: DEVICE STAFF (NEW TAB) ==================== -->
+        <!-- ==================== VIEW 5: DEVICE STAFF ==================== -->
         <div id="view-device" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
@@ -617,7 +617,7 @@
         </div>
     </div>
 
-    <!-- MODAL 3: DETAIL ITEMS STAFF TAP (AKSESORIS / DEVICE / VAS) -->
+    <!-- MODAL 3: DETAIL ITEMS STAFF TAP -->
     <div id="staffItemsModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="liquid-glass rounded-3xl p-6 max-w-2xl w-full border border-white/20 shadow-2xl relative space-y-4 max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center border-b border-white/10 pb-3">
@@ -932,18 +932,19 @@
             const accSales = dayTx.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
             const vasSales = dayTx.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
 
-            // Item Category Quantities
-            const macQty = dayTx.filter(r => r.product_name.toLowerCase().includes('mac') || r.article.toLowerCase().includes('mac')).length;
-            const ipadQty = dayTx.filter(r => r.product_name.toLowerCase().includes('ipad') || r.article.toLowerCase().includes('ipad')).length;
-            const iphoneQty = dayTx.filter(r => r.product_name.toLowerCase().includes('iphone') || r.article.toLowerCase().includes('iphone')).length;
-            const awQty = dayTx.filter(r => r.product_name.toLowerCase().includes('watch') || r.article.toLowerCase().includes('aw')).length;
-            const airpodsQty = dayTx.filter(r => r.product_name.toLowerCase().includes('airpod') || r.article.toLowerCase().includes('airpod')).length;
+            // Device Specific Quantities (Mac, iPad, iPhone, AW, AirPods)
+            const macRegex = /\b(MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MACPRO|MAC PRO)\b/i;
+            const macQty = dayTx.filter(r => r.category === 'Device' && macRegex.test(r.product_name)).length;
+            const ipadQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPAD')).length;
+            const iphoneQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPHONE')).length;
+            const awQty = dayTx.filter(r => r.category === 'Device' && (r.product_name.toUpperCase().includes('WATCH') || r.product_name.toUpperCase().includes('AW'))).length;
+            const airpodsQty = dayTx.filter(r => r.product_name.toUpperCase().includes('AIRPOD')).length;
 
             // VAS Breakdown Nominal
-            const qoalaRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toLowerCase().includes('kla') || r.product_name.toLowerCase().includes('kla') || r.product_name.toLowerCase().includes('qoala'))).reduce((acc, r) => acc + r.net_price, 0);
-            const tslRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toLowerCase().includes('tsl') || r.product_name.toLowerCase().includes('tsl') || r.product_name.toLowerCase().includes('telkomsel'))).reduce((acc, r) => acc + r.net_price, 0);
-            const idtRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toLowerCase().includes('idt') || r.product_name.toLowerCase().includes('idt') || r.product_name.toLowerCase().includes('indosat'))).reduce((acc, r) => acc + r.net_price, 0);
-            const xxlRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toLowerCase().includes('xxl') || r.product_name.toLowerCase().includes('xxl') || r.product_name.toLowerCase().includes('xl'))).reduce((acc, r) => acc + r.net_price, 0);
+            const qoalaRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('QOALA'))).reduce((acc, r) => acc + r.net_price, 0);
+            const tslRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TELKOMSEL'))).reduce((acc, r) => acc + r.net_price, 0);
+            const idtRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('INDOSAT'))).reduce((acc, r) => acc + r.net_price, 0);
+            const xxlRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XL'))).reduce((acc, r) => acc + r.net_price, 0);
 
             const reportStr = `*M121 - Closing Report ${dateStr}*
 
@@ -1320,7 +1321,7 @@ XL : ${fmtRp(xxlRp)}`;
                         </table>
                     </div>
 
-                    <!-- CLOSING HARIAN (STORE) MOVED TO BOTTOM OF WEEK CARD -->
+                    <!-- CLOSING HARIAN (STORE) MOVED TO BOTTOM OF WEEK PAGE -->
                     <div class="space-y-1.5 pt-3 border-t border-white/10">
                         <span class="text-[10px] uppercase font-bold opacity-60">CLOSING HARIAN (STORE):</span>
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
