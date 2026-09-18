@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Performance Dashboard</title>
+    <title>Sales Performance Dashboard - iOS 27 Edition</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -24,48 +24,56 @@
     </script>
     <style>
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 35%, #311042 70%, #0f172a 100%);
+            background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #0f172a 60%, #020617 100%);
             background-attachment: fixed;
             color: #f8fafc;
             min-height: 100vh;
         }
         .liquid-glass {
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(25px) saturate(190%);
-            -webkit-backdrop-filter: blur(25px) saturate(190%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px) saturate(210%);
+            -webkit-backdrop-filter: blur(30px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
         }
         .liquid-glass-card {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(16px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .liquid-glass-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.22);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
         }
-        .ios-tab-active {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(12px);
+        .floating-nav {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(25px) saturate(200%);
+            -webkit-backdrop-filter: blur(25px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+        }
+        .nav-tab-active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.35) 0%, rgba(168, 85, 247, 0.35) 100%);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
         }
     </style>
 </head>
-<body class="p-4 md:p-8 font-sans antialiased">
-    <div class="max-w-7xl mx-auto space-y-6">
+<body class="p-4 md:p-8 pb-28 font-sans antialiased">
+    <div class="max-w-7xl mx-auto space-y-8">
 
         <!-- HEADER -->
         <header class="liquid-glass rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4">
-                <div class="p-3 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-2xl shadow-lg shadow-indigo-500/30">
+                <div class="p-3.5 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-xl shadow-indigo-500/20">
                     <i data-lucide="layout-dashboard" class="w-8 h-8 text-white"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
                         Sales Progress Dashboard
                     </h1>
                     <p class="text-xs md:text-sm text-slate-400">Staff Achievement Tracker</p>
@@ -73,7 +81,6 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <!-- BUTTON CONFIG -->
                 <button onclick="toggleConfigModal(true)" class="liquid-glass-card hover:bg-white/10 text-xs font-bold px-5 py-3 rounded-2xl flex items-center gap-2 border border-indigo-500/30 text-indigo-300 shadow-lg shadow-indigo-500/10 transition">
                     <i data-lucide="settings" class="w-4 h-4 text-indigo-400"></i>
                     Config Target
@@ -88,226 +95,284 @@
             </div>
         </header>
 
-        <!-- SELECTOR STAFF & FILTER -->
-        <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
-            <div class="w-full sm:w-auto flex items-center gap-3">
-                <i data-lucide="user" class="w-5 h-5 text-cyan-400"></i>
-                <select id="staffSelect" onchange="updateDashboard()" class="w-full sm:w-72 bg-slate-900/80 border border-white/20 rounded-2xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="ALL">ALL STAFF</option>
-                </select>
+        <!-- FLOATING iOS 27 MAIN NAVIGATION TABS -->
+        <div class="sticky top-4 z-40 flex justify-center">
+            <nav class="floating-nav p-2 rounded-3xl flex gap-1.5 overflow-x-auto max-w-full shadow-2xl">
+                <button onclick="switchMainTab('overview')" id="mainTab-overview" class="nav-tab-active px-5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="pie-chart" class="w-4 h-4"></i> Store Overview
+                </button>
+                <button onclick="switchMainTab('matrix')" id="mainTab-matrix" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="users" class="w-4 h-4"></i> Staff & LFL
+                </button>
+                <button onclick="switchMainTab('lob')" id="mainTab-lob" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="smartphone" class="w-4 h-4"></i> LOB Focus Staff
+                </button>
+                <button onclick="switchMainTab('vas')" id="mainTab-vas" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> VAS Staff
+                </button>
+                <button onclick="switchMainTab('transactions')" id="mainTab-transactions" class="px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="list" class="w-4 h-4"></i> Data Transaksi
+                </button>
+            </nav>
+        </div>
+
+        <!-- ==================== VIEW 1: STORE OVERVIEW ==================== -->
+        <div id="view-overview" class="space-y-6">
+            <!-- REVENUE METRIC CARDS (STORE LEVEL) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Monthly Progress -->
+                <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN MONTH STORE</span>
+                        <span id="badgeMonth" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">0%</span>
+                    </div>
+                    <div class="mt-4">
+                        <h2 id="achMonth" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
+                        <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetMonth" class="text-slate-200">Rp 0</span></p>
+                    </div>
+                    <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
+                        <div id="barMonth" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Weekly Progress -->
+                <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN WEEK STORE</span>
+                        <span id="badgeWeek" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">0%</span>
+                    </div>
+                    <div class="mt-4">
+                        <h2 id="achWeek" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
+                        <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetWeek" class="text-slate-200">Rp 0</span></p>
+                    </div>
+                    <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
+                        <div id="barWeek" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Daily Progress -->
+                <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN DAY STORE</span>
+                        <span id="badgeDay" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">0%</span>
+                    </div>
+                    <div class="mt-4">
+                        <h2 id="achDay" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
+                        <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetDay" class="text-slate-200">Rp 0</span></p>
+                    </div>
+                    <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
+                        <div id="barDay" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
             </div>
 
-            <!-- TABS CATEGORY -->
-            <div class="liquid-glass p-1.5 rounded-2xl flex gap-1 w-full sm:w-auto overflow-x-auto">
-                <button onclick="switchTab('ALL')" id="tab-ALL" class="ios-tab-active px-4 py-2 rounded-xl text-xs font-bold text-white whitespace-nowrap">Semua Items</button>
-                <button onclick="switchTab('Device')" id="tab-Device" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">Device</button>
-                <button onclick="switchTab('Accessories')" id="tab-Accessories" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">Accessories</button>
-                <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">VAS</button>
+            <!-- CATEGORY TARGET CARDS (AKSESORI & VAS IN AMOUNT Rp) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Aksesori Card -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="headphones" class="w-5 h-5 text-cyan-400"></i>
+                            <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian Aksesori (Rp)</span>
+                        </div>
+                        <span id="badgeAcc" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">0%</span>
+                    </div>
+                    <div class="mt-4 flex justify-between items-end">
+                        <div>
+                            <h3 id="achAcc" class="text-2xl font-black text-white">Rp 0</h3>
+                            <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetAcc" class="text-slate-200">Rp 0</span></p>
+                        </div>
+                        <div class="text-right">
+                            <span id="remAcc" class="text-xs font-semibold text-cyan-400">Sisa: Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
+                        <div id="barAcc" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- VAS Card -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i>
+                            <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian VAS (Rp)</span>
+                        </div>
+                        <span id="badgeVAS" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">0%</span>
+                    </div>
+                    <div class="mt-4 flex justify-between items-end">
+                        <div>
+                            <h3 id="achVAS" class="text-2xl font-black text-white">Rp 0</h3>
+                            <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetVAS" class="text-slate-200">Rp 0</span></p>
+                        </div>
+                        <div class="text-right">
+                            <span id="remVAS" class="text-xs font-semibold text-purple-400">Sisa: Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
+                        <div id="barVAS" class="bg-gradient-to-r from-purple-400 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STORE LFL & VAS OVERVIEW -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Store LFL -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> Store LFL (Week Sebelumnya vs Week Berjalan)
+                        </h3>
+                        <span id="lflGrowthStore" class="text-xs font-bold px-2.5 py-1 rounded-full bg-white/10 text-emerald-400">0% WoW</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="liquid-glass-card p-4 rounded-2xl">
+                            <span class="text-xs text-slate-400">Week Sebelumnya (W-1)</span>
+                            <p id="lflPrevStore" class="text-lg font-bold text-slate-200 mt-1">Rp 0</p>
+                        </div>
+                        <div class="liquid-glass-card p-4 rounded-2xl">
+                            <span class="text-xs text-slate-400">Week Berjalan (W-0)</span>
+                            <p id="lflCurrStore" class="text-lg font-bold text-emerald-400 mt-1">Rp 0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Store VAS Summary -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i data-lucide="shield" class="w-4 h-4 text-purple-400"></i> Summary Penjualan VAS Store
+                        </h3>
+                        <span id="vasTotalSummary" class="text-xs font-bold text-purple-300">Total: 0 Pcs</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="vasKeywordCardsStore">
+                        <!-- Dynamic Store VAS Cards -->
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- REVENUE METRIC CARDS (STORE LEVEL) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Monthly Progress -->
-            <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN MONTH STORE</span>
-                    <span id="badgeMonth" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">0%</span>
-                </div>
-                <div class="mt-4">
-                    <h2 id="achMonth" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
-                    <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetMonth" class="text-slate-200">Rp 0</span></p>
-                </div>
-                <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
-                    <div id="barMonth" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <!-- Weekly Progress -->
-            <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN WEEK STORE</span>
-                    <span id="badgeWeek" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">0%</span>
-                </div>
-                <div class="mt-4">
-                    <h2 id="achWeek" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
-                    <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetWeek" class="text-slate-200">Rp 0</span></p>
-                </div>
-                <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
-                    <div id="barWeek" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <!-- Daily Progress -->
-            <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN DAY STORE</span>
-                    <span id="badgeDay" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">0%</span>
-                </div>
-                <div class="mt-4">
-                    <h2 id="achDay" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
-                    <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetDay" class="text-slate-200">Rp 0</span></p>
-                </div>
-                <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
-                    <div id="barDay" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CATEGORY TARGET CARDS (AKSESORI & VAS IN AMOUNT Rp) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Aksesori Card -->
-            <div class="liquid-glass rounded-3xl p-6">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="headphones" class="w-5 h-5 text-cyan-400"></i>
-                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian Aksesori (Rp)</span>
-                    </div>
-                    <span id="badgeAcc" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">0%</span>
-                </div>
-                <div class="mt-4 flex justify-between items-end">
-                    <div>
-                        <h3 id="achAcc" class="text-2xl font-black text-white">Rp 0</h3>
-                        <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetAcc" class="text-slate-200">Rp 0</span></p>
-                    </div>
-                    <div class="text-right">
-                        <span id="remAcc" class="text-xs font-semibold text-cyan-400">Sisa: Rp 0</span>
-                    </div>
-                </div>
-                <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
-                    <div id="barAcc" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <!-- VAS Card -->
-            <div class="liquid-glass rounded-3xl p-6">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i>
-                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian VAS (Rp)</span>
-                    </div>
-                    <span id="badgeVAS" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">0%</span>
-                </div>
-                <div class="mt-4 flex justify-between items-end">
-                    <div>
-                        <h3 id="achVAS" class="text-2xl font-black text-white">Rp 0</h3>
-                        <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetVAS" class="text-slate-200">Rp 0</span></p>
-                    </div>
-                    <div class="text-right">
-                        <span id="remVAS" class="text-xs font-semibold text-purple-400">Sisa: Rp 0</span>
-                    </div>
-                </div>
-                <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
-                    <div id="barVAS" class="bg-gradient-to-r from-purple-400 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- NEW: BREAKDOWN PENCAPAIAN PER STAFF (VERTIKAL: STAFF, HORISONTAL: MONTH/WEEK/DAY) -->
-        <div class="liquid-glass rounded-3xl p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> Matriks Target & Pencapaian Per Staff
-                </h3>
-                <span id="activeStaffCount" class="text-xs text-slate-400">0 Staff Aktif</span>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
-                    <thead>
-                        <tr class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
-                            <th class="pb-3 px-3">Staff</th>
-                            <th class="pb-3 px-3 text-right">Target Month</th>
-                            <th class="pb-3 px-3 text-right">Ach Month</th>
-                            <th class="pb-3 px-3 text-center">% Month</th>
-                            <th class="pb-3 px-3 text-right">Target Week</th>
-                            <th class="pb-3 px-3 text-right">Ach Week</th>
-                            <th class="pb-3 px-3 text-center">% Week</th>
-                            <th class="pb-3 px-3 text-right">Target Day</th>
-                            <th class="pb-3 px-3 text-right">Ach Day</th>
-                            <th class="pb-3 px-3 text-center">% Day</th>
-                        </tr>
-                    </thead>
-                    <tbody id="staffMatrixBody" class="divide-y divide-white/5 text-slate-300 font-medium">
-                        <!-- Dynamic Staff Matrix Rows -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- DETAIL VAS ITEM TERJUAL BREAKDOWN -->
-        <div class="liquid-glass rounded-3xl p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i data-lucide="shield" class="w-4 h-4 text-purple-400"></i> Detail Penjualan VAS (KLA, TSL, IDT, XXL)
-                </h3>
-                <span id="vasTotalSummary" class="text-xs font-bold text-purple-300">Total: 0 Pcs</span>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="vasKeywordCards">
-                <!-- Dynamic VAS Keyword Cards -->
-            </div>
-        </div>
-
-        <!-- LOB FOCUS & LFL COMPARISON -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- LOB Focus Item Tracker -->
+        <!-- ==================== VIEW 2: STAFF PERFORMANCE & LFL ==================== -->
+        <div id="view-matrix" class="space-y-6 hidden">
+            <!-- BREAKDOWN PENCAPAIAN TARGET PER STAFF -->
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Pencapaian
+                        <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> Matriks Target & Pencapaian Per Staff
                     </h3>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="lobGrid">
-                    <!-- Dynamic LOB Cards -->
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
+                                <th class="pb-3 px-3">Staff</th>
+                                <th class="pb-3 px-3 text-right">Target Month</th>
+                                <th class="pb-3 px-3 text-right">Ach Month</th>
+                                <th class="pb-3 px-3 text-center">% Month</th>
+                                <th class="pb-3 px-3 text-right">Target Week</th>
+                                <th class="pb-3 px-3 text-right">Ach Week</th>
+                                <th class="pb-3 px-3 text-center">% Week</th>
+                                <th class="pb-3 px-3 text-right">Target Day</th>
+                                <th class="pb-3 px-3 text-right">Ach Day</th>
+                                <th class="pb-3 px-3 text-center">% Day</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffMatrixBody" class="divide-y divide-white/5 text-slate-300 font-medium">
+                            <!-- Dynamic Staff Matrix Rows -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- LFL Comparison -->
+            <!-- LFL COMPARISON PER MASYING-MASING STAFF -->
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> LFL (Week Sebelumnya vs Week Berjalan)
+                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> LFL (Week Sebelumnya vs Week Berjalan) Per Staff
                     </h3>
-                    <span id="lflGrowth" class="text-xs font-bold px-2.5 py-1 rounded-full bg-white/10 text-emerald-400">0% WoW</span>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="liquid-glass-card p-4 rounded-2xl">
-                        <span class="text-xs text-slate-400">Week Sebelumnya (W-1)</span>
-                        <p id="lflPrev" class="text-lg font-bold text-slate-200 mt-1">Rp 0</p>
-                    </div>
-                    <div class="liquid-glass-card p-4 rounded-2xl">
-                        <span class="text-xs text-slate-400">Week Berjalan (W-0)</span>
-                        <p id="lflCurr" class="text-lg font-bold text-emerald-400 mt-1">Rp 0</p>
-                    </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="staffLflCardsContainer">
+                    <!-- Dynamic Staff LFL Cards -->
                 </div>
             </div>
         </div>
 
-        <!-- TRANSACTION DETAIL TABLE -->
-        <div class="liquid-glass rounded-3xl p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i data-lucide="list" class="w-4 h-4 text-blue-400"></i> Detail Item Terjual
-                </h3>
-                <span id="itemCount" class="text-xs text-slate-400">0 Items</span>
-            </div>
+        <!-- ==================== VIEW 3: LOB FOCUS STAFF ==================== -->
+        <div id="view-lob" class="space-y-6 hidden">
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Pencapaian Per Staff
+                    </h3>
+                </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
-                    <thead>
-                        <tr class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
-                            <th class="pb-3 px-2">Tanggal</th>
-                            <th class="pb-3 px-2">Staff</th>
-                            <th class="pb-3 px-2">Nama Produk</th>
-                            <th class="pb-3 px-2">Article</th>
-                            <th class="pb-3 px-2">Kategori</th>
-                            <th class="pb-3 px-2 text-right">Harga Net</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactionBody" class="divide-y divide-white/5 text-slate-300">
-                        <!-- Dynamic Rows -->
-                    </tbody>
-                </table>
+                <div class="space-y-4" id="staffLobListContainer">
+                    <!-- Dynamic Staff LOB List -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 4: VAS STAFF ==================== -->
+        <div id="view-vas" class="space-y-6 hidden">
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i> Detail Rincian VAS (KLA, TSL, IDT, XXL) Per Staff
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="staffVasCardsContainer">
+                    <!-- Dynamic Staff VAS Cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 5: TRANSACTIONS ==================== -->
+        <div id="view-transactions" class="space-y-6 hidden">
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="user" class="w-5 h-5 text-cyan-400"></i>
+                        <select id="staffSelect" onchange="updateDashboard()" class="bg-slate-900/80 border border-white/20 rounded-2xl px-4 py-2.5 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">ALL STAFF</option>
+                        </select>
+                    </div>
+
+                    <!-- TABS CATEGORY FILTER -->
+                    <div class="liquid-glass p-1.5 rounded-2xl flex gap-1 overflow-x-auto w-full sm:w-auto">
+                        <button onclick="switchTab('ALL')" id="tab-ALL" class="ios-tab-active px-4 py-1.5 rounded-xl text-xs font-bold text-white whitespace-nowrap">Semua Items</button>
+                        <button onclick="switchTab('Device')" id="tab-Device" class="px-4 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">Device</button>
+                        <button onclick="switchTab('Accessories')" id="tab-Accessories" class="px-4 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">Accessories</button>
+                        <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">VAS</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="list" class="w-4 h-4 text-blue-400"></i> Detail Item Terjual
+                    </h3>
+                    <span id="itemCount" class="text-xs text-slate-400">0 Items</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
+                                <th class="pb-3 px-2">Tanggal</th>
+                                <th class="pb-3 px-2">Staff</th>
+                                <th class="pb-3 px-2">Nama Produk</th>
+                                <th class="pb-3 px-2">Article</th>
+                                <th class="pb-3 px-2">Kategori</th>
+                                <th class="pb-3 px-2 text-right">Harga Net</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionBody" class="divide-y divide-white/5 text-slate-300">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -315,7 +380,7 @@
 
     <!-- MODAL CONFIG TARGET -->
     <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="liquid-glass rounded-3xl p-6 max-w-2xl w-full border border-white/20 shadow-2xl relative space-y-6">
+        <div class="liquid-glass rounded-3xl p-6 max-w-2xl w-full border border-white/20 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
                 <h2 class="text-lg font-bold text-white flex items-center gap-2">
                     <i data-lucide="settings" class="w-5 h-5 text-indigo-400"></i> Set Config Target Sales
@@ -347,7 +412,7 @@
 
                 <!-- Target Category (Amount Rp) -->
                 <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
-                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Category (Rp)</h3>
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Category Store (Rp)</h3>
                     <div>
                         <label class="text-xs text-slate-400">Target Aksesori (Rp)</label>
                         <input type="number" id="targetAccessories" value="15000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
@@ -360,7 +425,7 @@
 
                 <!-- Target LOB Qty -->
                 <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
-                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target LOB Focus Items (Qty)</h3>
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target LOB Focus Per Staff (Qty)</h3>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="text-xs text-slate-400">iPhone 15</label>
@@ -397,8 +462,25 @@
     <script>
         let rawData = [];
         let currentTab = 'ALL';
+        let currentMainView = 'overview';
 
         const fmtRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
+
+        function switchMainTab(viewName) {
+            currentMainView = viewName;
+            ['overview', 'matrix', 'lob', 'vas', 'transactions'].forEach(v => {
+                const btn = document.getElementById(`mainTab-${v}`);
+                const view = document.getElementById(`view-${v}`);
+                if (v === viewName) {
+                    btn.className = "nav-tab-active px-5 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition";
+                    if (view) view.classList.remove('hidden');
+                } else {
+                    btn.className = "px-5 py-2.5 rounded-2xl text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 whitespace-nowrap transition";
+                    if (view) view.classList.add('hidden');
+                }
+            });
+            updateDashboard();
+        }
 
         function toggleConfigModal(show) {
             const modal = document.getElementById('configModal');
@@ -423,7 +505,6 @@
                 const res = await fetch('data.json');
                 if (res.ok) {
                     const data = await res.json();
-                    // FILTER HAPUS ITEM BERHARGA <= Rp0
                     rawData = data.filter(item => item.net_price > 0);
                     initStaffSelector();
                     autoCalcTargets();
@@ -435,7 +516,6 @@
         });
 
         function getActiveStaffList() {
-            // EXCLUDE STAFF DIGIMAP.CO.ID
             return [...new Set(rawData.map(r => r.staff))]
                 .filter(s => !s.toLowerCase().includes('digimap.co.id'))
                 .sort();
@@ -443,6 +523,7 @@
 
         function initStaffSelector() {
             const select = document.getElementById('staffSelect');
+            if (!select) return;
             select.innerHTML = '<option value="ALL">ALL STAFF</option>';
             const staffList = [...new Set(rawData.map(r => r.staff))].sort();
             staffList.forEach(s => {
@@ -457,40 +538,27 @@
             currentTab = tab;
             ['ALL', 'Device', 'Accessories', 'VAS'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
+                if (!btn) return;
                 if (t === tab) {
-                    btn.className = "ios-tab-active px-4 py-2 rounded-xl text-xs font-bold text-white whitespace-nowrap";
+                    btn.className = "ios-tab-active px-4 py-1.5 rounded-xl text-xs font-bold text-white whitespace-nowrap";
                 } else {
-                    btn.className = "px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap";
+                    btn.className = "px-4 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap";
                 }
             });
             updateDashboard();
         }
 
         function updateDashboard() {
-            const selectedStaff = document.getElementById('staffSelect').value;
+            const selectedStaff = document.getElementById('staffSelect') ? document.getElementById('staffSelect').value : 'ALL';
             const activeStaffs = getActiveStaffList();
             const activeStaffCount = activeStaffs.length || 1;
-
-            document.getElementById('activeStaffCount').textContent = `${activeStaffCount} Staff Aktif (Excl. digimap.co.id)`;
-
-            // Filter data per staff
-            let staffData = rawData;
-            if (selectedStaff !== 'ALL') {
-                staffData = staffData.filter(r => r.staff === selectedStaff);
-            }
-
-            // Filter data per tab
-            let filtered = staffData;
-            if (currentTab !== 'ALL') {
-                filtered = filtered.filter(r => r.category === currentTab);
-            }
 
             // Target Store Inputs
             const tStoreMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
             const tStoreWeek = parseFloat(document.getElementById('targetWeek').value) || 0;
             const tStoreDay = parseFloat(document.getElementById('targetDay').value) || 0;
             
-            // Individual Staff Target Breakdown (Divide equally by active staff count)
+            // Per Staff Targets
             const tStaffMonth = Math.round(tStoreMonth / activeStaffCount);
             const tStaffWeek = Math.round(tStoreWeek / activeStaffCount);
             const tStaffDay = Math.round(tStoreDay / activeStaffCount);
@@ -504,59 +572,106 @@
             const last7Dates = uniqueDates.slice(-7);
             const prev7Dates = uniqueDates.slice(-14, -7);
 
-            // Revenue Calculations for Cards
-            const totalMonth = filtered.reduce((acc, r) => acc + r.net_price, 0);
-            const totalDay = filtered.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
-            const totalWeek0 = filtered.filter(r => last7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
-            const totalWeek1 = filtered.filter(r => prev7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+            // Filter data for Store/Selected Staff
+            let staffData = rawData;
+            if (selectedStaff !== 'ALL') {
+                staffData = staffData.filter(r => r.staff === selectedStaff);
+            }
 
-            // Target for display: Store level if ALL, Staff level if single staff selected
-            const effectiveTMonth = selectedStaff === 'ALL' ? tStoreMonth : tStaffMonth;
-            const effectiveTWeek = selectedStaff === 'ALL' ? tStoreWeek : tStaffWeek;
-            const effectiveTDay = selectedStaff === 'ALL' ? tStoreDay : tStaffDay;
+            let filtered = staffData;
+            if (currentTab !== 'ALL') {
+                filtered = filtered.filter(r => r.category === currentTab);
+            }
 
-            // Update Revenue Cards UI
-            document.getElementById('achMonth').textContent = fmtRp(totalMonth);
-            document.getElementById('lblTargetMonth').textContent = fmtRp(effectiveTMonth);
-            const pMonth = effectiveTMonth ? Math.min(Math.round((totalMonth / effectiveTMonth) * 100), 100) : 0;
-            document.getElementById('badgeMonth').textContent = `${pMonth}%`;
-            document.getElementById('barMonth').style.width = `${pMonth}%`;
+            // ==================== 1. STORE OVERVIEW METRICS ====================
+            const storeDataAll = rawData;
+            const totalMonthStore = storeDataAll.reduce((acc, r) => acc + r.net_price, 0);
+            const totalDayStore = storeDataAll.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
+            const totalWeek0Store = storeDataAll.filter(r => last7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+            const totalWeek1Store = storeDataAll.filter(r => prev7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
 
-            document.getElementById('achWeek').textContent = fmtRp(totalWeek0);
-            document.getElementById('lblTargetWeek').textContent = fmtRp(effectiveTWeek);
-            const pWeek = effectiveTWeek ? Math.min(Math.round((totalWeek0 / effectiveTWeek) * 100), 100) : 0;
-            document.getElementById('badgeWeek').textContent = `${pWeek}%`;
-            document.getElementById('barWeek').style.width = `${pWeek}%`;
+            document.getElementById('achMonth').textContent = fmtRp(totalMonthStore);
+            document.getElementById('lblTargetMonth').textContent = fmtRp(tStoreMonth);
+            const pMonthStore = tStoreMonth ? Math.min(Math.round((totalMonthStore / tStoreMonth) * 100), 100) : 0;
+            document.getElementById('badgeMonth').textContent = `${pMonthStore}%`;
+            document.getElementById('barMonth').style.width = `${pMonthStore}%`;
 
-            document.getElementById('achDay').textContent = fmtRp(totalDay);
-            document.getElementById('lblTargetDay').textContent = fmtRp(effectiveTDay);
-            const pDay = effectiveTDay ? Math.min(Math.round((totalDay / effectiveTDay) * 100), 100) : 0;
-            document.getElementById('badgeDay').textContent = `${pDay}%`;
-            document.getElementById('barDay').style.width = `${pDay}%`;
+            document.getElementById('achWeek').textContent = fmtRp(totalWeek0Store);
+            document.getElementById('lblTargetWeek').textContent = fmtRp(tStoreWeek);
+            const pWeekStore = tStoreWeek ? Math.min(Math.round((totalWeek0Store / tStoreWeek) * 100), 100) : 0;
+            document.getElementById('badgeWeek').textContent = `${pWeekStore}%`;
+            document.getElementById('barWeek').style.width = `${pWeekStore}%`;
 
-            // Category Calculation (Aksesori & VAS Amount Rp)
-            const accAmount = staffData.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
-            const vasAmount = staffData.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
+            document.getElementById('achDay').textContent = fmtRp(totalDayStore);
+            document.getElementById('lblTargetDay').textContent = fmtRp(tStoreDay);
+            const pDayStore = tStoreDay ? Math.min(Math.round((totalDayStore / tStoreDay) * 100), 100) : 0;
+            document.getElementById('badgeDay').textContent = `${pDayStore}%`;
+            document.getElementById('barDay').style.width = `${pDayStore}%`;
 
-            document.getElementById('achAcc').textContent = fmtRp(accAmount);
+            // Store Category Targets (Aksesori & VAS)
+            const accAmountStore = storeDataAll.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
+            const vasAmountStore = storeDataAll.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
+
+            document.getElementById('achAcc').textContent = fmtRp(accAmountStore);
             document.getElementById('lblTargetAcc').textContent = fmtRp(tAcc);
-            const remAccVal = Math.max(tAcc - accAmount, 0);
+            const remAccVal = Math.max(tAcc - accAmountStore, 0);
             document.getElementById('remAcc').textContent = remAccVal === 0 ? 'Target Achieved!' : `Sisa: ${fmtRp(remAccVal)}`;
-            const pAcc = tAcc ? Math.min(Math.round((accAmount / tAcc) * 100), 100) : 0;
+            const pAcc = tAcc ? Math.min(Math.round((accAmountStore / tAcc) * 100), 100) : 0;
             document.getElementById('badgeAcc').textContent = `${pAcc}%`;
             document.getElementById('barAcc').style.width = `${pAcc}%`;
 
-            document.getElementById('achVAS').textContent = fmtRp(vasAmount);
+            document.getElementById('achVAS').textContent = fmtRp(vasAmountStore);
             document.getElementById('lblTargetVAS').textContent = fmtRp(tVAS);
-            const remVASVal = Math.max(tVAS - vasAmount, 0);
+            const remVASVal = Math.max(tVAS - vasAmountStore, 0);
             document.getElementById('remVAS').textContent = remVASVal === 0 ? 'Target Achieved!' : `Sisa: ${fmtRp(remVASVal)}`;
-            const pVAS = tVAS ? Math.min(Math.round((vasAmount / tVAS) * 100), 100) : 0;
+            const pVAS = tVAS ? Math.min(Math.round((vasAmountStore / tVAS) * 100), 100) : 0;
             document.getElementById('badgeVAS').textContent = `${pVAS}%`;
             document.getElementById('barVAS').style.width = `${pVAS}%`;
 
-            // STAFF MATRIX TABLE GENERATION
+            // Store LFL WoW
+            document.getElementById('lflPrevStore').textContent = fmtRp(totalWeek1Store);
+            document.getElementById('lflCurrStore').textContent = fmtRp(totalWeek0Store);
+            const lflValStore = totalWeek1Store ? (((totalWeek0Store - totalWeek1Store) / totalWeek1Store) * 100).toFixed(1) : 0;
+            const lflBadgeStore = document.getElementById('lflGrowthStore');
+            lflBadgeStore.textContent = `${lflValStore > 0 ? '+' : ''}${lflValStore}% WoW`;
+            lflBadgeStore.className = `text-xs font-bold px-2.5 py-1 rounded-full ${lflValStore >= 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`;
+
+            // Store VAS Keyword Summary
+            const vasKeywords = ['kla', 'tsl', 'idt', 'xxl'];
+            const vasContainerStore = document.getElementById('vasKeywordCardsStore');
+            vasContainerStore.innerHTML = '';
+
+            const vasItemsStore = storeDataAll.filter(r => r.category === 'VAS');
+            document.getElementById('vasTotalSummary').textContent = `Total VAS Store: ${vasItemsStore.length} Pcs (${fmtRp(vasAmountStore)})`;
+
+            vasKeywords.forEach(kw => {
+                const matched = vasItemsStore.filter(r => 
+                    r.article.toLowerCase().includes(kw) || r.product_name.toLowerCase().includes(kw)
+                );
+                const count = matched.length;
+                const sum = matched.reduce((acc, r) => acc + r.net_price, 0);
+
+                const card = document.createElement('div');
+                card.className = 'liquid-glass-card p-3.5 rounded-2xl flex flex-col justify-between';
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black uppercase text-purple-300 tracking-wider">${kw.toUpperCase()}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Pcs</span>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-base font-extrabold text-white">${fmtRp(sum)}</p>
+                    </div>
+                `;
+                vasContainerStore.appendChild(card);
+            });
+
+
+            // ==================== 2. STAFF MATRIX & LFL ====================
             const matrixBody = document.getElementById('staffMatrixBody');
             matrixBody.innerHTML = '';
+
+            const staffLflCardsContainer = document.getElementById('staffLflCardsContainer');
+            staffLflCardsContainer.innerHTML = '';
 
             activeStaffs.forEach(stf => {
                 const sData = rawData.filter(r => r.staff === stf);
@@ -568,6 +683,7 @@
                 const pctW = tStaffWeek ? Math.round((sAchW / tStaffWeek) * 100) : 0;
                 const pctD = tStaffDay ? Math.round((sAchD / tStaffDay) * 100) : 0;
 
+                // Matrix Row
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-white/5 transition';
                 tr.innerHTML = `
@@ -583,47 +699,40 @@
                     <td class="py-3 px-3 text-center font-bold ${pctD >= 100 ? 'text-emerald-400' : 'text-emerald-400'}">${pctD}%</td>
                 `;
                 matrixBody.appendChild(tr);
-            });
 
-            // VAS KEYWORD BREAKDOWN CARDS
-            const vasKeywords = ['kla', 'tsl', 'idt', 'xxl'];
-            const vasContainer = document.getElementById('vasKeywordCards');
-            vasContainer.innerHTML = '';
+                // LFL Card Per Staff
+                const sWeek1 = sData.filter(r => prev7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+                const sWeek0 = sAchW;
+                const sLflVal = sWeek1 ? (((sWeek0 - sWeek1) / sWeek1) * 100).toFixed(1) : 0;
 
-            const vasItemsAll = staffData.filter(r => r.category === 'VAS');
-            let vasTotalQty = vasItemsAll.length;
-            document.getElementById('vasTotalSummary').textContent = `Total VAS: ${vasTotalQty} Pcs (${fmtRp(vasAmount)})`;
-
-            vasKeywords.forEach(kw => {
-                const matched = vasItemsAll.filter(r => 
-                    r.article.toLowerCase().includes(kw) || r.product_name.toLowerCase().includes(kw)
-                );
-                const count = matched.length;
-                const sum = matched.reduce((acc, r) => acc + r.net_price, 0);
-
-                const card = document.createElement('div');
-                card.className = 'liquid-glass-card p-4 rounded-2xl flex flex-col justify-between';
-                card.innerHTML = `
+                const lflCard = document.createElement('div');
+                lflCard.className = 'liquid-glass-card p-4 rounded-2xl flex flex-col justify-between space-y-3';
+                lflCard.innerHTML = `
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-black uppercase text-purple-300 tracking-wider">Identitas: ${kw.toUpperCase()}</span>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Pcs</span>
+                        <span class="text-xs font-bold text-white">${stf.split('/')[1] || stf}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${sLflVal >= 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}">
+                            ${sLflVal > 0 ? '+' : ''}${sLflVal}% WoW
+                        </span>
                     </div>
-                    <div class="mt-3">
-                        <p class="text-lg font-extrabold text-white">${fmtRp(sum)}</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white/5 p-2 rounded-xl">
+                            <span class="text-[10px] text-slate-400 block">W-1 (Sebelumnya)</span>
+                            <span class="font-bold text-slate-200">${fmtRp(sWeek1)}</span>
+                        </div>
+                        <div class="bg-white/5 p-2 rounded-xl">
+                            <span class="text-[10px] text-slate-400 block">W-0 (Berjalan)</span>
+                            <span class="font-bold text-emerald-400">${fmtRp(sWeek0)}</span>
+                        </div>
                     </div>
                 `;
-                vasContainer.appendChild(card);
+                staffLflCardsContainer.appendChild(lflCard);
             });
 
-            // LFL WoW
-            document.getElementById('lflPrev').textContent = fmtRp(totalWeek1);
-            document.getElementById('lflCurr').textContent = fmtRp(totalWeek0);
-            const lflVal = totalWeek1 ? (((totalWeek0 - totalWeek1) / totalWeek1) * 100).toFixed(1) : 0;
-            const lflBadge = document.getElementById('lflGrowth');
-            lflBadge.textContent = `${lflVal > 0 ? '+' : ''}${lflVal}% WoW`;
-            lflBadge.className = `text-xs font-bold px-2.5 py-1 rounded-full ${lflVal >= 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`;
 
-            // LOB Focus Tracker
+            // ==================== 3. LOB FOCUS PER STAFF ====================
+            const staffLobContainer = document.getElementById('staffLobListContainer');
+            staffLobContainer.innerHTML = '';
+
             const lobTargets = {
                 'iPhone 15': parseInt(document.getElementById('targetIphone15').value) || 0,
                 'iPad 11th': parseInt(document.getElementById('targetIpadA16').value) || 0,
@@ -632,26 +741,89 @@
                 'AirPods': parseInt(document.getElementById('targetAirpods').value) || 0
             };
 
-            const lobGrid = document.getElementById('lobGrid');
-            lobGrid.innerHTML = '';
+            activeStaffs.forEach(stf => {
+                const sData = rawData.filter(r => r.staff === stf);
+                
+                const staffCard = document.createElement('div');
+                staffCard.className = 'liquid-glass-card p-5 rounded-3xl space-y-3';
 
-            Object.keys(lobTargets).forEach(key => {
-                const soldQty = staffData.filter(r => r.lob_focus === key).length;
-                const remaining = Math.max(lobTargets[key] - soldQty, 0);
+                let itemsHtml = '';
+                Object.keys(lobTargets).forEach(key => {
+                    const soldQty = sData.filter(r => r.lob_focus === key).length;
+                    const rem = Math.max(lobTargets[key] - soldQty, 0);
 
-                const card = document.createElement('div');
-                card.className = 'liquid-glass-card p-3 rounded-2xl text-center';
-                card.innerHTML = `
-                    <span class="text-[10px] font-bold text-slate-400 uppercase">${key}</span>
-                    <div class="text-lg font-black text-white mt-1">${soldQty} <span class="text-xs font-normal text-slate-400">/ ${lobTargets[key]}</span></div>
-                    <div class="text-[10px] font-semibold mt-1 ${remaining === 0 ? 'text-emerald-400' : 'text-purple-300'}">
-                        ${remaining === 0 ? 'Achieved!' : `Sisa: ${remaining} pcs`}
+                    itemsHtml += `
+                        <div class="bg-white/5 p-3 rounded-2xl text-center">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">${key}</span>
+                            <div class="text-base font-black text-white mt-0.5">${soldQty} <span class="text-xs font-normal text-slate-400">/ ${lobTargets[key]}</span></div>
+                            <div class="text-[9px] font-semibold mt-0.5 ${rem === 0 ? 'text-emerald-400' : 'text-purple-300'}">
+                                ${rem === 0 ? 'Achieved!' : `Sisa: ${rem}`}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                staffCard.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-xs font-extrabold text-white flex items-center gap-2">
+                            <i data-lucide="user" class="w-4 h-4 text-indigo-400"></i> ${stf.split('/')[1] || stf}
+                        </h4>
+                        <span class="text-[10px] text-slate-400 font-semibold">${stf.split('/')[0]}</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                        ${itemsHtml}
                     </div>
                 `;
-                lobGrid.appendChild(card);
+                staffLobContainer.appendChild(staffCard);
             });
 
-            // Table Transactions
+
+            // ==================== 4. VAS STAFF BREAKDOWN ====================
+            const staffVasContainer = document.getElementById('staffVasCardsContainer');
+            staffVasContainer.innerHTML = '';
+
+            activeStaffs.forEach(stf => {
+                const sData = rawData.filter(r => r.staff === stf && r.category === 'VAS');
+                const sVasTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
+
+                let vasKwHtml = '';
+                vasKeywords.forEach(kw => {
+                    const matched = sData.filter(r => 
+                        r.article.toLowerCase().includes(kw) || r.product_name.toLowerCase().includes(kw)
+                    );
+                    const count = matched.length;
+                    const sum = matched.reduce((acc, r) => acc + r.net_price, 0);
+
+                    vasKwHtml += `
+                        <div class="bg-white/5 p-2.5 rounded-xl flex justify-between items-center text-xs">
+                            <div>
+                                <span class="font-bold text-purple-300 uppercase text-[10px] block">${kw.toUpperCase()}</span>
+                                <span class="text-slate-200 font-semibold">${fmtRp(sum)}</span>
+                            </div>
+                            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Pcs</span>
+                        </div>
+                    `;
+                });
+
+                const vasCard = document.createElement('div');
+                vasCard.className = 'liquid-glass-card p-5 rounded-3xl space-y-3';
+                vasCard.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                        <div>
+                            <h4 class="text-xs font-extrabold text-white">${stf.split('/')[1] || stf}</h4>
+                            <span class="text-[10px] text-slate-400">${sData.length} Items Terjual</span>
+                        </div>
+                        <span class="text-xs font-black text-purple-300">${fmtRp(sVasTotal)}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        ${vasKwHtml}
+                    </div>
+                `;
+                staffVasContainer.appendChild(vasCard);
+            });
+
+
+            // ==================== 5. TRANSACTIONS TABLE ====================
             const tbody = document.getElementById('transactionBody');
             tbody.innerHTML = '';
             document.getElementById('itemCount').textContent = `${filtered.length} Items`;
@@ -673,6 +845,8 @@
                 `;
                 tbody.appendChild(tr);
             });
+
+            lucide.createIcons();
         }
     </script>
 </body>
