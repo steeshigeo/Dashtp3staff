@@ -104,9 +104,9 @@
                         Sales Progress Dashboard
                     </h1>
                     <div class="flex items-center gap-2 mt-0.5">
-                        <p class="text-xs md:text-sm opacity-70">Staff Achievement Tracker</p>
-                        <!-- WATERMARK -->
-                        <span class="text-[10px] opacity-40 font-medium tracking-wider">made with ❤️ by frans</span>
+                        <p class="text-xs md:text-sm opacity-70">
+                            Staff Achievement Tracker • <span class="text-[10px] opacity-60 font-medium">made with ❤️ by frans</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
             </div>
         </header>
 
-        <!-- FLOATING iOS 27 MAIN NAVIGATION TABS -->
+        <!-- FLOATING MAIN NAVIGATION TABS -->
         <div class="sticky top-4 z-40 flex justify-center">
             <nav class="floating-nav p-2 rounded-3xl flex gap-1.5 overflow-x-auto max-w-full shadow-2xl">
                 <button onclick="switchMainTab('overview')" id="mainTab-overview" class="nav-tab-active px-4 py-2 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition">
@@ -148,6 +148,9 @@
                 </button>
                 <button onclick="switchMainTab('lob')" id="mainTab-lob" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="smartphone" class="w-4 h-4"></i> LOB Focus Staff
+                </button>
+                <button onclick="switchMainTab('device')" id="mainTab-device" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="tablet" class="w-4 h-4"></i> Device Staff
                 </button>
                 <button onclick="switchMainTab('aksesoris')" id="mainTab-aksesoris" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="headphones" class="w-4 h-4"></i> Aksesoris Staff
@@ -212,7 +215,30 @@
             </div>
 
             <!-- CATEGORY TARGET CARDS -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Device Card -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="tablet" class="w-5 h-5 text-indigo-400"></i>
+                            <span class="text-xs font-bold uppercase tracking-wider">Pencapaian Device (Rp)</span>
+                        </div>
+                        <span id="badgeDevice" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">0%</span>
+                    </div>
+                    <div class="mt-4 flex justify-between items-end">
+                        <div>
+                            <h3 id="achDevice" class="text-2xl font-black">Rp 0</h3>
+                            <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetDevice" class="font-semibold">Rp 0</span></p>
+                        </div>
+                        <div class="text-right">
+                            <span id="remDevice" class="text-xs font-semibold text-indigo-400">Sisa: Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-800/40 rounded-full h-2 mt-3 overflow-hidden">
+                        <div id="barDevice" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
                 <!-- Aksesori Card -->
                 <div class="liquid-glass rounded-3xl p-6">
                     <div class="flex justify-between items-center">
@@ -260,11 +286,11 @@
                 </div>
             </div>
 
-            <!-- DAILY INVOICE COUNT (COLUMN B PREFIX 1000 UNIQ COUNT) -->
+            <!-- DAILY INVOICE COUNT -->
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-sm font-bold flex items-center gap-2">
-                        <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i> Total Qty Invoice Per Tanggal (Kalender Berjalan)
+                        <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i> Total Qty Invoice Per Tanggal
                     </h3>
                     <span id="totalUniqueInvoicesLabel" class="text-xs font-extrabold text-emerald-400">0 Unique Invoices</span>
                 </div>
@@ -339,7 +365,7 @@
                 </div>
             </div>
 
-            <!-- WEEKLY BREAKDOWN WITH TARGET DAY & RUNNING CALENDAR PROJECTION -->
+            <!-- WEEKLY BREAKDOWN WITH CLOSING HARIAN AT BOTTOM OF PAGE -->
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-sm font-bold flex items-center gap-2">
@@ -383,7 +409,22 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 5: AKSESORIS STAFF ==================== -->
+        <!-- ==================== VIEW 5: DEVICE STAFF (NEW TAB) ==================== -->
+        <div id="view-device" class="space-y-6 hidden">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="tablet" class="w-4 h-4 text-indigo-400"></i> Detail Rincian Device Per Staff
+                    </h3>
+                </div>
+
+                <div class="space-y-6" id="deviceWeeklyCapsulesContainer">
+                    <!-- Dynamic Weekly Device Cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 6: AKSESORIS STAFF ==================== -->
         <div id="view-aksesoris" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
@@ -398,7 +439,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 6: VAS STAFF ==================== -->
+        <!-- ==================== VIEW 7: VAS STAFF ==================== -->
         <div id="view-vas" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
@@ -413,7 +454,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 7: TRANSACTIONS ==================== -->
+        <!-- ==================== VIEW 8: TRANSACTIONS ==================== -->
         <div id="view-transactions" class="space-y-6 hidden">
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -462,7 +503,7 @@
 
     </div>
 
-    <!-- MODAL CONFIG TARGET & STAFF PERCENTAGE -->
+    <!-- MODAL 1: CONFIG TARGET & STAFF PERCENTAGE -->
     <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="liquid-glass rounded-3xl p-6 max-w-3xl w-full border border-white/20 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
@@ -493,10 +534,14 @@
                 </div>
             </div>
 
-            <!-- 2. TARGET CATEGORY STORE -->
+            <!-- 2. TARGET CATEGORY STORE (RP) INCLUDING DEVICE -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
                 <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">2. Target Category Store (Rp)</h3>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="text-xs opacity-70">Target Device Store (Rp)</label>
+                        <input type="number" id="targetDevice" value="75000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
                     <div>
                         <label class="text-xs opacity-70">Target Aksesori Store (Rp)</label>
                         <input type="number" id="targetAccessories" value="15000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
@@ -518,7 +563,7 @@
                         <button onclick="restoreAllRemovedStaffs()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition">Restore All Staff</button>
                     </div>
                 </div>
-                <p class="text-[11px] opacity-70">Atur Jabatan (misal SA, IC) dan persentase target. Klik tombol sampah untuk menghapus staff dari target (persentase auto terbagi merata ke sisa staff).</p>
+                <p class="text-[11px] opacity-70">Atur Jabatan (misal SA, IC) dan persentase target.</p>
 
                 <div class="space-y-2 max-h-56 overflow-y-auto pr-1" id="staffPercentInputsContainer">
                     <!-- Dynamic Inputs Staff Percent + Jabatan -->
@@ -546,6 +591,70 @@
         </div>
     </div>
 
+    <!-- MODAL 2: CLOSING REPORT DAILY TAP -->
+    <div id="closingReportModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="liquid-glass rounded-3xl p-6 max-w-md w-full border border-white/20 shadow-2xl relative space-y-4">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <h3 class="text-sm font-bold flex items-center gap-2">
+                    <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i> Closing Report
+                </h3>
+                <button onclick="toggleClosingModal(false)" class="opacity-70 hover:opacity-100 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- CLOSING REPORT TEXT FORMATTED -->
+            <div class="bg-slate-900/90 p-4 rounded-2xl border border-white/10 font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed select-all" id="closingReportText">
+                <!-- Dynamic Closing Report Content -->
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="toggleClosingModal(false)" class="px-4 py-2 rounded-xl text-xs font-semibold opacity-70 hover:opacity-100 bg-white/5 transition">Tutup</button>
+                <button onclick="copyClosingReportText()" id="btnCopyClosing" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-xs px-5 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Teks
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: DETAIL ITEMS STAFF TAP (AKSESORIS / DEVICE / VAS) -->
+    <div id="staffItemsModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="liquid-glass rounded-3xl p-6 max-w-2xl w-full border border-white/20 shadow-2xl relative space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <div>
+                    <h3 id="staffModalTitle" class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="package" class="w-4 h-4 text-cyan-400"></i> Detail Transaksi
+                    </h3>
+                    <p id="staffModalSub" class="text-xs opacity-60 mt-0.5">--</p>
+                </div>
+                <button onclick="toggleStaffItemsModal(false)" class="opacity-70 hover:opacity-100 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto flex-1 pr-1">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="border-b border-white/10 opacity-70 font-semibold uppercase tracking-wider">
+                            <th class="pb-2 px-2">Tanggal</th>
+                            <th class="pb-2 px-2">Nama Produk</th>
+                            <th class="pb-2 px-2">Article</th>
+                            <th class="pb-2 px-2 text-right">Harga Net</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffItemsTableBody" class="divide-y divide-white/5">
+                        <!-- Dynamic Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-between items-center border-t border-white/10 pt-3">
+                <span id="staffModalTotalQty" class="text-xs font-bold opacity-70">Total: 0 Item</span>
+                <span id="staffModalTotalNominal" class="text-xs font-black text-emerald-400">Rp 0</span>
+            </div>
+        </div>
+    </div>
+
     <!-- MAIN APP SCRIPT -->
     <script>
         let rawData = [];
@@ -554,7 +663,7 @@
 
         let removedStaffs = new Set();
         let staffPercentConfig = {};
-        let staffRoleConfig = {}; // Jabatan staff
+        let staffRoleConfig = {};
 
         // Dynamic LOB Items List
         let lobItemsConfig = [
@@ -589,14 +698,14 @@
 
         function switchMainTab(viewName) {
             currentMainView = viewName;
-            ['overview', 'matrix', 'lfl', 'lob', 'aksesoris', 'vas', 'transactions'].forEach(v => {
+            ['overview', 'matrix', 'lfl', 'lob', 'device', 'aksesoris', 'vas', 'transactions'].forEach(v => {
                 const btn = document.getElementById(`mainTab-${v}`);
                 const view = document.getElementById(`view-${v}`);
                 if (v === viewName) {
-                    btn.className = "nav-tab-active px-4 py-2 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition";
+                    if (btn) btn.className = "nav-tab-active px-4 py-2 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition";
                     if (view) view.classList.remove('hidden');
                 } else {
-                    btn.className = "px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition";
+                    if (btn) btn.className = "px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition";
                     if (view) view.classList.add('hidden');
                 }
             });
@@ -808,6 +917,117 @@
             renderLobConfigInputs();
         }
 
+        // ==================== CLOSING REPORT MODAL POPUP ====================
+        function toggleClosingModal(show) {
+            const modal = document.getElementById('closingReportModal');
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        function openClosingReport(dateStr) {
+            const dayTx = rawData.filter(r => r.date === dateStr);
+
+            const totalSales = dayTx.reduce((acc, r) => acc + r.net_price, 0);
+            const devSales = dayTx.filter(r => r.category === 'Device').reduce((acc, r) => acc + r.net_price, 0);
+            const accSales = dayTx.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
+            const vasSales = dayTx.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
+
+            // Item Category Quantities
+            const macQty = dayTx.filter(r => r.product_name.toLowerCase().includes('mac') || r.article.toLowerCase().includes('mac')).length;
+            const ipadQty = dayTx.filter(r => r.product_name.toLowerCase().includes('ipad') || r.article.toLowerCase().includes('ipad')).length;
+            const iphoneQty = dayTx.filter(r => r.product_name.toLowerCase().includes('iphone') || r.article.toLowerCase().includes('iphone')).length;
+            const awQty = dayTx.filter(r => r.product_name.toLowerCase().includes('watch') || r.article.toLowerCase().includes('aw')).length;
+            const airpodsQty = dayTx.filter(r => r.product_name.toLowerCase().includes('airpod') || r.article.toLowerCase().includes('airpod')).length;
+
+            // VAS Breakdown Nominal
+            const qoalaRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toLowerCase().includes('kla') || r.product_name.toLowerCase().includes('kla') || r.product_name.toLowerCase().includes('qoala'))).reduce((acc, r) => acc + r.net_price, 0);
+            const tslRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toLowerCase().includes('tsl') || r.product_name.toLowerCase().includes('tsl') || r.product_name.toLowerCase().includes('telkomsel'))).reduce((acc, r) => acc + r.net_price, 0);
+            const idtRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toLowerCase().includes('idt') || r.product_name.toLowerCase().includes('idt') || r.product_name.toLowerCase().includes('indosat'))).reduce((acc, r) => acc + r.net_price, 0);
+            const xxlRp = dayTx.filter(r => r.category === 'VAS' && (r.article.toLowerCase().includes('xxl') || r.product_name.toLowerCase().includes('xxl') || r.product_name.toLowerCase().includes('xl'))).reduce((acc, r) => acc + r.net_price, 0);
+
+            const reportStr = `*M121 - Closing Report ${dateStr}*
+
+Total Sales : ${fmtRp(totalSales)}
+Devices : ${fmtRp(devSales)}
+Accessories : ${fmtRp(accSales)}
+VAS : ${fmtRp(vasSales)}
+
+Mac : ${macQty}
+iPad : ${ipadQty}
+iPhone : ${iphoneQty}
+Apple Watch : ${awQty}
+AirPods : ${airpodsQty}
+
+Qoala : ${fmtRp(qoalaRp)}
+Telkomsel : ${fmtRp(tslRp)}
+Indosat : ${fmtRp(idtRp)}
+XL : ${fmtRp(xxlRp)}`;
+
+            document.getElementById('closingReportText').textContent = reportStr;
+            toggleClosingModal(true);
+        }
+
+        function copyClosingReportText() {
+            const text = document.getElementById('closingReportText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('btnCopyClosing');
+                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Tersalin!`;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Teks`;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        // ==================== STAFF ITEMS DETAIL POPUP MODAL ====================
+        function toggleStaffItemsModal(show) {
+            const modal = document.getElementById('staffItemsModal');
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        function openStaffItemsModal(staffName, category, dateFilterArray) {
+            const displayName = staffName.split('/')[1] || staffName;
+            const role = staffRoleConfig[staffName] || 'SA';
+
+            document.getElementById('staffModalTitle').innerHTML = `
+                <i data-lucide="package" class="w-4 h-4 text-cyan-400"></i> Rincian Item ${category} - ${displayName}
+            `;
+            document.getElementById('staffModalSub').textContent = `Jabatan: ${role} | Filter: ${category}`;
+
+            let items = rawData.filter(r => r.staff === staffName);
+            if (category && category !== 'ALL') {
+                items = items.filter(r => r.category === category);
+            }
+            if (dateFilterArray && Array.isArray(dateFilterArray) && dateFilterArray.length > 0) {
+                items = items.filter(r => dateFilterArray.includes(r.date));
+            }
+
+            const tbody = document.getElementById('staffItemsTableBody');
+            tbody.innerHTML = '';
+
+            let sumPrice = 0;
+            items.forEach(r => {
+                sumPrice += r.net_price;
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/5 transition';
+                tr.innerHTML = `
+                    <td class="py-2 px-2 font-mono text-[11px] opacity-70">${r.date}</td>
+                    <td class="py-2 px-2 font-semibold text-white">${r.product_name}</td>
+                    <td class="py-2 px-2 font-mono text-[11px] opacity-70">${r.article}</td>
+                    <td class="py-2 px-2 text-right font-bold text-emerald-400">${fmtRp(r.net_price)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('staffModalTotalQty').textContent = `Total: ${items.length} Item`;
+            document.getElementById('staffModalTotalNominal').textContent = fmtRp(sumPrice);
+
+            toggleStaffItemsModal(true);
+            lucide.createIcons();
+        }
+
         // ==================== DASHBOARD UPDATE ENGINE ====================
         function updateDashboard() {
             const selectedStaff = document.getElementById('staffSelect') ? document.getElementById('staffSelect').value : 'ALL';
@@ -818,10 +1038,11 @@
             const tStoreWeek = parseFloat(document.getElementById('targetWeek').value) || 0;
             const tStoreDay = parseFloat(document.getElementById('targetDay').value) || 0;
 
+            const tDev = parseFloat(document.getElementById('targetDevice') ? document.getElementById('targetDevice').value : 0) || 0;
             const tAcc = parseFloat(document.getElementById('targetAccessories').value) || 0;
             const tVAS = parseFloat(document.getElementById('targetVAS').value) || 0;
 
-            // DATES & WEEK BREAKDOWN LOGIC (FULL MONTH CALENDAR GENERATION)
+            // DATES & WEEK BREAKDOWN LOGIC
             const uniqueDatesFromData = [...new Set(rawData.map(r => r.date))].sort();
             const latestDate = uniqueDatesFromData[uniqueDatesFromData.length - 1] || '--';
 
@@ -829,7 +1050,7 @@
                 document.getElementById('syncDateLbl').textContent = latestDate;
             }
 
-            // Generate full calendar dates for the month
+            // Generate full calendar dates for the running month
             let allMonthDates = [];
             let sampleDate = uniqueDatesFromData[0] || '01-08-2026';
             const dateParts = sampleDate.split('-');
@@ -846,7 +1067,7 @@
                 allMonthDates = uniqueDatesFromData;
             }
 
-            // Build strictly 4 week intervals (7 days per week)
+            // Build strictly 4 week intervals
             const weekIntervals = [];
             for (let i = 0; i < 4; i++) {
                 const startIdx = i * 7;
@@ -907,9 +1128,22 @@
             document.getElementById('barDay').style.width = `${pDayStore}%`;
 
             // Store Category Targets
+            const devAmountStore = storeDataAll.filter(r => r.category === 'Device').reduce((acc, r) => acc + r.net_price, 0);
             const accAmountStore = storeDataAll.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
             const vasAmountStore = storeDataAll.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
 
+            // Device Card
+            if (document.getElementById('achDevice')) {
+                document.getElementById('achDevice').textContent = fmtRp(devAmountStore);
+                document.getElementById('lblTargetDevice').textContent = fmtRp(tDev);
+                const remDevVal = Math.max(tDev - devAmountStore, 0);
+                document.getElementById('remDevice').textContent = remDevVal === 0 ? 'Target Achieved!' : `Sisa: ${fmtRp(remDevVal)}`;
+                const pDev = tDev ? Math.min(Math.round((devAmountStore / tDev) * 100), 100) : 0;
+                document.getElementById('badgeDevice').textContent = `${pDev}%`;
+                document.getElementById('barDevice').style.width = `${pDev}%`;
+            }
+
+            // Acc Card
             document.getElementById('achAcc').textContent = fmtRp(accAmountStore);
             document.getElementById('lblTargetAcc').textContent = fmtRp(tAcc);
             const remAccVal = Math.max(tAcc - accAmountStore, 0);
@@ -918,6 +1152,7 @@
             document.getElementById('badgeAcc').textContent = `${pAcc}%`;
             document.getElementById('barAcc').style.width = `${pAcc}%`;
 
+            // VAS Card
             document.getElementById('achVAS').textContent = fmtRp(vasAmountStore);
             document.getElementById('lblTargetVAS').textContent = fmtRp(tVAS);
             const remVASVal = Math.max(tVAS - vasAmountStore, 0);
@@ -926,7 +1161,7 @@
             document.getElementById('badgeVAS').textContent = `${pVAS}%`;
             document.getElementById('barVAS').style.width = `${pVAS}%`;
 
-            // STORE DAILY INVOICE COUNT (COL B UNIQUE RECEIPT PREFIX 1000)
+            // STORE DAILY INVOICE COUNT (CLICKABLE FOR CLOSING REPORT MODAL)
             const dailyInvoiceGrid = document.getElementById('dailyInvoiceGrid');
             dailyInvoiceGrid.innerHTML = '';
             let totalStoreUniqueInvoices = 0;
@@ -941,7 +1176,8 @@
                 totalStoreUniqueInvoices += invCount;
 
                 const card = document.createElement('div');
-                card.className = 'liquid-glass-card p-2 rounded-xl text-center flex flex-col justify-between';
+                card.className = 'liquid-glass-card p-2 rounded-xl text-center flex flex-col justify-between cursor-pointer hover:border-emerald-400/50 hover:scale-105 transition';
+                card.onclick = () => openClosingReport(dt);
                 card.innerHTML = `
                     <span class="text-[9px] font-mono opacity-60 block">${dt}</span>
                     <div class="text-xs font-black text-emerald-400 mt-0.5">${invCount} <span class="text-[8px] font-normal opacity-60">Inv</span></div>
@@ -1015,7 +1251,7 @@
                 summaryBody.appendChild(tr);
             });
 
-            // WEEKLY TABLES WITH TARGET DAY & CLOSING HARIAN (STORE)
+            // WEEKLY TABLES WITH CLOSING HARIAN AT BOTTOM OF PAGE
             const weeklyCapsulesContainer = document.getElementById('weeklyCapsulesContainer');
             weeklyCapsulesContainer.innerHTML = '';
 
@@ -1046,7 +1282,7 @@
                     `;
                 });
 
-                // CLOSING HARIAN (STORE) CALENDAR PROJECTION FOR THIS WEEK
+                // CLOSING HARIAN (STORE) AT BOTTOM OF EACH WEEK PAGE
                 let calendarDatesHtml = '';
                 wk.dates.forEach(dt => {
                     const dayAch = storeDataAll.filter(r => r.date === dt).reduce((acc, r) => acc + r.net_price, 0);
@@ -1067,15 +1303,7 @@
                         <span class="text-xs font-bold opacity-70">${wk.dates.length} Days</span>
                     </div>
 
-                    <!-- CLOSING HARIAN (STORE) -->
-                    <div class="space-y-1.5">
-                        <span class="text-[10px] uppercase font-bold opacity-60">CLOSING HARIAN (STORE):</span>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
-                            ${calendarDatesHtml}
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto pt-2">
+                    <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="opacity-70 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
@@ -1090,6 +1318,14 @@
                                 ${rowsHtml}
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- CLOSING HARIAN (STORE) MOVED TO BOTTOM OF WEEK CARD -->
+                    <div class="space-y-1.5 pt-3 border-t border-white/10">
+                        <span class="text-[10px] uppercase font-bold opacity-60">CLOSING HARIAN (STORE):</span>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+                            ${calendarDatesHtml}
+                        </div>
                     </div>
                 `;
                 weeklyCapsulesContainer.appendChild(capsuleCard);
@@ -1167,7 +1403,7 @@
             }
 
 
-            // ==================== 4. LOB FOCUS (GROUPED BY LOB ITEM, iPad A16 DISPLAY LABEL) ====================
+            // ==================== 4. LOB FOCUS (DISPLAY NAME IPAD A16) ====================
             const lobItemsContainer = document.getElementById('lobItemsContainer');
             lobItemsContainer.innerHTML = '';
 
@@ -1268,7 +1504,64 @@
             });
 
 
-            // ==================== 5. AKSESORIS STAFF ====================
+            // ==================== 5. DEVICE STAFF (NEW TAB WITH POPUP DETAIL ON TAP) ====================
+            const deviceWeeklyContainer = document.getElementById('deviceWeeklyCapsulesContainer');
+            if (deviceWeeklyContainer) {
+                deviceWeeklyContainer.innerHTML = '';
+
+                weekIntervals.forEach((wk) => {
+                    const capsuleCard = document.createElement('div');
+                    capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+
+                    let staffCardsHtml = '';
+                    activeStaffs.forEach(stf => {
+                        const sData = rawData.filter(r => r.staff === stf && r.category === 'Device' && wk.dates.includes(r.date));
+                        const sDevTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
+
+                        const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
+                        const tStaffDevM = Math.round((tDev * pctShare) / 100);
+                        const tStaffDevW = Math.round(tStaffDevM / 4);
+                        const role = staffRoleConfig[stf] || 'SA';
+
+                        const safeStfName = stf.replace(/'/g, "\\'");
+                        const wkDatesJson = JSON.stringify(wk.dates).replace(/"/g, '&quot;');
+
+                        staffCardsHtml += `
+                            <div onclick="openStaffItemsModal('${safeStfName}', 'Device', ${wkDatesJson})" class="liquid-glass-card p-4 rounded-2xl space-y-3 cursor-pointer hover:border-indigo-400/50 hover:scale-[1.01] transition" title="Klik untuk rincian item Device">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                    <div>
+                                        <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                                            ${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span>
+                                            <i data-lucide="external-link" class="w-3 h-3 text-indigo-400 opacity-60"></i>
+                                        </h4>
+                                        <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-xs font-black text-indigo-400">${fmtRp(sDevTotal)} (${sData.length} Item)</span>
+                                        <span class="text-[10px] block opacity-60">Target: ${fmtRp(tStaffDevW)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    capsuleCard.innerHTML = `
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-black uppercase text-indigo-400 tracking-wider">Device Week ${wk.num}</span>
+                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">${wk.label}</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${staffCardsHtml}
+                        </div>
+                    `;
+                    deviceWeeklyContainer.appendChild(capsuleCard);
+                });
+            }
+
+
+            // ==================== 6. AKSESORIS STAFF (WITH POPUP DETAIL ON TAP) ====================
             const aksesorisWeeklyContainer = document.getElementById('aksesorisWeeklyCapsulesContainer');
             aksesorisWeeklyContainer.innerHTML = '';
 
@@ -1286,11 +1579,17 @@
                     const tStaffAccW = Math.round(tStaffAccM / 4);
                     const role = staffRoleConfig[stf] || 'SA';
 
+                    const safeStfName = stf.replace(/'/g, "\\'");
+                    const wkDatesJson = JSON.stringify(wk.dates).replace(/"/g, '&quot;');
+
                     staffCardsHtml += `
-                        <div class="liquid-glass-card p-4 rounded-2xl space-y-3">
+                        <div onclick="openStaffItemsModal('${safeStfName}', 'Accessories', ${wkDatesJson})" class="liquid-glass-card p-4 rounded-2xl space-y-3 cursor-pointer hover:border-cyan-400/50 hover:scale-[1.01] transition" title="Klik untuk rincian item Aksesori">
                             <div class="flex justify-between items-center border-b border-white/10 pb-2">
                                 <div>
-                                    <h4 class="text-xs font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span></h4>
+                                    <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                                        ${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span>
+                                        <i data-lucide="external-link" class="w-3 h-3 text-cyan-400 opacity-60"></i>
+                                    </h4>
                                     <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
                                 </div>
                                 <div class="text-right">
@@ -1317,7 +1616,7 @@
             });
 
 
-            // ==================== 6. VAS STAFF ====================
+            // ==================== 7. VAS STAFF (WITH POPUP DETAIL ON TAP) ====================
             const vasWeeklyContainer = document.getElementById('vasWeeklyCapsulesContainer');
             vasWeeklyContainer.innerHTML = '';
 
@@ -1334,6 +1633,9 @@
                     const tStaffVasM = Math.round((tVAS * pctShare) / 100);
                     const tStaffVasW = Math.round(tStaffVasM / 4);
                     const role = staffRoleConfig[stf] || 'SA';
+
+                    const safeStfName = stf.replace(/'/g, "\\'");
+                    const wkDatesJson = JSON.stringify(wk.dates).replace(/"/g, '&quot;');
 
                     let vasKwHtml = '';
                     vasKeywords.forEach(kw => {
@@ -1355,10 +1657,13 @@
                     });
 
                     staffCardsHtml += `
-                        <div class="liquid-glass-card p-4 rounded-2xl space-y-2">
+                        <div onclick="openStaffItemsModal('${safeStfName}', 'VAS', ${wkDatesJson})" class="liquid-glass-card p-4 rounded-2xl space-y-2 cursor-pointer hover:border-purple-400/50 hover:scale-[1.01] transition" title="Klik untuk rincian item VAS">
                             <div class="flex justify-between items-center border-b border-white/10 pb-2">
                                 <div>
-                                    <h4 class="text-xs font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span></h4>
+                                    <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                                        ${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span>
+                                        <i data-lucide="external-link" class="w-3 h-3 text-purple-400 opacity-60"></i>
+                                    </h4>
                                     <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
                                 </div>
                                 <div class="text-right">
@@ -1388,7 +1693,7 @@
             });
 
 
-            // ==================== 7. TRANSACTIONS TABLE ====================
+            // ==================== 8. TRANSACTIONS TABLE ====================
             const tbody = document.getElementById('transactionBody');
             tbody.innerHTML = '';
             document.getElementById('itemCount').textContent = `${filtered.length} Item`;
