@@ -1635,7 +1635,7 @@
     "price": 889000.0,
     "receipt": "100043748",
     "net_price": 889000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -2141,7 +2141,7 @@
     "price": 999000.0,
     "receipt": "100043737",
     "net_price": 999000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -2955,7 +2955,7 @@
     "price": 889000.0,
     "receipt": "100043765",
     "net_price": 889000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -2966,7 +2966,7 @@
     "price": 495200.0,
     "receipt": "100043786",
     "net_price": 495200.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -3406,7 +3406,7 @@
     "price": 889000.0,
     "receipt": "100043836",
     "net_price": 889000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -5463,7 +5463,7 @@
     "price": 899000.0,
     "receipt": "100043923",
     "net_price": 899000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -5826,7 +5826,7 @@
     "price": 889000.0,
     "receipt": "100043941",
     "net_price": 889000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -6574,7 +6574,7 @@
     "price": 889000.0,
     "receipt": "100043967",
     "net_price": 889000.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -8037,7 +8037,7 @@
     "price": 449000.0,
     "receipt": "100044071",
     "net_price": 449000.0,
-    "category": "VAS",
+    "category": "Accessories",
     "lob_focus": null
   },
   {
@@ -8114,7 +8114,7 @@
     "price": 495200.0,
     "receipt": "100044077",
     "net_price": 495200.0,
-    "category": "Accessories",
+    "category": "Device",
     "lob_focus": "MBN"
   },
   {
@@ -8235,7 +8235,7 @@
     "price": 499000.0,
     "receipt": "100044087",
     "net_price": 499000.0,
-    "category": "Device",
+    "category": "Accessories",
     "lob_focus": "MBN"
   },
   {
