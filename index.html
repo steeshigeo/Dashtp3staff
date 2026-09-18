@@ -72,85 +72,21 @@
                 </div>
             </div>
 
-            <div class="text-right border-l border-white/10 pl-4">
-                <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold">Status Data</span>
-                <span id="dataStatus" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Auto Synced
-                </span>
+            <div class="flex items-center gap-4">
+                <!-- BUTTON CONFIG -->
+                <button onclick="toggleConfigModal(true)" class="liquid-glass-card hover:bg-white/10 text-xs font-bold px-5 py-3 rounded-2xl flex items-center gap-2 border border-indigo-500/30 text-indigo-300 shadow-lg shadow-indigo-500/10 transition">
+                    <i data-lucide="settings" class="w-4 h-4 text-indigo-400"></i>
+                    Config Target
+                </button>
+
+                <div class="text-right border-l border-white/10 pl-4">
+                    <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold">Status Data</span>
+                    <span id="dataStatus" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Auto Synced
+                    </span>
+                </div>
             </div>
         </header>
-
-        <!-- INPUT TARGET MANUAL (COLLAPSIBLE) -->
-        <details class="liquid-glass rounded-3xl p-6 group" open>
-            <summary class="cursor-pointer flex justify-between items-center text-sm font-bold text-slate-200">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="target" class="w-5 h-5 text-indigo-400"></i>
-                    <span>Set Target Revenue, Aksesori, VAS & LOB Focus Items</span>
-                </div>
-                <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform"></i>
-            </summary>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 pt-6 border-t border-white/10">
-                <!-- Target Revenue -->
-                <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Sales Revenue (Rp)</h3>
-                    <div>
-                        <label class="text-xs text-slate-400">Target Month (Rp)</label>
-                        <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="text-xs text-slate-400">Target Week (Auto)</label>
-                            <input type="number" id="targetWeek" value="25000000" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-slate-300 cursor-not-allowed">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-400">Target Day (Auto)</label>
-                            <input type="number" id="targetDay" value="3333333" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-slate-300 cursor-not-allowed">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Target Aksesori & VAS Qty -->
-                <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Category (Qty)</h3>
-                    <div>
-                        <label class="text-xs text-slate-400">Target Aksesori (Pcs)</label>
-                        <input type="number" id="targetAccessories" value="50" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-400">Target VAS (Pcs)</label>
-                        <input type="number" id="targetVAS" value="30" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                    </div>
-                </div>
-
-                <!-- Target LOB Qty -->
-                <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target LOB Focus Items (Qty)</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        <div>
-                            <label class="text-xs text-slate-400">iPhone 15</label>
-                            <input type="number" id="targetIphone15" value="10" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-400">iPad A16</label>
-                            <input type="number" id="targetIpadA16" value="5" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-400">MBN</label>
-                            <input type="number" id="targetMbn" value="8" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-400">AW SE</label>
-                            <input type="number" id="targetAwSe" value="6" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                        </div>
-                        <div class="col-span-2 sm:col-span-1">
-                            <label class="text-xs text-slate-400">AirPods</label>
-                            <input type="number" id="targetAirpods" value="15" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </details>
 
         <!-- SELECTOR STAFF & FILTER -->
         <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
@@ -170,17 +106,17 @@
             </div>
         </div>
 
-        <!-- REVENUE METRIC CARDS -->
+        <!-- REVENUE METRIC CARDS (STORE LEVEL) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Monthly Progress -->
             <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
                 <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pencapaian Month</span>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN MONTH STORE</span>
                     <span id="badgeMonth" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">0%</span>
                 </div>
                 <div class="mt-4">
                     <h2 id="achMonth" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
-                    <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetMonth" class="text-slate-200">Rp 0</span></p>
+                    <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetMonth" class="text-slate-200">Rp 0</span></p>
                 </div>
                 <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
                     <div id="barMonth" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -190,12 +126,12 @@
             <!-- Weekly Progress -->
             <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
                 <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pencapaian Week</span>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN WEEK STORE</span>
                     <span id="badgeWeek" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">0%</span>
                 </div>
                 <div class="mt-4">
                     <h2 id="achWeek" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
-                    <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetWeek" class="text-slate-200">Rp 0</span></p>
+                    <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetWeek" class="text-slate-200">Rp 0</span></p>
                 </div>
                 <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
                     <div id="barWeek" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -205,12 +141,12 @@
             <!-- Daily Progress -->
             <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
                 <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pencapaian Day</span>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">PENCAPAIAN DAY STORE</span>
                     <span id="badgeDay" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">0%</span>
                 </div>
                 <div class="mt-4">
                     <h2 id="achDay" class="text-2xl md:text-3xl font-black text-white">Rp 0</h2>
-                    <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetDay" class="text-slate-200">Rp 0</span></p>
+                    <p class="text-xs text-slate-400 mt-1">Target Store: <span id="lblTargetDay" class="text-slate-200">Rp 0</span></p>
                 </div>
                 <div class="w-full bg-slate-800/80 rounded-full h-2.5 mt-4 overflow-hidden">
                     <div id="barDay" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -218,24 +154,24 @@
             </div>
         </div>
 
-        <!-- CATEGORY TARGET CARDS (AKSESORI & VAS) -->
+        <!-- CATEGORY TARGET CARDS (AKSESORI & VAS IN AMOUNT Rp) -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Aksesori Card -->
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-2">
                         <i data-lucide="headphones" class="w-5 h-5 text-cyan-400"></i>
-                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian Aksesori</span>
+                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian Aksesori (Rp)</span>
                     </div>
                     <span id="badgeAcc" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">0%</span>
                 </div>
                 <div class="mt-4 flex justify-between items-end">
                     <div>
-                        <h3 id="achAcc" class="text-2xl font-black text-white">0 Pcs</h3>
-                        <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetAcc" class="text-slate-200">0 Pcs</span></p>
+                        <h3 id="achAcc" class="text-2xl font-black text-white">Rp 0</h3>
+                        <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetAcc" class="text-slate-200">Rp 0</span></p>
                     </div>
                     <div class="text-right">
-                        <span id="remAcc" class="text-xs font-semibold text-cyan-400">Sisa: 0 Pcs</span>
+                        <span id="remAcc" class="text-xs font-semibold text-cyan-400">Sisa: Rp 0</span>
                     </div>
                 </div>
                 <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
@@ -248,22 +184,67 @@
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-2">
                         <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i>
-                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian VAS</span>
+                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian VAS (Rp)</span>
                     </div>
                     <span id="badgeVAS" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">0%</span>
                 </div>
                 <div class="mt-4 flex justify-between items-end">
                     <div>
-                        <h3 id="achVAS" class="text-2xl font-black text-white">0 Pcs</h3>
-                        <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetVAS" class="text-slate-200">0 Pcs</span></p>
+                        <h3 id="achVAS" class="text-2xl font-black text-white">Rp 0</h3>
+                        <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetVAS" class="text-slate-200">Rp 0</span></p>
                     </div>
                     <div class="text-right">
-                        <span id="remVAS" class="text-xs font-semibold text-purple-400">Sisa: 0 Pcs</span>
+                        <span id="remVAS" class="text-xs font-semibold text-purple-400">Sisa: Rp 0</span>
                     </div>
                 </div>
                 <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
                     <div id="barVAS" class="bg-gradient-to-r from-purple-400 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- NEW: BREAKDOWN PENCAPAIAN PER STAFF (VERTIKAL: STAFF, HORISONTAL: MONTH/WEEK/DAY) -->
+        <div class="liquid-glass rounded-3xl p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> Matriks Target & Pencapaian Per Staff
+                </h3>
+                <span id="activeStaffCount" class="text-xs text-slate-400">0 Staff Aktif</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
+                            <th class="pb-3 px-3">Staff</th>
+                            <th class="pb-3 px-3 text-right">Target Month</th>
+                            <th class="pb-3 px-3 text-right">Ach Month</th>
+                            <th class="pb-3 px-3 text-center">% Month</th>
+                            <th class="pb-3 px-3 text-right">Target Week</th>
+                            <th class="pb-3 px-3 text-right">Ach Week</th>
+                            <th class="pb-3 px-3 text-center">% Week</th>
+                            <th class="pb-3 px-3 text-right">Target Day</th>
+                            <th class="pb-3 px-3 text-right">Ach Day</th>
+                            <th class="pb-3 px-3 text-center">% Day</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffMatrixBody" class="divide-y divide-white/5 text-slate-300 font-medium">
+                        <!-- Dynamic Staff Matrix Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- DETAIL VAS ITEM TERJUAL BREAKDOWN -->
+        <div class="liquid-glass rounded-3xl p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i data-lucide="shield" class="w-4 h-4 text-purple-400"></i> Detail Penjualan VAS (KLA, TSL, IDT, XXL)
+                </h3>
+                <span id="vasTotalSummary" class="text-xs font-bold text-purple-300">Total: 0 Pcs</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="vasKeywordCards">
+                <!-- Dynamic VAS Keyword Cards -->
             </div>
         </div>
 
@@ -273,7 +254,7 @@
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Sisa
+                        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Pencapaian
                     </h3>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="lobGrid">
@@ -285,7 +266,7 @@
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> LFL (Week Berjalan vs Week Sebelumnya)
+                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> LFL (Week Sebelumnya vs Week Berjalan)
                     </h3>
                     <span id="lflGrowth" class="text-xs font-bold px-2.5 py-1 rounded-full bg-white/10 text-emerald-400">0% WoW</span>
                 </div>
@@ -332,6 +313,86 @@
 
     </div>
 
+    <!-- MODAL CONFIG TARGET -->
+    <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="liquid-glass rounded-3xl p-6 max-w-2xl w-full border border-white/20 shadow-2xl relative space-y-6">
+            <div class="flex justify-between items-center border-b border-white/10 pb-4">
+                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="settings" class="w-5 h-5 text-indigo-400"></i> Set Config Target Sales
+                </h2>
+                <button onclick="toggleConfigModal(false)" class="text-slate-400 hover:text-white transition">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Target Store Revenue -->
+                <div class="space-y-3 sm:col-span-2 bg-white/5 p-4 rounded-2xl border border-white/10">
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Sales Revenue Store (Rp)</h3>
+                    <div>
+                        <label class="text-xs text-slate-400">Target Month Store (Rp)</label>
+                        <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets()" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-xs text-slate-400">Target Week Store (Auto)</label>
+                            <input type="number" id="targetWeek" value="25000000" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-slate-400 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400">Target Day Store (Auto)</label>
+                            <input type="number" id="targetDay" value="3333333" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-slate-400 cursor-not-allowed">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Target Category (Amount Rp) -->
+                <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Category (Rp)</h3>
+                    <div>
+                        <label class="text-xs text-slate-400">Target Aksesori (Rp)</label>
+                        <input type="number" id="targetAccessories" value="15000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400">Target VAS (Rp)</label>
+                        <input type="number" id="targetVAS" value="10000000" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Target LOB Qty -->
+                <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target LOB Focus Items (Qty)</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-xs text-slate-400">iPhone 15</label>
+                            <input type="number" id="targetIphone15" value="10" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400">iPad 11th</label>
+                            <input type="number" id="targetIpadA16" value="5" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400">MBN</label>
+                            <input type="number" id="targetMbn" value="8" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400">AW</label>
+                            <input type="number" id="targetAwSe" value="6" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="text-xs text-slate-400">AirPods</label>
+                            <input type="number" id="targetAirpods" value="15" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+                <button onclick="toggleConfigModal(false)" class="px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-white/5 transition">Batal</button>
+                <button onclick="saveConfigModal()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-lg transition">Simpan Config</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MAIN APP SCRIPT -->
     <script>
         let rawData = [];
@@ -339,11 +400,21 @@
 
         const fmtRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
 
+        function toggleConfigModal(show) {
+            const modal = document.getElementById('configModal');
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        function saveConfigModal() {
+            toggleConfigModal(false);
+            updateDashboard();
+        }
+
         function autoCalcTargets() {
             const tMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
             document.getElementById('targetWeek').value = Math.round(tMonth / 4);
             document.getElementById('targetDay').value = Math.round(tMonth / 30);
-            updateDashboard();
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
@@ -352,15 +423,23 @@
                 const res = await fetch('data.json');
                 if (res.ok) {
                     const data = await res.json();
-                    // FILTER HAPUS ITEM BERHARGA Rp0
+                    // FILTER HAPUS ITEM BERHARGA <= Rp0
                     rawData = data.filter(item => item.net_price > 0);
                     initStaffSelector();
                     autoCalcTargets();
+                    updateDashboard();
                 }
             } catch (err) {
                 console.log("Waiting for data.json...");
             }
         });
+
+        function getActiveStaffList() {
+            // EXCLUDE STAFF DIGIMAP.CO.ID
+            return [...new Set(rawData.map(r => r.staff))]
+                .filter(s => !s.toLowerCase().includes('digimap.co.id'))
+                .sort();
+        }
 
         function initStaffSelector() {
             const select = document.getElementById('staffSelect');
@@ -389,6 +468,10 @@
 
         function updateDashboard() {
             const selectedStaff = document.getElementById('staffSelect').value;
+            const activeStaffs = getActiveStaffList();
+            const activeStaffCount = activeStaffs.length || 1;
+
+            document.getElementById('activeStaffCount').textContent = `${activeStaffCount} Staff Aktif (Excl. digimap.co.id)`;
 
             // Filter data per staff
             let staffData = rawData;
@@ -402,65 +485,135 @@
                 filtered = filtered.filter(r => r.category === currentTab);
             }
 
-            // Target Inputs
-            const tMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
-            const tWeek = parseFloat(document.getElementById('targetWeek').value) || 0;
-            const tDay = parseFloat(document.getElementById('targetDay').value) || 0;
-            const tAcc = parseInt(document.getElementById('targetAccessories').value) || 0;
-            const tVAS = parseInt(document.getElementById('targetVAS').value) || 0;
-
-            // Revenue Calculations
-            const totalMonth = filtered.reduce((acc, r) => acc + r.net_price, 0);
+            // Target Store Inputs
+            const tStoreMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
+            const tStoreWeek = parseFloat(document.getElementById('targetWeek').value) || 0;
+            const tStoreDay = parseFloat(document.getElementById('targetDay').value) || 0;
             
+            // Individual Staff Target Breakdown (Divide equally by active staff count)
+            const tStaffMonth = Math.round(tStoreMonth / activeStaffCount);
+            const tStaffWeek = Math.round(tStoreWeek / activeStaffCount);
+            const tStaffDay = Math.round(tStoreDay / activeStaffCount);
+
+            const tAcc = parseFloat(document.getElementById('targetAccessories').value) || 0;
+            const tVAS = parseFloat(document.getElementById('targetVAS').value) || 0;
+
+            // Dates Calculation
             const uniqueDates = [...new Set(rawData.map(r => r.date))];
             const latestDate = uniqueDates[uniqueDates.length - 1];
-            
-            const totalDay = filtered.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
-
             const last7Dates = uniqueDates.slice(-7);
             const prev7Dates = uniqueDates.slice(-14, -7);
 
+            // Revenue Calculations for Cards
+            const totalMonth = filtered.reduce((acc, r) => acc + r.net_price, 0);
+            const totalDay = filtered.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
             const totalWeek0 = filtered.filter(r => last7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
             const totalWeek1 = filtered.filter(r => prev7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
 
-            // Update Revenue UI
+            // Target for display: Store level if ALL, Staff level if single staff selected
+            const effectiveTMonth = selectedStaff === 'ALL' ? tStoreMonth : tStaffMonth;
+            const effectiveTWeek = selectedStaff === 'ALL' ? tStoreWeek : tStaffWeek;
+            const effectiveTDay = selectedStaff === 'ALL' ? tStoreDay : tStaffDay;
+
+            // Update Revenue Cards UI
             document.getElementById('achMonth').textContent = fmtRp(totalMonth);
-            document.getElementById('lblTargetMonth').textContent = fmtRp(tMonth);
-            const pMonth = tMonth ? Math.min(Math.round((totalMonth / tMonth) * 100), 100) : 0;
+            document.getElementById('lblTargetMonth').textContent = fmtRp(effectiveTMonth);
+            const pMonth = effectiveTMonth ? Math.min(Math.round((totalMonth / effectiveTMonth) * 100), 100) : 0;
             document.getElementById('badgeMonth').textContent = `${pMonth}%`;
             document.getElementById('barMonth').style.width = `${pMonth}%`;
 
             document.getElementById('achWeek').textContent = fmtRp(totalWeek0);
-            document.getElementById('lblTargetWeek').textContent = fmtRp(tWeek);
-            const pWeek = tWeek ? Math.min(Math.round((totalWeek0 / tWeek) * 100), 100) : 0;
+            document.getElementById('lblTargetWeek').textContent = fmtRp(effectiveTWeek);
+            const pWeek = effectiveTWeek ? Math.min(Math.round((totalWeek0 / effectiveTWeek) * 100), 100) : 0;
             document.getElementById('badgeWeek').textContent = `${pWeek}%`;
             document.getElementById('barWeek').style.width = `${pWeek}%`;
 
             document.getElementById('achDay').textContent = fmtRp(totalDay);
-            document.getElementById('lblTargetDay').textContent = fmtRp(tDay);
-            const pDay = tDay ? Math.min(Math.round((totalDay / tDay) * 100), 100) : 0;
+            document.getElementById('lblTargetDay').textContent = fmtRp(effectiveTDay);
+            const pDay = effectiveTDay ? Math.min(Math.round((totalDay / effectiveTDay) * 100), 100) : 0;
             document.getElementById('badgeDay').textContent = `${pDay}%`;
             document.getElementById('barDay').style.width = `${pDay}%`;
 
-            // Category Calculation (Aksesori & VAS Qty Sold)
-            const accSold = staffData.filter(r => r.category === 'Accessories').length;
-            const vasSold = staffData.filter(r => r.category === 'VAS').length;
+            // Category Calculation (Aksesori & VAS Amount Rp)
+            const accAmount = staffData.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
+            const vasAmount = staffData.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
 
-            document.getElementById('achAcc').textContent = `${accSold} Pcs`;
-            document.getElementById('lblTargetAcc').textContent = `${tAcc} Pcs`;
-            const remAccVal = Math.max(tAcc - accSold, 0);
-            document.getElementById('remAcc').textContent = remAccVal === 0 ? 'Target Achieved!' : `Sisa: ${remAccVal} Pcs`;
-            const pAcc = tAcc ? Math.min(Math.round((accSold / tAcc) * 100), 100) : 0;
+            document.getElementById('achAcc').textContent = fmtRp(accAmount);
+            document.getElementById('lblTargetAcc').textContent = fmtRp(tAcc);
+            const remAccVal = Math.max(tAcc - accAmount, 0);
+            document.getElementById('remAcc').textContent = remAccVal === 0 ? 'Target Achieved!' : `Sisa: ${fmtRp(remAccVal)}`;
+            const pAcc = tAcc ? Math.min(Math.round((accAmount / tAcc) * 100), 100) : 0;
             document.getElementById('badgeAcc').textContent = `${pAcc}%`;
             document.getElementById('barAcc').style.width = `${pAcc}%`;
 
-            document.getElementById('achVAS').textContent = `${vasSold} Pcs`;
-            document.getElementById('lblTargetVAS').textContent = `${tVAS} Pcs`;
-            const remVASVal = Math.max(tVAS - vasSold, 0);
-            document.getElementById('remVAS').textContent = remVASVal === 0 ? 'Target Achieved!' : `Sisa: ${remVASVal} Pcs`;
-            const pVAS = tVAS ? Math.min(Math.round((vasSold / tVAS) * 100), 100) : 0;
+            document.getElementById('achVAS').textContent = fmtRp(vasAmount);
+            document.getElementById('lblTargetVAS').textContent = fmtRp(tVAS);
+            const remVASVal = Math.max(tVAS - vasAmount, 0);
+            document.getElementById('remVAS').textContent = remVASVal === 0 ? 'Target Achieved!' : `Sisa: ${fmtRp(remVASVal)}`;
+            const pVAS = tVAS ? Math.min(Math.round((vasAmount / tVAS) * 100), 100) : 0;
             document.getElementById('badgeVAS').textContent = `${pVAS}%`;
             document.getElementById('barVAS').style.width = `${pVAS}%`;
+
+            // STAFF MATRIX TABLE GENERATION
+            const matrixBody = document.getElementById('staffMatrixBody');
+            matrixBody.innerHTML = '';
+
+            activeStaffs.forEach(stf => {
+                const sData = rawData.filter(r => r.staff === stf);
+                const sAchM = sData.reduce((acc, r) => acc + r.net_price, 0);
+                const sAchW = sData.filter(r => last7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+                const sAchD = sData.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
+
+                const pctM = tStaffMonth ? Math.round((sAchM / tStaffMonth) * 100) : 0;
+                const pctW = tStaffWeek ? Math.round((sAchW / tStaffWeek) * 100) : 0;
+                const pctD = tStaffDay ? Math.round((sAchD / tStaffDay) * 100) : 0;
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/5 transition';
+                tr.innerHTML = `
+                    <td class="py-3 px-3 font-bold text-white">${stf.split('/')[1] || stf}</td>
+                    <td class="py-3 px-3 text-right text-slate-400">${fmtRp(tStaffMonth)}</td>
+                    <td class="py-3 px-3 text-right font-bold text-indigo-300">${fmtRp(sAchM)}</td>
+                    <td class="py-3 px-3 text-center font-bold ${pctM >= 100 ? 'text-emerald-400' : 'text-indigo-400'}">${pctM}%</td>
+                    <td class="py-3 px-3 text-right text-slate-400">${fmtRp(tStaffWeek)}</td>
+                    <td class="py-3 px-3 text-right font-bold text-cyan-300">${fmtRp(sAchW)}</td>
+                    <td class="py-3 px-3 text-center font-bold ${pctW >= 100 ? 'text-emerald-400' : 'text-cyan-400'}">${pctW}%</td>
+                    <td class="py-3 px-3 text-right text-slate-400">${fmtRp(tStaffDay)}</td>
+                    <td class="py-3 px-3 text-right font-bold text-emerald-300">${fmtRp(sAchD)}</td>
+                    <td class="py-3 px-3 text-center font-bold ${pctD >= 100 ? 'text-emerald-400' : 'text-emerald-400'}">${pctD}%</td>
+                `;
+                matrixBody.appendChild(tr);
+            });
+
+            // VAS KEYWORD BREAKDOWN CARDS
+            const vasKeywords = ['kla', 'tsl', 'idt', 'xxl'];
+            const vasContainer = document.getElementById('vasKeywordCards');
+            vasContainer.innerHTML = '';
+
+            const vasItemsAll = staffData.filter(r => r.category === 'VAS');
+            let vasTotalQty = vasItemsAll.length;
+            document.getElementById('vasTotalSummary').textContent = `Total VAS: ${vasTotalQty} Pcs (${fmtRp(vasAmount)})`;
+
+            vasKeywords.forEach(kw => {
+                const matched = vasItemsAll.filter(r => 
+                    r.article.toLowerCase().includes(kw) || r.product_name.toLowerCase().includes(kw)
+                );
+                const count = matched.length;
+                const sum = matched.reduce((acc, r) => acc + r.net_price, 0);
+
+                const card = document.createElement('div');
+                card.className = 'liquid-glass-card p-4 rounded-2xl flex flex-col justify-between';
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black uppercase text-purple-300 tracking-wider">Identitas: ${kw.toUpperCase()}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Pcs</span>
+                    </div>
+                    <div class="mt-3">
+                        <p class="text-lg font-extrabold text-white">${fmtRp(sum)}</p>
+                    </div>
+                `;
+                vasContainer.appendChild(card);
+            });
 
             // LFL WoW
             document.getElementById('lflPrev').textContent = fmtRp(totalWeek1);
@@ -473,9 +626,9 @@
             // LOB Focus Tracker
             const lobTargets = {
                 'iPhone 15': parseInt(document.getElementById('targetIphone15').value) || 0,
-                'iPad A16': parseInt(document.getElementById('targetIpadA16').value) || 0,
+                'iPad 11th': parseInt(document.getElementById('targetIpadA16').value) || 0,
                 'MBN': parseInt(document.getElementById('targetMbn').value) || 0,
-                'AW SE': parseInt(document.getElementById('targetAwSe').value) || 0,
+                'AW': parseInt(document.getElementById('targetAwSe').value) || 0,
                 'AirPods': parseInt(document.getElementById('targetAirpods').value) || 0
             };
 
@@ -492,7 +645,7 @@
                     <span class="text-[10px] font-bold text-slate-400 uppercase">${key}</span>
                     <div class="text-lg font-black text-white mt-1">${soldQty} <span class="text-xs font-normal text-slate-400">/ ${lobTargets[key]}</span></div>
                     <div class="text-[10px] font-semibold mt-1 ${remaining === 0 ? 'text-emerald-400' : 'text-purple-300'}">
-                        ${remaining === 0 ? 'Target Achieved!' : `Sisa: ${remaining} pcs`}
+                        ${remaining === 0 ? 'Achieved!' : `Sisa: ${remaining} pcs`}
                     </div>
                 `;
                 lobGrid.appendChild(card);
