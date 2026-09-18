@@ -99,7 +99,7 @@ def parse_sales_xls(file_path):
                     price = float(rc0)
                     net_price = float(rc2) if rc2 is not None else price
                     
-                    # SYSTEM FILTER: HANYA MEMASUKKAN ITEM BERHARGA LEBIH DARI RP 0
+                    # FILTER SYSTEM: HANYA ITEM DENGAN HARGA NET > 0
                     if net_price > 0:
                         p_lower = product_name.lower()
                         art_lower = article.lower()
@@ -110,15 +110,16 @@ def parse_sales_xls(file_path):
                         elif any(dk in p_lower for dk in device_keywords):
                             category = "Device"
                             
+                        # ATURAN MAPPING LOB FOCUS REVISI
                         lob_focus = None
                         if 'iphone 15' in p_lower:
                             lob_focus = 'iPhone 15'
-                        elif 'ipad' in p_lower and ('a16' in p_lower or '10th' in p_lower or '10.9' in p_lower):
-                            lob_focus = 'iPad A16'
+                        elif 'ipad' in p_lower and ('11th' in p_lower or '10th' in p_lower or 'a16' in p_lower):
+                            lob_focus = 'iPad 11th'
                         elif 'mbn' in p_lower or 'macbook' in p_lower:
                             lob_focus = 'MBN'
-                        elif 'aw se' in p_lower or 'watch se' in p_lower:
-                            lob_focus = 'AW SE'
+                        elif 'apple watch' in p_lower or 'watch' in p_lower or 'aw' in p_lower:
+                            lob_focus = 'AW'
                         elif 'airpods' in p_lower:
                             lob_focus = 'AirPods'
 
