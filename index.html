@@ -105,7 +105,7 @@
                     </h1>
                     <div class="flex items-center gap-2 mt-0.5">
                         <p class="text-xs md:text-sm opacity-70">
-                            Staff Achievement Tracker • <span class="text-[10px] opacity-60 font-medium">made with ❤️ by frans</span>
+                            Staff Achievement Tracker | <span class="text-[10px] opacity-60 font-medium">made with ❤️ by frans</span>
                         </p>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                 <!-- BUTTON CONFIG -->
                 <button onclick="toggleConfigModal(true)" class="liquid-glass-card hover:bg-white/10 text-xs font-bold px-5 py-3 rounded-2xl flex items-center gap-2 border border-indigo-500/30 text-indigo-400 shadow-lg shadow-indigo-500/10 transition">
                     <i data-lucide="settings" class="w-4 h-4 text-indigo-400"></i>
-                    Config Target & Staff %
+                    Config
                 </button>
 
                 <!-- DATE SYNCED STATUS -->
@@ -488,16 +488,34 @@
                             <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">VAS</button>
                         </div>
 
-                        <!-- SORTING BUTTON CONTROLS -->
-                        <div class="flex items-center gap-1.5 overflow-x-auto py-1 w-full sm:w-auto">
-                            <span class="text-xs font-bold opacity-60 whitespace-nowrap flex items-center gap-1">
-                                <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-indigo-400"></i> Sort:
-                            </span>
-                            <button onclick="setTxSort('name-asc')" id="sortBtn-name-asc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 transition whitespace-nowrap">Name A-Z</button>
-                            <button onclick="setTxSort('name-desc')" id="sortBtn-name-desc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 transition whitespace-nowrap">Name Z-A</button>
-                            <button onclick="setTxSort('amount-desc')" id="sortBtn-amount-desc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 transition whitespace-nowrap">Amount ↓</button>
-                            <button onclick="setTxSort('amount-asc')" id="sortBtn-amount-asc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 transition whitespace-nowrap">Amount ↑</button>
-                            <button onclick="setTxSort('date-desc')" id="sortBtn-date-desc" class="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-indigo-500 text-white transition whitespace-nowrap">Date ↓</button>
+                        <!-- SORTING BUTTON COLLAPSIBLE DROPDOWN CONTROLS -->
+                        <div class="relative w-full sm:w-auto">
+                            <button onclick="toggleSortDropdown()" id="sortDropdownToggleBtn" class="liquid-glass px-4 py-2 rounded-2xl text-xs font-bold text-white flex items-center justify-between gap-2 border border-white/10 hover:border-indigo-500/40 transition w-full sm:w-auto">
+                                <span class="flex items-center gap-1.5">
+                                    <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-indigo-400"></i>
+                                    <span id="currentSortLabel">Date ↓</span>
+                                </span>
+                                <i data-lucide="chevron-down" id="sortChevronIcon" class="w-3.5 h-3.5 opacity-70 transition-transform duration-300"></i>
+                            </button>
+
+                            <!-- DROPDOWN LIST (COLLAPSIBLE / DEFAULT HIDDEN) -->
+                            <div id="sortDropdownMenu" class="absolute right-0 mt-2 w-44 bg-slate-900/95 backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl p-1.5 space-y-1 z-50 hidden">
+                                <button onclick="setTxSort('date-desc')" id="sortBtn-date-desc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Date Terbaru (↓)
+                                </button>
+                                <button onclick="setTxSort('amount-desc')" id="sortBtn-amount-desc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Amount Termahal (↓)
+                                </button>
+                                <button onclick="setTxSort('amount-asc')" id="sortBtn-amount-asc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Amount Termurah (↑)
+                                </button>
+                                <button onclick="setTxSort('name-asc')" id="sortBtn-name-asc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Name A-Z
+                                </button>
+                                <button onclick="setTxSort('name-desc')" id="sortBtn-name-desc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Name Z-A
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -843,19 +861,60 @@
             document.getElementById('targetDay').value = Math.round(tMonth / 30);
         }
 
+        function toggleSortDropdown() {
+            const menu = document.getElementById('sortDropdownMenu');
+            const chevron = document.getElementById('sortChevronIcon');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+            } else {
+                menu.classList.add('hidden');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
         function setTxSort(sortType) {
             currentTxSort = sortType;
-            ['name-asc', 'name-desc', 'amount-desc', 'amount-asc', 'date-desc'].forEach(st => {
+            const sortLabels = {
+                'date-desc': 'Date Terbaru (↓)',
+                'amount-desc': 'Amount Termahal (↓)',
+                'amount-asc': 'Amount Termurah (↑)',
+                'name-asc': 'Name A-Z',
+                'name-desc': 'Name Z-A'
+            };
+            if (document.getElementById('currentSortLabel')) {
+                document.getElementById('currentSortLabel').textContent = sortLabels[sortType] || 'Sort';
+            }
+
+            ['date-desc', 'amount-desc', 'amount-asc', 'name-asc', 'name-desc'].forEach(st => {
                 const btn = document.getElementById(`sortBtn-${st}`);
                 if (!btn) return;
                 if (st === sortType) {
-                    btn.className = "px-2.5 py-1 rounded-xl text-[11px] font-bold bg-indigo-500 text-white shadow-md transition whitespace-nowrap";
+                    btn.className = "w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold bg-indigo-500 text-white transition flex items-center justify-between";
                 } else {
-                    btn.className = "px-2.5 py-1 rounded-xl text-[11px] font-bold bg-white/10 hover:bg-white/20 opacity-70 transition whitespace-nowrap";
+                    btn.className = "w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between";
                 }
             });
+
+            // Auto close dropdown after selection
+            const menu = document.getElementById('sortDropdownMenu');
+            if (menu) menu.classList.add('hidden');
+            const chevron = document.getElementById('sortChevronIcon');
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+
             updateDashboard();
         }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (e) => {
+            const btn = document.getElementById('sortDropdownToggleBtn');
+            const menu = document.getElementById('sortDropdownMenu');
+            if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.add('hidden');
+                const chevron = document.getElementById('sortChevronIcon');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        });
 
         window.addEventListener('DOMContentLoaded', async () => {
             initTheme();
@@ -1329,7 +1388,7 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
                         startDate: wDates[0],
                         endDate: wDates[wDates.length - 1],
                         dates: wDates,
-                        label: `${weekLabels[i] || 'W' + (10+i)}: ${wDates[0]} s/d ${wDates[wDates.length - 1]}`
+                        label: `${wDates[0]} s/d ${wDates[wDates.length - 1]}` // DIBUANG TEKS DUPLIKAT W10 NYA
                     });
                 }
             }
