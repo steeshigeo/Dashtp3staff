@@ -265,18 +265,18 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
+                            <tr id="staffMatrixHeaderRow" class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
                                 <th class="pb-3 px-3">Staff</th>
                                 <th class="pb-3 px-3 text-center">Share %</th>
                                 <th class="pb-3 px-3 text-right">Target Month</th>
                                 <th class="pb-3 px-3 text-right">Ach Month</th>
                                 <th class="pb-3 px-3 text-center">% Month</th>
-                                <th class="pb-3 px-3 text-right">Target Week</th>
-                                <th class="pb-3 px-3 text-right">Ach Week</th>
-                                <th class="pb-3 px-3 text-center">% Week</th>
+                                <th class="pb-3 px-3 text-right" id="hdrW1">W1</th>
+                                <th class="pb-3 px-3 text-right" id="hdrW2">W2</th>
+                                <th class="pb-3 px-3 text-right" id="hdrW3">W3</th>
+                                <th class="pb-3 px-3 text-right" id="hdrW4">W4</th>
                                 <th class="pb-3 px-3 text-right">Target Day</th>
                                 <th class="pb-3 px-3 text-right">Ach Day</th>
-                                <th class="pb-3 px-3 text-center">% Day</th>
                             </tr>
                         </thead>
                         <tbody id="staffMatrixBody" class="divide-y divide-white/5 text-slate-300 font-medium">
@@ -286,7 +286,7 @@
                 </div>
             </div>
 
-            <!-- LFL COMPARISON PER MASYING-MASING STAFF -->
+            <!-- LFL COMPARISON PER MASING-MASING STAFF -->
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -305,12 +305,29 @@
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Pencapaian Per Staff
+                        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Pencapaian Per Staff (Per Week Breakdown)
                     </h3>
                 </div>
 
-                <div class="space-y-4" id="staffLobListContainer">
-                    <!-- Dynamic Staff LOB List -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr id="lobMatrixHeaderRow" class="border-b border-white/10 text-slate-400 font-semibold uppercase tracking-wider">
+                                <th class="pb-3 px-3">Staff</th>
+                                <th class="pb-3 px-3">Item LOB</th>
+                                <th class="pb-3 px-3 text-center">Target</th>
+                                <th class="pb-3 px-3 text-center">Ach Total</th>
+                                <th class="pb-3 px-3 text-center" id="lobHdrW1">W1</th>
+                                <th class="pb-3 px-3 text-center" id="lobHdrW2">W2</th>
+                                <th class="pb-3 px-3 text-center" id="lobHdrW3">W3</th>
+                                <th class="pb-3 px-3 text-center" id="lobHdrW4">W4</th>
+                                <th class="pb-3 px-3 text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lobMatrixBody" class="divide-y divide-white/5 text-slate-300 font-medium">
+                            <!-- Dynamic LOB Rows -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -425,23 +442,24 @@
                 </div>
             </div>
 
-            <!-- 3. MANUAL ALOKASI TARGET PER STAFF (%) -->
+            <!-- 3. MANUAL ALOKASI TARGET PER STAFF (%) HAS REMOVE BUTTON -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
-                <div class="flex justify-between items-center">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                     <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">3. Alokasi Pembagian Target Per Staff (%)</h3>
                     <div class="flex items-center gap-2">
                         <span id="totalPercentBadge" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Total: 100%</span>
                         <button onclick="resetEqualStaffPercentages()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 transition">Reset Sama Rata</button>
+                        <button onclick="restoreAllRemovedStaffs()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition">Restore All Staff</button>
                     </div>
                 </div>
-                <p class="text-[11px] text-slate-400">Sesuaikan persentase porsi target untuk masing-masing staff (misal SA target besar, IC target kecil). Total harus 100%.</p>
+                <p class="text-[11px] text-slate-400">Klik tombol sampah jika ingin mengecualikan/menghapus staff tertentu dari target. Sisa persentase akan otomatis terbagi merata ke staff aktif.</p>
 
                 <div class="space-y-2 max-h-48 overflow-y-auto pr-1" id="staffPercentInputsContainer">
                     <!-- Dynamic Inputs Staff Percent -->
                 </div>
             </div>
 
-            <!-- 4. MANAJEMEN LOB FOCUS ITEMS DYNAMIS -->
+            <!-- 4. MANAJEMEN LOB FOCUS ITEMS DINAMIS -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">4. Dynamic LOB Focus Items & Target Qty Per Staff</h3>
@@ -467,6 +485,9 @@
         let rawData = [];
         let currentTab = 'ALL';
         let currentMainView = 'overview';
+
+        // Set of staff names excluded manually
+        let removedStaffs = new Set();
 
         // Custom Staff Percentage Allocation Map { staffName: percentValue }
         let staffPercentConfig = {};
@@ -539,7 +560,7 @@
 
         function getActiveStaffList() {
             return [...new Set(rawData.map(r => r.staff))]
-                .filter(s => !s.toLowerCase().includes('digimap.co.id'))
+                .filter(s => !s.toLowerCase().includes('digimap.co.id') && !removedStaffs.has(s))
                 .sort();
         }
 
@@ -570,7 +591,20 @@
             updateDashboard();
         }
 
-        // ==================== CONFIG: STAFF PERCENTAGE MANAGEMENT ====================
+        // ==================== CONFIG: STAFF PERCENTAGE & REMOVE MANAGEMENT ====================
+        function removeStaffFromTarget(staffName) {
+            removedStaffs.add(staffName);
+            delete staffPercentConfig[staffName];
+            resetEqualStaffPercentages();
+            updateDashboard();
+        }
+
+        function restoreAllRemovedStaffs() {
+            removedStaffs.clear();
+            resetEqualStaffPercentages();
+            updateDashboard();
+        }
+
         function resetEqualStaffPercentages() {
             const activeStaffs = getActiveStaffList();
             if (activeStaffs.length === 0) return;
@@ -602,7 +636,12 @@
                 const div = document.createElement('div');
                 div.className = 'flex items-center justify-between gap-3 bg-slate-900/60 p-2.5 rounded-xl border border-white/5 text-xs';
                 div.innerHTML = `
-                    <span class="font-bold text-white truncate max-w-[200px]">${s.split('/')[1] || s}</span>
+                    <div class="flex items-center gap-2 truncate max-w-[200px]">
+                        <button onclick="removeStaffFromTarget('${s}')" class="text-rose-400 hover:text-rose-300 transition p-1 hover:bg-rose-500/10 rounded-lg" title="Hapus staff dari target">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <span class="font-bold text-white truncate">${s.split('/')[1] || s}</span>
+                    </div>
                     <div class="flex items-center gap-3">
                         <span class="text-slate-400 text-[10px] hidden sm:inline">${fmtRp(nominalMonth)}</span>
                         <div class="flex items-center gap-1">
@@ -622,6 +661,7 @@
             } else {
                 badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
             }
+            lucide.createIcons();
         }
 
         function updateStaffPct(staffName, val) {
@@ -686,11 +726,43 @@
             const tAcc = parseFloat(document.getElementById('targetAccessories').value) || 0;
             const tVAS = parseFloat(document.getElementById('targetVAS').value) || 0;
 
-            // Dates Calculation
-            const uniqueDates = [...new Set(rawData.map(r => r.date))];
+            // DATES & WEEK BREAKDOWN LOGIC
+            const uniqueDates = [...new Set(rawData.map(r => r.date))].sort();
             const latestDate = uniqueDates[uniqueDates.length - 1];
+
+            // Split unique dates into 4 weekly chunks
+            const chunkSize = Math.ceil(uniqueDates.length / 4) || 7;
+            const w1Dates = uniqueDates.slice(0, chunkSize);
+            const w2Dates = uniqueDates.slice(chunkSize, chunkSize * 2);
+            const w3Dates = uniqueDates.slice(chunkSize * 2, chunkSize * 3);
+            const w4Dates = uniqueDates.slice(chunkSize * 3);
+
             const last7Dates = uniqueDates.slice(-7);
             const prev7Dates = uniqueDates.slice(-14, -7);
+
+            // Format date range string (DD/MM)
+            const fmtRange = (arr, label) => {
+                if (!arr || arr.length === 0) return label;
+                const start = arr[0].substring(0, 5);
+                const end = arr[arr.length - 1].substring(0, 5);
+                return `${label} (${start}-${end})`;
+            };
+
+            const w1Label = fmtRange(w1Dates, 'W1');
+            const w2Label = fmtRange(w2Dates, 'W2');
+            const w3Label = fmtRange(w3Dates, 'W3');
+            const w4Label = fmtRange(w4Dates, 'W4');
+
+            // Update Headers for W1, W2, W3, W4 in Matrix & LOB Tables
+            if (document.getElementById('hdrW1')) document.getElementById('hdrW1').textContent = w1Label;
+            if (document.getElementById('hdrW2')) document.getElementById('hdrW2').textContent = w2Label;
+            if (document.getElementById('hdrW3')) document.getElementById('hdrW3').textContent = w3Label;
+            if (document.getElementById('hdrW4')) document.getElementById('hdrW4').textContent = w4Label;
+
+            if (document.getElementById('lobHdrW1')) document.getElementById('lobHdrW1').textContent = w1Label;
+            if (document.getElementById('lobHdrW2')) document.getElementById('lobHdrW2').textContent = w2Label;
+            if (document.getElementById('lobHdrW3')) document.getElementById('lobHdrW3').textContent = w3Label;
+            if (document.getElementById('lobHdrW4')) document.getElementById('lobHdrW4').textContent = w4Label;
 
             // Filter data
             let staffData = rawData;
@@ -786,7 +858,7 @@
             });
 
 
-            // ==================== 2. STAFF MATRIX & LFL ====================
+            // ==================== 2. STAFF MATRIX & LFL (REMOVED % WEEK & % DAY, ADDED WEEK SPARE COLS) ====================
             const matrixBody = document.getElementById('staffMatrixBody');
             matrixBody.innerHTML = '';
 
@@ -796,20 +868,23 @@
             activeStaffs.forEach(stf => {
                 const sData = rawData.filter(r => r.staff === stf);
                 const sAchM = sData.reduce((acc, r) => acc + r.net_price, 0);
-                const sAchW = sData.filter(r => last7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+
+                // Weekly Achievements
+                const sAchW1 = sData.filter(r => w1Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+                const sAchW2 = sData.filter(r => w2Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+                const sAchW3 = sData.filter(r => w3Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+                const sAchW4 = sData.filter(r => w4Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+
                 const sAchD = sData.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
 
                 // CUSTOM STAFF PERCENTAGE ALLOCATION TARGET
                 const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
                 const tStaffM = Math.round((tStoreMonth * pctShare) / 100);
-                const tStaffW = Math.round(tStaffM / 4);
                 const tStaffD = Math.round(tStaffM / 30);
 
                 const pctM = tStaffM ? Math.round((sAchM / tStaffM) * 100) : 0;
-                const pctW = tStaffW ? Math.round((sAchW / tStaffW) * 100) : 0;
-                const pctD = tStaffD ? Math.round((sAchD / tStaffD) * 100) : 0;
 
-                // Matrix Row
+                // Matrix Row Without % WEEK and % DAY
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-white/5 transition';
                 tr.innerHTML = `
@@ -818,19 +893,19 @@
                     <td class="py-3 px-3 text-right text-slate-400">${fmtRp(tStaffM)}</td>
                     <td class="py-3 px-3 text-right font-bold text-indigo-300">${fmtRp(sAchM)}</td>
                     <td class="py-3 px-3 text-center font-bold ${pctM >= 100 ? 'text-emerald-400' : 'text-indigo-400'}">${pctM}%</td>
-                    <td class="py-3 px-3 text-right text-slate-400">${fmtRp(tStaffW)}</td>
-                    <td class="py-3 px-3 text-right font-bold text-cyan-300">${fmtRp(sAchW)}</td>
-                    <td class="py-3 px-3 text-center font-bold ${pctW >= 100 ? 'text-emerald-400' : 'text-cyan-400'}">${pctW}%</td>
+                    <td class="py-3 px-3 text-right text-slate-300 font-medium">${fmtRp(sAchW1)}</td>
+                    <td class="py-3 px-3 text-right text-slate-300 font-medium">${fmtRp(sAchW2)}</td>
+                    <td class="py-3 px-3 text-right text-slate-300 font-medium">${fmtRp(sAchW3)}</td>
+                    <td class="py-3 px-3 text-right text-slate-300 font-medium">${fmtRp(sAchW4)}</td>
                     <td class="py-3 px-3 text-right text-slate-400">${fmtRp(tStaffD)}</td>
                     <td class="py-3 px-3 text-right font-bold text-emerald-300">${fmtRp(sAchD)}</td>
-                    <td class="py-3 px-3 text-center font-bold ${pctD >= 100 ? 'text-emerald-400' : 'text-emerald-400'}">${pctD}%</td>
                 `;
                 matrixBody.appendChild(tr);
 
-                // LFL Card Per Staff
-                const sWeek1 = sData.filter(r => prev7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
-                const sWeek0 = sAchW;
-                const sLflVal = sWeek1 ? (((sWeek0 - sWeek1) / sWeek1) * 100).toFixed(1) : 0;
+                // LFL Card Per Staff (Last 7 Days W-0 vs Prev 7 Days W-1)
+                const sWeek1Lfl = sData.filter(r => prev7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+                const sWeek0Lfl = sData.filter(r => last7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+                const sLflVal = sWeek1Lfl ? (((sWeek0Lfl - sWeek1Lfl) / sWeek1Lfl) * 100).toFixed(1) : 0;
 
                 const lflCard = document.createElement('div');
                 lflCard.className = 'liquid-glass-card p-4 rounded-2xl flex flex-col justify-between space-y-3';
@@ -844,11 +919,11 @@
                     <div class="grid grid-cols-2 gap-2 text-xs">
                         <div class="bg-white/5 p-2 rounded-xl">
                             <span class="text-[10px] text-slate-400 block">W-1 (Sebelumnya)</span>
-                            <span class="font-bold text-slate-200">${fmtRp(sWeek1)}</span>
+                            <span class="font-bold text-slate-200">${fmtRp(sWeek1Lfl)}</span>
                         </div>
                         <div class="bg-white/5 p-2 rounded-xl">
                             <span class="text-[10px] text-slate-400 block">W-0 (Berjalan)</span>
-                            <span class="font-bold text-emerald-400">${fmtRp(sWeek0)}</span>
+                            <span class="font-bold text-emerald-400">${fmtRp(sWeek0Lfl)}</span>
                         </div>
                     </div>
                 `;
@@ -856,44 +931,43 @@
             });
 
 
-            // ==================== 3. LOB FOCUS PER STAFF (DYNAMIC CONFIG) ====================
-            const staffLobContainer = document.getElementById('staffLobListContainer');
-            staffLobContainer.innerHTML = '';
+            // ==================== 3. LOB FOCUS PER STAFF (MATRIX TABLE WITH WEEK BREAKDOWN) ====================
+            const lobMatrixBody = document.getElementById('lobMatrixBody');
+            lobMatrixBody.innerHTML = '';
 
             activeStaffs.forEach(stf => {
                 const sData = rawData.filter(r => r.staff === stf);
-                
-                const staffCard = document.createElement('div');
-                staffCard.className = 'liquid-glass-card p-5 rounded-3xl space-y-3';
 
-                let itemsHtml = '';
-                lobItemsConfig.forEach(lobItem => {
-                    const soldQty = sData.filter(r => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()))).length;
-                    const rem = Math.max(lobItem.target - soldQty, 0);
+                lobItemsConfig.forEach((lobItem, idx) => {
+                    const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
+                    
+                    const achTotal = sData.filter(matchFn).length;
+                    const achW1 = sData.filter(r => w1Dates.includes(r.date) && matchFn(r)).length;
+                    const achW2 = sData.filter(r => w2Dates.includes(r.date) && matchFn(r)).length;
+                    const achW3 = sData.filter(r => w3Dates.includes(r.date) && matchFn(r)).length;
+                    const achW4 = sData.filter(r => w4Dates.includes(r.date) && matchFn(r)).length;
 
-                    itemsHtml += `
-                        <div class="bg-white/5 p-3 rounded-2xl text-center">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase truncate block">${lobItem.name}</span>
-                            <div class="text-base font-black text-white mt-0.5">${soldQty} <span class="text-xs font-normal text-slate-400">/ ${lobItem.target}</span></div>
-                            <div class="text-[9px] font-semibold mt-0.5 ${rem === 0 ? 'text-emerald-400' : 'text-purple-300'}">
+                    const rem = Math.max(lobItem.target - achTotal, 0);
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-white/5 transition';
+                    tr.innerHTML = `
+                        ${idx === 0 ? `<td class="py-3 px-3 font-bold text-white align-top border-r border-white/5" rowspan="${lobItemsConfig.length}">${stf.split('/')[1] || stf}</td>` : ''}
+                        <td class="py-2.5 px-3 font-semibold text-slate-200">${lobItem.name}</td>
+                        <td class="py-2.5 px-3 text-center text-slate-400 font-mono">${lobItem.target}</td>
+                        <td class="py-2.5 px-3 text-center font-bold text-purple-300 font-mono">${achTotal}</td>
+                        <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${achW1}</td>
+                        <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${achW2}</td>
+                        <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${achW3}</td>
+                        <td class="py-2.5 px-3 text-center text-slate-300 font-mono">${achW4}</td>
+                        <td class="py-2.5 px-3 text-center">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${rem === 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-purple-500/20 text-purple-300'}">
                                 ${rem === 0 ? 'Achieved!' : `Sisa: ${rem}`}
-                            </div>
-                        </div>
+                            </span>
+                        </td>
                     `;
+                    lobMatrixBody.appendChild(tr);
                 });
-
-                staffCard.innerHTML = `
-                    <div class="flex justify-between items-center">
-                        <h4 class="text-xs font-extrabold text-white flex items-center gap-2">
-                            <i data-lucide="user" class="w-4 h-4 text-indigo-400"></i> ${stf.split('/')[1] || stf}
-                        </h4>
-                        <span class="text-[10px] text-slate-400 font-semibold">${stf.split('/')[0]}</span>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                        ${itemsHtml}
-                    </div>
-                `;
-                staffLobContainer.appendChild(staffCard);
             });
 
 
