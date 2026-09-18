@@ -1,0 +1,12 @@
+{
+  "name": "sales-liquid-glass-dashboard",
+  "version": "1.0.0",
+  "description": "iOS Liquid Glass Sales Progress Dashboard with Automatic OneDrive Sync",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": ["dashboard", "sales", "ios", "liquid-glass"],
+  "author": "Sales Team",
+  "license": "MIT"
+}
