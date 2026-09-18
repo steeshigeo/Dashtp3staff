@@ -560,7 +560,7 @@
                     <div class="flex items-center gap-2">
                         <span id="totalPercentBadge" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Total: 100%</span>
                         <button onclick="resetEqualStaffPercentages()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition">Reset Sama Rata</button>
-                        <button onclick="restoreAllRemovedStaffs()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition">Restore All Staff</button>
+                        <button onclick="restoreAllRemovedStaffs()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition">Restore All Staff</button>
                     </div>
                 </div>
                 <p class="text-[11px] opacity-70">Atur Jabatan (misal SA, IC) dan persentase target.</p>
@@ -932,7 +932,7 @@
             const accSales = dayTx.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
             const vasSales = dayTx.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
 
-            // Mac = Device yang merupakan MACBOOK / MAC (MBA, MBP, MBN, IMAC, MACMINI, MACPRO)
+            // Mac = Device MACBOOK (MBA, MBP, MBN, IMAC, MACMINI, MACPRO)
             const macRegex = /\b(MACBOOK|MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MACPRO|MAC PRO|MAC)\b/i;
             const macQty = dayTx.filter(r => r.category === 'Device' && macRegex.test(r.product_name)).length;
 
@@ -1053,7 +1053,6 @@ XL : ${fmtRp(xxlRp)}`;
                 document.getElementById('syncDateLbl').textContent = latestDate;
             }
 
-            // Generate full calendar dates for the running month
             let allMonthDates = [];
             let sampleDate = uniqueDatesFromData[0] || '01-08-2026';
             const dateParts = sampleDate.split('-');
@@ -1070,7 +1069,6 @@ XL : ${fmtRp(xxlRp)}`;
                 allMonthDates = uniqueDatesFromData;
             }
 
-            // Build strictly 4 week intervals
             const weekIntervals = [];
             for (let i = 0; i < 4; i++) {
                 const startIdx = i * 7;
@@ -1094,7 +1092,6 @@ XL : ${fmtRp(xxlRp)}`;
             const last7Dates = uniqueDatesFromData.slice(-7);
             const prev7Dates = uniqueDatesFromData.slice(-14, -7);
 
-            // Filter data
             let staffData = rawData;
             if (selectedStaff !== 'ALL') {
                 staffData = staffData.filter(r => r.staff === selectedStaff);
@@ -1105,7 +1102,6 @@ XL : ${fmtRp(xxlRp)}`;
                 filtered = filtered.filter(r => r.category === currentTab);
             }
 
-            // ==================== 1. STORE OVERVIEW METRICS ====================
             const storeDataAll = rawData;
             const totalMonthStore = storeDataAll.reduce((acc, r) => acc + r.net_price, 0);
             const totalDayStore = storeDataAll.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
@@ -1130,12 +1126,10 @@ XL : ${fmtRp(xxlRp)}`;
             document.getElementById('badgeDay').textContent = `${pDayStore}%`;
             document.getElementById('barDay').style.width = `${pDayStore}%`;
 
-            // Store Category Targets
             const devAmountStore = storeDataAll.filter(r => r.category === 'Device').reduce((acc, r) => acc + r.net_price, 0);
             const accAmountStore = storeDataAll.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
             const vasAmountStore = storeDataAll.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
 
-            // Device Card
             if (document.getElementById('achDevice')) {
                 document.getElementById('achDevice').textContent = fmtRp(devAmountStore);
                 document.getElementById('lblTargetDevice').textContent = fmtRp(tDev);
@@ -1146,7 +1140,6 @@ XL : ${fmtRp(xxlRp)}`;
                 document.getElementById('barDevice').style.width = `${pDev}%`;
             }
 
-            // Acc Card
             document.getElementById('achAcc').textContent = fmtRp(accAmountStore);
             document.getElementById('lblTargetAcc').textContent = fmtRp(tAcc);
             const remAccVal = Math.max(tAcc - accAmountStore, 0);
@@ -1155,7 +1148,6 @@ XL : ${fmtRp(xxlRp)}`;
             document.getElementById('badgeAcc').textContent = `${pAcc}%`;
             document.getElementById('barAcc').style.width = `${pAcc}%`;
 
-            // VAS Card
             document.getElementById('achVAS').textContent = fmtRp(vasAmountStore);
             document.getElementById('lblTargetVAS').textContent = fmtRp(tVAS);
             const remVASVal = Math.max(tVAS - vasAmountStore, 0);
@@ -1164,7 +1156,6 @@ XL : ${fmtRp(xxlRp)}`;
             document.getElementById('badgeVAS').textContent = `${pVAS}%`;
             document.getElementById('barVAS').style.width = `${pVAS}%`;
 
-            // STORE DAILY INVOICE COUNT (CLICKABLE FOR CLOSING REPORT MODAL)
             const dailyInvoiceGrid = document.getElementById('dailyInvoiceGrid');
             dailyInvoiceGrid.innerHTML = '';
             let totalStoreUniqueInvoices = 0;
@@ -1190,7 +1181,6 @@ XL : ${fmtRp(xxlRp)}`;
 
             document.getElementById('totalUniqueInvoicesLabel').textContent = `${totalStoreUniqueInvoices} Unique Invoices`;
 
-            // Store LFL
             document.getElementById('lflPrevStore').textContent = fmtRp(totalWeek1Store);
             document.getElementById('lflCurrStore').textContent = fmtRp(totalWeek0Store);
             const lflValStore = totalWeek1Store ? (((totalWeek0Store - totalWeek1Store) / totalWeek1Store) * 100).toFixed(1) : 0;
@@ -1198,7 +1188,6 @@ XL : ${fmtRp(xxlRp)}`;
             lflBadgeStore.textContent = `${lflValStore > 0 ? '+' : ''}${lflValStore}% WoW`;
             lflBadgeStore.className = `text-xs font-bold px-2.5 py-1 rounded-full ${lflValStore >= 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`;
 
-            // Store VAS Keyword Summary
             const vasKeywords = ['kla', 'tsl', 'idt', 'xxl'];
             const vasContainerStore = document.getElementById('vasKeywordCardsStore');
             vasContainerStore.innerHTML = '';
@@ -1227,8 +1216,6 @@ XL : ${fmtRp(xxlRp)}`;
                 vasContainerStore.appendChild(card);
             });
 
-
-            // ==================== 2. STAFF PERFORMANCE: MONTHLY SUMMARY & WEEKLY TABLES ====================
             const summaryBody = document.getElementById('staffMonthlySummaryBody');
             summaryBody.innerHTML = '';
 
@@ -1254,7 +1241,6 @@ XL : ${fmtRp(xxlRp)}`;
                 summaryBody.appendChild(tr);
             });
 
-            // WEEKLY TABLES WITH CLOSING HARIAN AT BOTTOM OF PAGE
             const weeklyCapsulesContainer = document.getElementById('weeklyCapsulesContainer');
             weeklyCapsulesContainer.innerHTML = '';
 
@@ -1285,7 +1271,6 @@ XL : ${fmtRp(xxlRp)}`;
                     `;
                 });
 
-                // CLOSING HARIAN (STORE) AT BOTTOM OF EACH WEEK PAGE
                 let calendarDatesHtml = '';
                 wk.dates.forEach(dt => {
                     const dayAch = storeDataAll.filter(r => r.date === dt).reduce((acc, r) => acc + r.net_price, 0);
@@ -1323,7 +1308,6 @@ XL : ${fmtRp(xxlRp)}`;
                         </table>
                     </div>
 
-                    <!-- CLOSING HARIAN (STORE) MOVED TO BOTTOM OF WEEK PAGE -->
                     <div class="space-y-1.5 pt-3 border-t border-white/10">
                         <span class="text-[10px] uppercase font-bold opacity-60">CLOSING HARIAN (STORE):</span>
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
@@ -1334,8 +1318,6 @@ XL : ${fmtRp(xxlRp)}`;
                 weeklyCapsulesContainer.appendChild(capsuleCard);
             });
 
-
-            // ==================== 3. LFL COMPARISON IN SEPARATE TAB ====================
             const lflPairContainer = document.getElementById('lflPairCapsulesContainer');
             lflPairContainer.innerHTML = '';
 
@@ -1405,8 +1387,6 @@ XL : ${fmtRp(xxlRp)}`;
                 lflPairContainer.appendChild(pairCard);
             }
 
-
-            // ==================== 4. LOB FOCUS (DISPLAY NAME IPAD A16) ====================
             const lobItemsContainer = document.getElementById('lobItemsContainer');
             lobItemsContainer.innerHTML = '';
 
@@ -1506,26 +1486,20 @@ XL : ${fmtRp(xxlRp)}`;
                 lobItemsContainer.appendChild(lobCard);
             });
 
-
-            // ==================== 5. DEVICE STAFF (NEW TAB WITH POPUP DETAIL ON TAP) ====================
             const deviceWeeklyContainer = document.getElementById('deviceWeeklyCapsulesContainer');
             if (deviceWeeklyContainer) {
                 deviceWeeklyContainer.innerHTML = '';
-
                 weekIntervals.forEach((wk) => {
                     const capsuleCard = document.createElement('div');
                     capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
-
                     let staffCardsHtml = '';
                     activeStaffs.forEach(stf => {
                         const sData = rawData.filter(r => r.staff === stf && r.category === 'Device' && wk.dates.includes(r.date));
                         const sDevTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
-
                         const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
                         const tStaffDevM = Math.round((tDev * pctShare) / 100);
                         const tStaffDevW = Math.round(tStaffDevM / 4);
                         const role = staffRoleConfig[stf] || 'SA';
-
                         const safeStfName = stf.replace(/'/g, "\\'");
                         const wkDatesJson = JSON.stringify(wk.dates).replace(/"/g, '&quot;');
 
@@ -1547,7 +1521,6 @@ XL : ${fmtRp(xxlRp)}`;
                             </div>
                         `;
                     });
-
                     capsuleCard.innerHTML = `
                         <div class="flex justify-between items-center border-b border-white/10 pb-3">
                             <div class="flex items-center gap-2">
@@ -1563,25 +1536,19 @@ XL : ${fmtRp(xxlRp)}`;
                 });
             }
 
-
-            // ==================== 6. AKSESORIS STAFF (WITH POPUP DETAIL ON TAP) ====================
             const aksesorisWeeklyContainer = document.getElementById('aksesorisWeeklyCapsulesContainer');
             aksesorisWeeklyContainer.innerHTML = '';
-
             weekIntervals.forEach((wk) => {
                 const capsuleCard = document.createElement('div');
                 capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
-
                 let staffCardsHtml = '';
                 activeStaffs.forEach(stf => {
                     const sData = rawData.filter(r => r.staff === stf && r.category === 'Accessories' && wk.dates.includes(r.date));
                     const sAccTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
-
                     const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
                     const tStaffAccM = Math.round((tAcc * pctShare) / 100);
                     const tStaffAccW = Math.round(tStaffAccM / 4);
                     const role = staffRoleConfig[stf] || 'SA';
-
                     const safeStfName = stf.replace(/'/g, "\\'");
                     const wkDatesJson = JSON.stringify(wk.dates).replace(/"/g, '&quot;');
 
@@ -1603,7 +1570,6 @@ XL : ${fmtRp(xxlRp)}`;
                         </div>
                     `;
                 });
-
                 capsuleCard.innerHTML = `
                     <div class="flex justify-between items-center border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
@@ -1618,25 +1584,19 @@ XL : ${fmtRp(xxlRp)}`;
                 aksesorisWeeklyContainer.appendChild(capsuleCard);
             });
 
-
-            // ==================== 7. VAS STAFF (WITH POPUP DETAIL ON TAP) ====================
             const vasWeeklyContainer = document.getElementById('vasWeeklyCapsulesContainer');
             vasWeeklyContainer.innerHTML = '';
-
             weekIntervals.forEach((wk) => {
                 const capsuleCard = document.createElement('div');
                 capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
-
                 let staffCardsHtml = '';
                 activeStaffs.forEach(stf => {
                     const sData = rawData.filter(r => r.staff === stf && r.category === 'VAS' && wk.dates.includes(r.date));
                     const sVasTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
-
                     const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
                     const tStaffVasM = Math.round((tVAS * pctShare) / 100);
                     const tStaffVasW = Math.round(tStaffVasM / 4);
                     const role = staffRoleConfig[stf] || 'SA';
-
                     const safeStfName = stf.replace(/'/g, "\\'");
                     const wkDatesJson = JSON.stringify(wk.dates).replace(/"/g, '&quot;');
 
@@ -1680,7 +1640,6 @@ XL : ${fmtRp(xxlRp)}`;
                         </div>
                     `;
                 });
-
                 capsuleCard.innerHTML = `
                     <div class="flex justify-between items-center border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
@@ -1695,8 +1654,6 @@ XL : ${fmtRp(xxlRp)}`;
                 vasWeeklyContainer.appendChild(capsuleCard);
             });
 
-
-            // ==================== 8. TRANSACTIONS TABLE ====================
             const tbody = document.getElementById('transactionBody');
             tbody.innerHTML = '';
             document.getElementById('itemCount').textContent = `${filtered.length} Item`;
