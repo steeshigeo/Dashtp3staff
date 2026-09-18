@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Performance Dashboard - iOS Liquid Glass</title>
+    <title>Sales Performance Dashboard</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SheetJS (XLS Parser) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts SF Pro / Inter -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <script>
@@ -19,15 +17,6 @@
                 extend: {
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        glass: {
-                            bg: 'rgba(255, 255, 255, 0.65)',
-                            card: 'rgba(255, 255, 255, 0.45)',
-                            border: 'rgba(255, 255, 255, 0.6)',
-                            darkBg: 'rgba(15, 23, 42, 0.75)',
-                            darkCard: 'rgba(30, 41, 59, 0.55)',
-                        }
                     }
                 }
             }
@@ -79,31 +68,24 @@
                     <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
                         Sales Progress Dashboard
                     </h1>
-                    <p class="text-xs md:text-sm text-slate-400">iOS Liquid Glass Edition • Staff Achievement Tracker</p>
+                    <p class="text-xs md:text-sm text-slate-400">Staff Achievement Tracker</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
-                <label class="cursor-pointer liquid-glass-card hover:bg-white/10 text-xs font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 border border-white/20 transition">
-                    <i data-lucide="upload" class="w-4 h-4 text-cyan-400"></i>
-                    Upload XLS Manual
-                    <input type="file" id="xlsFileInput" accept=".xls,.xlsx" class="hidden">
-                </label>
-                <div class="text-right border-l border-white/10 pl-4">
-                    <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold">Status Data</span>
-                    <span id="dataStatus" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Auto Synced
-                    </span>
-                </div>
+            <div class="text-right border-l border-white/10 pl-4">
+                <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold">Status Data</span>
+                <span id="dataStatus" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Auto Synced
+                </span>
             </div>
         </header>
 
         <!-- INPUT TARGET MANUAL (COLLAPSIBLE) -->
-        <details class="liquid-glass rounded-3xl p-6 group">
+        <details class="liquid-glass rounded-3xl p-6 group" open>
             <summary class="cursor-pointer flex justify-between items-center text-sm font-bold text-slate-200">
                 <div class="flex items-center gap-2">
                     <i data-lucide="target" class="w-5 h-5 text-indigo-400"></i>
-                    <span>Set Target Revenue & LOB Focus Items (Manual Input)</span>
+                    <span>Set Target Revenue, Aksesori, VAS & LOB Focus Items</span>
                 </div>
                 <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform"></i>
             </summary>
@@ -111,54 +93,62 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 pt-6 border-t border-white/10">
                 <!-- Target Revenue -->
                 <div class="space-y-3">
-                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Sales Revenue</h3>
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Sales Revenue (Rp)</h3>
                     <div>
                         <label class="text-xs text-slate-400">Target Month (Rp)</label>
-                        <input type="number" id="targetMonth" value="100000000" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="text-xs text-slate-400">Target Week (Rp)</label>
-                            <input type="number" id="targetWeek" value="25000000" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <label class="text-xs text-slate-400">Target Week (Auto)</label>
+                            <input type="number" id="targetWeek" value="25000000" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-slate-300 cursor-not-allowed">
                         </div>
                         <div>
-                            <label class="text-xs text-slate-400">Target Day (Rp)</label>
-                            <input type="number" id="targetDay" value="3500000" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <label class="text-xs text-slate-400">Target Day (Auto)</label>
+                            <input type="number" id="targetDay" value="3333333" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm text-slate-300 cursor-not-allowed">
                         </div>
                     </div>
                 </div>
 
+                <!-- Target Aksesori & VAS Qty -->
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Category (Qty)</h3>
+                    <div>
+                        <label class="text-xs text-slate-400">Target Aksesori (Pcs)</label>
+                        <input type="number" id="targetAccessories" value="50" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-400">Target VAS (Pcs)</label>
+                        <input type="number" id="targetVAS" value="30" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+
                 <!-- Target LOB Qty -->
-                <div class="md:col-span-2 space-y-3">
-                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target Qty LOB Focus Items</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider">Target LOB Focus Items (Qty)</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         <div>
                             <label class="text-xs text-slate-400">iPhone 15</label>
-                            <input type="number" id="targetIphone15" value="10" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <input type="number" id="targetIphone15" value="10" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                         </div>
                         <div>
                             <label class="text-xs text-slate-400">iPad A16</label>
-                            <input type="number" id="targetIpadA16" value="5" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <input type="number" id="targetIpadA16" value="5" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                         </div>
                         <div>
                             <label class="text-xs text-slate-400">MBN</label>
-                            <input type="number" id="targetMbn" value="8" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <input type="number" id="targetMbn" value="8" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                         </div>
                         <div>
                             <label class="text-xs text-slate-400">AW SE</label>
-                            <input type="number" id="targetAwSe" value="6" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <input type="number" id="targetAwSe" value="6" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                         </div>
-                        <div>
+                        <div class="col-span-2 sm:col-span-1">
                             <label class="text-xs text-slate-400">AirPods</label>
-                            <input type="number" id="targetAirpods" value="15" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <input type="number" id="targetAirpods" value="15" oninput="updateDashboard()" class="w-full mt-1 bg-slate-900/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="mt-4 text-right">
-                <button onclick="updateDashboard()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg transition">
-                    Terapkan Target
-                </button>
             </div>
         </details>
 
@@ -167,7 +157,7 @@
             <div class="w-full sm:w-auto flex items-center gap-3">
                 <i data-lucide="user" class="w-5 h-5 text-cyan-400"></i>
                 <select id="staffSelect" onchange="updateDashboard()" class="w-full sm:w-72 bg-slate-900/80 border border-white/20 rounded-2xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="ALL">-- SEMUA STAFF (TOTAL STORE) --</option>
+                    <option value="ALL">ALL STAFF</option>
                 </select>
             </div>
 
@@ -176,11 +166,11 @@
                 <button onclick="switchTab('ALL')" id="tab-ALL" class="ios-tab-active px-4 py-2 rounded-xl text-xs font-bold text-white whitespace-nowrap">Semua Items</button>
                 <button onclick="switchTab('Device')" id="tab-Device" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">Device</button>
                 <button onclick="switchTab('Accessories')" id="tab-Accessories" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">Accessories</button>
-                <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">VAS (KLA/TSL/IDT/XXL)</button>
+                <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white whitespace-nowrap">VAS</button>
             </div>
         </div>
 
-        <!-- METRIC CARDS -->
+        <!-- REVENUE METRIC CARDS -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Monthly Progress -->
             <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
@@ -228,6 +218,55 @@
             </div>
         </div>
 
+        <!-- CATEGORY TARGET CARDS (AKSESORI & VAS) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Aksesori Card -->
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="headphones" class="w-5 h-5 text-cyan-400"></i>
+                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian Aksesori</span>
+                    </div>
+                    <span id="badgeAcc" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">0%</span>
+                </div>
+                <div class="mt-4 flex justify-between items-end">
+                    <div>
+                        <h3 id="achAcc" class="text-2xl font-black text-white">0 Pcs</h3>
+                        <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetAcc" class="text-slate-200">0 Pcs</span></p>
+                    </div>
+                    <div class="text-right">
+                        <span id="remAcc" class="text-xs font-semibold text-cyan-400">Sisa: 0 Pcs</span>
+                    </div>
+                </div>
+                <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
+                    <div id="barAcc" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- VAS Card -->
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i>
+                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Pencapaian VAS</span>
+                    </div>
+                    <span id="badgeVAS" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">0%</span>
+                </div>
+                <div class="mt-4 flex justify-between items-end">
+                    <div>
+                        <h3 id="achVAS" class="text-2xl font-black text-white">0 Pcs</h3>
+                        <p class="text-xs text-slate-400 mt-1">Target: <span id="lblTargetVAS" class="text-slate-200">0 Pcs</span></p>
+                    </div>
+                    <div class="text-right">
+                        <span id="remVAS" class="text-xs font-semibold text-purple-400">Sisa: 0 Pcs</span>
+                    </div>
+                </div>
+                <div class="w-full bg-slate-800/80 rounded-full h-2 mt-3 overflow-hidden">
+                    <div id="barVAS" class="bg-gradient-to-r from-purple-400 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- LOB FOCUS & LFL COMPARISON -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- LOB Focus Item Tracker -->
@@ -236,7 +275,6 @@
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
                         <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Sisa
                     </h3>
-                    <span class="text-[10px] text-slate-400">Terpotong Otomatis</span>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="lobGrid">
                     <!-- Dynamic LOB Cards -->
@@ -299,135 +337,34 @@
         let rawData = [];
         let currentTab = 'ALL';
 
-        // Format Currency
         const fmtRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
 
-        // Fetch data.json on load
+        function autoCalcTargets() {
+            const tMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
+            document.getElementById('targetWeek').value = Math.round(tMonth / 4);
+            document.getElementById('targetDay').value = Math.round(tMonth / 30);
+            updateDashboard();
+        }
+
         window.addEventListener('DOMContentLoaded', async () => {
             lucide.createIcons();
             try {
                 const res = await fetch('data.json');
                 if (res.ok) {
-                    rawData = await res.json();
+                    const data = await res.json();
+                    // FILTER HAPUS ITEM BERHARGA Rp0
+                    rawData = data.filter(item => item.net_price > 0);
                     initStaffSelector();
-                    updateDashboard();
+                    autoCalcTargets();
                 }
             } catch (err) {
-                console.log("data.json belum tersedia, menunggu input manual.");
+                console.log("Waiting for data.json...");
             }
         });
-
-        // Manual XLS Upload Parser
-        document.getElementById('xlsFileInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const data = new Uint8Array(evt.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                
-                parseExcelJson(json);
-                document.getElementById('dataStatus').innerHTML = `<span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Loaded Manual XLS`;
-            };
-            reader.readAsArrayBuffer(file);
-        });
-
-        function parseExcelJson(rows) {
-            rawData = [];
-            let current_date = null;
-            let current_staff = null;
-
-            const vas_keywords = ['kla', 'tsl', 'idt', 'xxl'];
-            const device_keywords = ['iphone', 'ipad', 'macbook', 'imac', 'mac mini', 'apple watch', 'watch ultra', 'watch s', 'watch 11', 'watch 10'];
-
-            for (let i = 0; i < rows.length; i++) {
-                const c0 = rows[i][0] ? String(rows[i][0]).trim() : '';
-                const c1 = rows[i][1] ? String(rows[i][1]).trim() : '';
-
-                if (/^\d{2}-\d{2}-\d{4}$/.test(c0)) {
-                    current_date = c0;
-                    continue;
-                }
-
-                if (c0.includes('/') && !c0.startsWith('Total For') && !/^\d{2}-/.test(c0)) {
-                    const parts = c0.split('/');
-                    if (parts.length === 2 && !isNaN(parts[0].trim())) {
-                        current_staff = c0;
-                        continue;
-                    }
-                }
-
-                if (c0.startsWith('Total For')) {
-                    current_staff = null;
-                    continue;
-                }
-
-                if (c0 && current_staff && current_date) {
-                    const product_name = c0;
-                    const article = c1;
-                    i++;
-
-                    while (i < rows.length) {
-                        const rc0 = rows[i][0] ? String(rows[i][0]).trim() : '';
-                        const rc1 = rows[i][1] ? String(rows[i][1]).trim() : '';
-                        const rc2 = rows[i][2] !== undefined ? rows[i][2] : null;
-
-                        if (rc0.startsWith('Total For') || (rc0.includes('/') && !isNaN(rc0.split('/')[0].trim())) || /^\d{2}-\d{2}-\d{4}$/.test(rc0)) {
-                            i--;
-                            break;
-                        }
-
-                        const price = parseFloat(rc0);
-                        if (!isNaN(price)) {
-                            const net_price = rc2 !== null && !isNaN(parseFloat(rc2)) ? parseFloat(rc2) : price;
-                            
-                            const p_lower = product_name.toLowerCase();
-                            const art_lower = article.toLowerCase();
-
-                            let category = "Accessories";
-                            if (vas_keywords.some(kw => art_lower.includes(kw) || p_lower.includes(kw))) {
-                                category = "VAS";
-                            } else if (device_keywords.some(dk => p_lower.includes(dk))) {
-                                category = "Device";
-                            }
-
-                            let lob_focus = null;
-                            if (p_lower.includes('iphone 15')) lob_focus = 'iPhone 15';
-                            else if (p_lower.includes('ipad') && (p_lower.includes('a16') || p_lower.includes('10th'))) lob_focus = 'iPad A16';
-                            else if (p_lower.includes('mbn') || p_lower.includes('macbook')) lob_focus = 'MBN';
-                            else if (p_lower.includes('aw se') || p_lower.includes('watch se')) lob_focus = 'AW SE';
-                            else if (p_lower.includes('airpods')) lob_focus = 'AirPods';
-
-                            rawData.push({
-                                date: current_date,
-                                staff: current_staff,
-                                product_name,
-                                article,
-                                price,
-                                receipt: rc1,
-                                net_price,
-                                category,
-                                lob_focus
-                            });
-                        } else {
-                            i--;
-                            break;
-                        }
-                        i++;
-                    }
-                }
-            }
-
-            initStaffSelector();
-            updateDashboard();
-        }
 
         function initStaffSelector() {
             const select = document.getElementById('staffSelect');
-            select.innerHTML = '<option value="ALL">-- SEMUA STAFF (TOTAL STORE) --</option>';
+            select.innerHTML = '<option value="ALL">ALL STAFF</option>';
             const staffList = [...new Set(rawData.map(r => r.staff))].sort();
             staffList.forEach(s => {
                 const opt = document.createElement('option');
@@ -453,11 +390,14 @@
         function updateDashboard() {
             const selectedStaff = document.getElementById('staffSelect').value;
 
-            // Filter data by Staff & Category
-            let filtered = rawData;
+            // Filter data per staff
+            let staffData = rawData;
             if (selectedStaff !== 'ALL') {
-                filtered = filtered.filter(r => r.staff === selectedStaff);
+                staffData = staffData.filter(r => r.staff === selectedStaff);
             }
+
+            // Filter data per tab
+            let filtered = staffData;
             if (currentTab !== 'ALL') {
                 filtered = filtered.filter(r => r.category === currentTab);
             }
@@ -466,17 +406,17 @@
             const tMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
             const tWeek = parseFloat(document.getElementById('targetWeek').value) || 0;
             const tDay = parseFloat(document.getElementById('targetDay').value) || 0;
+            const tAcc = parseInt(document.getElementById('targetAccessories').value) || 0;
+            const tVAS = parseInt(document.getElementById('targetVAS').value) || 0;
 
-            // Sales Calculation
+            // Revenue Calculations
             const totalMonth = filtered.reduce((acc, r) => acc + r.net_price, 0);
             
-            // Assume latest date in data is "Today"
             const uniqueDates = [...new Set(rawData.map(r => r.date))];
             const latestDate = uniqueDates[uniqueDates.length - 1];
             
             const totalDay = filtered.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
 
-            // Last 7 days as W-0, Previous 7 days as W-1
             const last7Dates = uniqueDates.slice(-7);
             const prev7Dates = uniqueDates.slice(-14, -7);
 
@@ -502,6 +442,26 @@
             document.getElementById('badgeDay').textContent = `${pDay}%`;
             document.getElementById('barDay').style.width = `${pDay}%`;
 
+            // Category Calculation (Aksesori & VAS Qty Sold)
+            const accSold = staffData.filter(r => r.category === 'Accessories').length;
+            const vasSold = staffData.filter(r => r.category === 'VAS').length;
+
+            document.getElementById('achAcc').textContent = `${accSold} Pcs`;
+            document.getElementById('lblTargetAcc').textContent = `${tAcc} Pcs`;
+            const remAccVal = Math.max(tAcc - accSold, 0);
+            document.getElementById('remAcc').textContent = remAccVal === 0 ? 'Target Achieved!' : `Sisa: ${remAccVal} Pcs`;
+            const pAcc = tAcc ? Math.min(Math.round((accSold / tAcc) * 100), 100) : 0;
+            document.getElementById('badgeAcc').textContent = `${pAcc}%`;
+            document.getElementById('barAcc').style.width = `${pAcc}%`;
+
+            document.getElementById('achVAS').textContent = `${vasSold} Pcs`;
+            document.getElementById('lblTargetVAS').textContent = `${tVAS} Pcs`;
+            const remVASVal = Math.max(tVAS - vasSold, 0);
+            document.getElementById('remVAS').textContent = remVASVal === 0 ? 'Target Achieved!' : `Sisa: ${remVASVal} Pcs`;
+            const pVAS = tVAS ? Math.min(Math.round((vasSold / tVAS) * 100), 100) : 0;
+            document.getElementById('badgeVAS').textContent = `${pVAS}%`;
+            document.getElementById('barVAS').style.width = `${pVAS}%`;
+
             // LFL WoW
             document.getElementById('lflPrev').textContent = fmtRp(totalWeek1);
             document.getElementById('lflCurr').textContent = fmtRp(totalWeek0);
@@ -523,7 +483,7 @@
             lobGrid.innerHTML = '';
 
             Object.keys(lobTargets).forEach(key => {
-                const soldQty = filtered.filter(r => r.lob_focus === key).length;
+                const soldQty = staffData.filter(r => r.lob_focus === key).length;
                 const remaining = Math.max(lobTargets[key] - soldQty, 0);
 
                 const card = document.createElement('div');
@@ -543,7 +503,7 @@
             tbody.innerHTML = '';
             document.getElementById('itemCount').textContent = `${filtered.length} Items`;
 
-            filtered.slice(0, 100).forEach(r => {
+            filtered.forEach(r => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-white/5 transition';
                 tr.innerHTML = `
