@@ -5,10 +5,11 @@ import json
 import requests
 import pandas as pd
 
-DEFAULT_ONEDRIVE_URL = "https://1drv.ms/x/c/426713E72C49EDEB/IQBD3oB0QQCkTZRPXh7HhhWoAQ8oQIHav9BkCWSKDtwxFXI?e=zoQ86E"
+# Link OneDrive Merchandisesalesreport
+DEFAULT_ONEDRIVE_URL = "https://1drv.ms/x/c/426713E72C49EDEB/IQB6fEpkF1TaRr1Knh3LPIqaAWi45hl7dda2wv6TXqeRxi0?e=8aNuFC"
 
 def get_download_url(share_url):
-    """Menggunakan parameter download=1 untuk bypass autentikasi Graph API 401."""
+    """Parameter download=1 untuk bypass autentikasi Graph API 401."""
     if not share_url:
         return ""
     if "download=1" not in share_url:
@@ -51,11 +52,15 @@ def parse_sales_xls(file_path):
     current_date = None
     current_staff = None
     
-    # TRIGGER WORDS UPDATE UNTUK KLA DAN VAS LAINNYA
-    kla_keywords = ['klabronze', 'klasilver', 'klagold', 'klaemerald', 'kladiamond', 'klaplatinum', 'klatitanium', 'klavvip']
-    other_vas_keywords = ['tsl', 'idt', 'xxl']
+    vas_keywords = ['klabronze', 'klasilver', 'klagold', 'klaemerald', 'kladiamond', 'klaplatinum', 'klatitanium', 'klavvip', 'kla', 'tsl', 'idt', 'xxl']
     
-    device_keywords = ['iphone', 'ipad', 'macbook', 'imac', 'mac mini', 'apple watch', 'watch ultra', 'watch s', 'watch 11', 'watch 10']
+    acc_exception_words = [
+        'keyboard', 'sleeve', 'case', 'adapter', 'cable', 'guard', 'protector', 
+        'cover', 'strap', 'band', 'tempered', 'glass', 'film', 'battery', 
+        'charger', 'stand', 'pouch', 'holder', 'clearvue', 'combat', 'vero', 'm-neo', 'card', 'bag'
+    ]
+    
+    device_keywords = ['iphone', 'ipad', 'macbook', 'imac', 'macmini', 'mac mini', 'macpro', 'mac pro', 'mba', 'mbp', 'mbn', 'apple watch', 'watch ultra', 'watch s', 'watch 11', 'watch 10', 'watch se']
     
     i = 0
     n = len(df)
@@ -93,41 +98,47 @@ def parse_sales_xls(file_path):
             while i < n:
                 rc0 = str(df.iloc[i, 0]).strip() if pd.notna(df.iloc[i, 0]) else ''
                 rc1 = str(df.iloc[i, 1]).strip() if pd.notna(df.iloc[i, 1]) else ''
-                rc2 = df.iloc[i, 2] if pd.notna(df.iloc[i, 2]) else None
+                rc2 = str(df.iloc[i, 2]).strip() if pd.notna(df.iloc[i, 2]) else ''
                 
                 if rc0.startswith('Total For') or ('/' in rc0 and rc0.split('/')[0].strip().isdigit()) or re.match(r'^\d{2}-\d{2}-\d{4}$', rc0):
                     break
                     
                 try:
                     price = float(rc0)
-                    net_price = float(rc2) if rc2 is not None else price
+                    net_price = float(rc2) if rc2 and rc2.replace('.', '', 1).isdigit() else price
                     
-                    # FILTER SYSTEM: HANYA ITEM DENGAN HARGA NET > 0
                     if net_price > 0:
-                        p_lower = product_name.lower()
-                        art_lower = article.lower()
+                        p_upper = product_name.upper()
+                        art_upper = article.upper()
+                        col_c_upper = rc2.upper()
                         
-                        # VAS CATEGORY IDENTIFICATION WITH NEW KLA TRIGGERS
-                        is_kla = any(kw in art_lower or kw in p_lower for kw in kla_keywords)
-                        is_other_vas = any(kw in art_lower or kw in p_lower for kw in other_vas_keywords)
-                        
+                        # 1. KATEGORI VAS
                         category = "Accessories"
-                        if is_kla or is_other_vas:
+                        if any(kw in art_upper or kw in p_upper for kw in [k.upper() for k in vas_keywords]):
                             category = "VAS"
-                        elif any(dk in p_lower for dk in device_keywords):
+                        # 2. PRODUCT GROUP KOLOM C
+                        elif 'DEVICES' in col_c_upper:
+                            category = "Device"
+                        elif 'ACCESSORIES' in col_c_upper:
+                            category = "Accessories"
+                        # 3. KATA KUNCI AKSESORI (EXCEPTIONS)
+                        elif any(re.search(r'\b' + re.escape(aw.upper()) + r'\b', p_upper) for aw in acc_exception_words):
+                            category = "Accessories"
+                        # 4. KATA KUNCI DEVICE
+                        elif any(dk.upper() in p_upper for dk in device_keywords):
                             category = "Device"
                             
-                        # ATURAN MAPPING LOB FOCUS REVISI
+                        # MAPPING LOB FOCUS
                         lob_focus = None
-                        if 'iphone 15' in p_lower:
+                        if 'IPHONE 15' in p_upper:
                             lob_focus = 'iPhone 15'
-                        elif 'ipad' in p_lower and ('11th' in p_lower or '10th' in p_lower or 'a16' in p_lower):
+                        elif 'IPAD' in p_upper and ('11TH' in p_upper or '10TH' in p_upper or 'A16' in p_upper):
                             lob_focus = 'iPad 11th'
-                        elif 'mbn' in p_lower or 'macbook' in p_lower:
+                        elif 'MBN' in p_upper or 'MACBOOK' in p_upper:
                             lob_focus = 'MBN'
-                        elif 'apple watch' in p_lower or 'watch' in p_lower or 'aw' in p_lower:
+                        elif 'APPLE WATCH' in p_upper or 'WATCH' in p_upper or 'AW' in p_upper:
                             lob_focus = 'AW'
-                        elif 'airpods' in p_lower:
+                        elif 'AIRPOD' in p_upper:
                             lob_focus = 'AirPods'
 
                         records.append({
@@ -148,7 +159,7 @@ def parse_sales_xls(file_path):
             
         i += 1
         
-    print(f"[✓] Berhasil memproses {len(records)} transaksi sales (Excluding Rp0 items).")
+    print(f"[✓] Berhasil memproses {len(records)} transaksi sales.")
     return records
 
 def main():
