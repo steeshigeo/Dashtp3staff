@@ -2,37 +2,45 @@ import os
 import re
 import sys
 import json
-import base64
 import requests
 import pandas as pd
 
-# Link OneDrive default milik Anda
 DEFAULT_ONEDRIVE_URL = "https://1drv.ms/x/c/426713E72C49EDEB/IQBD3oB0QQCkTZRPXh7HhhWoAQ8oQIHav9BkCWSKDtwxFXI?e=zoQ86E"
 
-def get_direct_download_url(share_url):
-    """Mengonversi link sharing OneDrive menjadi direct download link."""
-    try:
-        encoded = base64.b64encode(share_url.encode('utf-8')).decode('utf-8')
-        encoded_safe = encoded.rstrip('=').replace('/', '_').replace('+', '-')
-        return f"https://api.onedrive.com/v1.0/shares/u!{encoded_safe}/root/content"
-    except Exception as e:
-        print(f"[!] Error converting URL: {e}")
-        return share_url
+def get_download_url(share_url):
+    """Menambahkan parameter download=1 untuk bypass autentikasi Graph API 401."""
+    if not share_url:
+        return ""
+    if "download=1" not in share_url:
+        if "?" in share_url:
+            return f"{share_url}&download=1"
+        else:
+            return f"{share_url}?download=1"
+    return share_url
 
 def download_excel(url, output_path="salespersonwise.xls"):
-    direct_url = get_direct_download_url(url)
-    print(f"[*] Mengunduh data dari: {direct_url}")
+    download_url = get_download_url(url)
+    print(f"[*] Mengunduh data dari: {download_url}")
+    
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8'
     }
-    response = requests.get(direct_url, headers=headers, allow_redirects=True)
-    if response.status_code == 200:
-        with open(output_path, 'wb') as f:
-            f.write(response.content)
-        print(f"[✓] Berhasil mengunduh {output_path} ({len(response.content)} bytes)")
-        return True
-    else:
-        print(f"[!] Gagal mengunduh file. Status code: {response.status_code}")
+    
+    try:
+        session = requests.Session()
+        response = session.get(download_url, headers=headers, allow_redirects=True, timeout=30)
+        
+        if response.status_code == 200:
+            with open(output_path, 'wb') as f:
+                f.write(response.content)
+            print(f"[✓] Berhasil mengunduh {output_path} ({len(response.content)} bytes)")
+            return True
+        else:
+            print(f"[!] Gagal mengunduh file. Status code: {response.status_code}")
+            return False
+    except Exception as e:
+        print(f"[!] Error saat mengunduh: {e}")
         return False
 
 def parse_sales_xls(file_path):
@@ -134,7 +142,6 @@ def parse_sales_xls(file_path):
     return records
 
 def main():
-    # Menggunakan DEFAULT_ONEDRIVE_URL jika variabel environment kosong
     onedrive_url = os.environ.get("ONEDRIVE_URL")
     if not onedrive_url or onedrive_url.strip() == "":
         onedrive_url = DEFAULT_ONEDRIVE_URL
