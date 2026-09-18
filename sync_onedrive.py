@@ -51,7 +51,10 @@ def parse_sales_xls(file_path):
     current_date = None
     current_staff = None
     
-    vas_keywords = ['kla', 'tsl', 'idt', 'xxl']
+    # TRIGGER WORDS UPDATE UNTUK KLA DAN VAS LAINNYA
+    kla_keywords = ['klabronze', 'klasilver', 'klagold', 'klaemerald', 'kladiamond', 'klaplatinum', 'klatitanium', 'klavvip']
+    other_vas_keywords = ['tsl', 'idt', 'xxl']
+    
     device_keywords = ['iphone', 'ipad', 'macbook', 'imac', 'mac mini', 'apple watch', 'watch ultra', 'watch s', 'watch 11', 'watch 10']
     
     i = 0
@@ -104,8 +107,12 @@ def parse_sales_xls(file_path):
                         p_lower = product_name.lower()
                         art_lower = article.lower()
                         
+                        # VAS CATEGORY IDENTIFICATION WITH NEW KLA TRIGGERS
+                        is_kla = any(kw in art_lower or kw in p_lower for kw in kla_keywords)
+                        is_other_vas = any(kw in art_lower or kw in p_lower for kw in other_vas_keywords)
+                        
                         category = "Accessories"
-                        if any(kw in art_lower or kw in p_lower for kw in vas_keywords):
+                        if is_kla or is_other_vas:
                             category = "VAS"
                         elif any(dk in p_lower for dk in device_keywords):
                             category = "Device"
