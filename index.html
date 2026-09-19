@@ -1224,7 +1224,6 @@
             updateDashboard();
         }
 
-        // UPDATE LIVE NOMINAL & BADGE TOTAL PERSEN SANGAT CEPAT
         function updateStaffNominalAndBadge() {
             const activeStaffs = getActiveStaffList();
             const targetMonthEl = document.getElementById('targetMonth');
@@ -1335,7 +1334,7 @@
                         
                         <div class="flex items-center gap-1">
                             <span class="text-[10px] font-bold text-purple-300">Total Qty:</span>
-                            <input type="number" value="${item.target || 0}" oninput="updateLobItemTotalTarget(${index}, this.value)" class="w-16 bg-slate-800 border border-purple-500/50 rounded-xl px-2 py-1 text-center text-xs text-white focus:outline-none font-extrabold" title="Ubah total target per bulan">
+                            <input type="number" id="lob_${index}_total" value="${item.target || 0}" oninput="updateLobItemTotalTarget(${index}, this.value)" class="w-16 bg-slate-800 border border-purple-500/50 rounded-xl px-2 py-1 text-center text-xs text-white focus:outline-none font-extrabold" title="Ubah total target per bulan">
                         </div>
 
                         <button onclick="deleteLobItem(${index})" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition" title="Hapus LOB">
@@ -1348,23 +1347,23 @@
                         <div class="grid grid-cols-5 gap-1.5">
                             <div class="text-center">
                                 <span class="text-[9px] font-mono opacity-70 block">W10</span>
-                                <input type="number" value="${item.w10 || 0}" oninput="updateLobItemWeek(${index}, 'w10', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                                <input type="number" id="lob_${index}_w10" value="${item.w10 || 0}" oninput="updateLobItemWeek(${index}, 'w10', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                             <div class="text-center">
                                 <span class="text-[9px] font-mono opacity-70 block">W11</span>
-                                <input type="number" value="${item.w11 || 0}" oninput="updateLobItemWeek(${index}, 'w11', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                                <input type="number" id="lob_${index}_w11" value="${item.w11 || 0}" oninput="updateLobItemWeek(${index}, 'w11', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                             <div class="text-center">
                                 <span class="text-[9px] font-mono opacity-70 block">W12</span>
-                                <input type="number" value="${item.w12 || 0}" oninput="updateLobItemWeek(${index}, 'w12', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                                <input type="number" id="lob_${index}_w12" value="${item.w12 || 0}" oninput="updateLobItemWeek(${index}, 'w12', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                             <div class="text-center">
                                 <span class="text-[9px] font-mono opacity-70 block">W13</span>
-                                <input type="number" value="${item.w13 || 0}" oninput="updateLobItemWeek(${index}, 'w13', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                                <input type="number" id="lob_${index}_w13" value="${item.w13 || 0}" oninput="updateLobItemWeek(${index}, 'w13', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                             <div class="text-center">
                                 <span class="text-[9px] font-mono opacity-70 block">W14</span>
-                                <input type="number" value="${item.w14 || 0}" oninput="updateLobItemWeek(${index}, 'w14', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                                <input type="number" id="lob_${index}_w14" value="${item.w14 || 0}" oninput="updateLobItemWeek(${index}, 'w14', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                         </div>
                     </div>
@@ -1393,6 +1392,10 @@
             lobItemsConfig[index][weekKey] = parseInt(val) || 0;
             const item = lobItemsConfig[index];
             item.target = (item.w10 || 0) + (item.w11 || 0) + (item.w12 || 0) + (item.w13 || 0) + (item.w14 || 0);
+
+            const totalInput = document.getElementById(`lob_${index}_total`);
+            if (totalInput) totalInput.value = item.target;
+
             updateDashboard();
             autoSyncToCloud();
         }
@@ -1407,6 +1410,12 @@
             lobItemsConfig[index].w12 = base;
             lobItemsConfig[index].w13 = base;
             lobItemsConfig[index].w14 = base;
+
+            ['w10', 'w11', 'w12', 'w13', 'w14'].forEach(wk => {
+                const inputEl = document.getElementById(`lob_${index}_${wk}`);
+                if (inputEl) inputEl.value = lobItemsConfig[index][wk];
+            });
+
             updateDashboard();
             autoSyncToCloud();
         }
