@@ -574,6 +574,20 @@
                 </button>
             </div>
 
+            <!-- GITHUB ACTIONS MANUAL TRIGGER CONFIG -->
+            <div class="space-y-3 bg-purple-950/40 p-4 rounded-2xl border border-purple-500/30">
+                <h3 class="text-xs font-bold uppercase text-purple-300 tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="github" class="w-4 h-4 text-purple-400"></i> GITHUB ACTIONS TRIGGER SETTINGS
+                </h3>
+                <p class="text-[11px] opacity-70">Token ini disimpan aman di browser lokal Anda (tidak di-push ke GitHub agar tidak ter-revoke).</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="sm:col-span-2">
+                        <label class="text-[10px] opacity-70 font-bold block mb-1">GitHub Personal Access Token (PAT)</label>
+                        <input type="password" id="ghTokenInput" onchange="saveConfigToLocal()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                    </div>
+                </div>
+            </div>
+
             <!-- ONLINE CLOUD SYNC CONTROL SECTION -->
             <div class="space-y-3 bg-indigo-950/40 p-4 rounded-2xl border border-indigo-500/30">
                 <div class="flex justify-between items-center">
@@ -761,8 +775,7 @@
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2BOcYHemGmeQDIwKTB197QZiQwKV428kkpmjR0OEuujY2cA2uvXvX4XFepZE_tevP3w/exec";
 
-        // EMBEDDED GITHUB ACTIONS CREDENTIALS
-        const GH_PAT = "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";
+        // GITHUB CONFIGURATION
         const GH_OWNER = "steeshigeo";
         const GH_REPO = "Dashtp3staff";
         const GH_WORKFLOW = "onedrive_sync.yml";
@@ -779,6 +792,15 @@
 
         // Trigger GitHub Action Workflow via REST API
         async function triggerGitHubWorkflow() {
+            const tokenInput = document.getElementById('ghTokenInput');
+            const token = tokenInput ? tokenInput.value.trim() : (localStorage.getItem('m121_gh_token') || '');
+
+            if (!token) {
+                alert('Silakan masukkan GitHub PAT terlebih dahulu di menu Config!');
+                toggleConfigModal(true);
+                return;
+            }
+
             const btn = document.getElementById('btnRunAction');
             if (btn) {
                 btn.disabled = true;
@@ -791,7 +813,7 @@
                     method: 'POST',
                     headers: {
                         'Accept': 'application/vnd.github+json',
-                        'Authorization': `Bearer ${GH_PAT}`,
+                        'Authorization': `Bearer ${token}`,
                         'X-GitHub-Api-Version': '2022-11-28',
                         'Content-Type': 'application/json'
                     },
@@ -810,7 +832,7 @@
                 }
             } catch (err) {
                 console.error("GitHub Action Trigger Error:", err);
-                alert('Gagal menjalankan GitHub Action: ' + err.message);
+                alert('Gagal menjalankan GitHub Action: ' + err.message + '\n\nPastikan PAT Token valid dan memiliki izin (workflow & repo).');
                 if (btn) btn.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-rose-400"></i> Failed`;
                 if (window.lucide) lucide.createIcons();
             } finally {
@@ -905,6 +927,9 @@
 
         function saveConfigToLocal() {
             try {
+                const tokenVal = document.getElementById('ghTokenInput') ? document.getElementById('ghTokenInput').value.trim() : '';
+                if (tokenVal) localStorage.setItem('m121_gh_token', tokenVal);
+
                 const configData = {
                     targetMonth: document.getElementById('targetMonth') ? document.getElementById('targetMonth').value : '100000000',
                     targetDevice: document.getElementById('targetDevice') ? document.getElementById('targetDevice').value : '75000000',
@@ -921,6 +946,11 @@
         }
 
         function loadConfigFromLocal() {
+            const savedToken = localStorage.getItem('m121_gh_token');
+            if (savedToken && document.getElementById('ghTokenInput')) {
+                document.getElementById('ghTokenInput').value = savedToken;
+            }
+
             const saved = localStorage.getItem('m121_sales_config');
             if (saved) {
                 try {
