@@ -440,8 +440,8 @@
                 <!-- LOB FOCUS WEEKLY CAPSULES BREAKDOWN PER WEEK -->
                 <div class="space-y-6 pt-4 border-t border-white/10">
                     <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-bold flex items-center gap-2 text-purple-300">
-                            <i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i> LOB Focus Breakdown Per Week (W10 - W14)
+                        <h3 id="lobWeeklyHeaderTitle" class="text-sm font-bold flex items-center gap-2 text-purple-300">
+                            <i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i> LOB Focus Breakdown Per Week
                         </h3>
                     </div>
 
@@ -673,12 +673,12 @@
                 </div>
             </div>
 
-            <!-- 4. DYNAMIC LOB FOCUS ITEMS WITH APPLE QUARTER WEEKLY CALENDAR (W10-W14) -->
+            <!-- 4. DYNAMIC LOB FOCUS ITEMS WITH APPLE QUARTER WEEKLY CALENDAR -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">4. Dynamic LOB Focus Items</h3>
-                        <p class="text-[10px] opacity-60">Set total target Qty & breakdown mingguan kalender Apple (W10-W14).</p>
+                        <p class="text-[10px] opacity-60" id="lobConfigSubTitle">Set total target Qty & breakdown mingguan kalender Apple.</p>
                     </div>
                     <button onclick="addLobItemConfig()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 transition flex items-center gap-1">
                         <i data-lucide="plus" class="w-3 h-3"></i> Tambah Item LOB
@@ -686,7 +686,7 @@
                 </div>
 
                 <div class="space-y-3 max-h-64 overflow-y-auto pr-1" id="lobConfigListContainer">
-                    <!-- Dynamic LOB Item Rows with W10-W14 Target Inputs -->
+                    <!-- Dynamic LOB Item Rows with Target Inputs -->
                 </div>
             </div>
 
@@ -814,7 +814,53 @@
             }
         }
 
-        // Dynamic LOB Items List with Weekly Calendar Breakdown (W10-W14)
+        // DYNAMIC APPLE RETAIL FISCAL QUARTER & WEEK CALENDAR HELPER
+        function getAppleCalendarInfo(sampleDateStr) {
+            let monthNum = 8;
+            let yearNum = 2026;
+            if (sampleDateStr && sampleDateStr.includes('-')) {
+                const parts = sampleDateStr.split('-');
+                if (parts.length === 3) {
+                    monthNum = parseInt(parts[1], 10) || 8;
+                    yearNum = parseInt(parts[2], 10) || 2026;
+                }
+            }
+
+            // Apple Retail Fiscal Quarter Mapping
+            // Q1: Oct(10), Nov(11), Dec(12)
+            // Q2: Jan(1), Feb(2), Mar(3)
+            // Q3: Apr(4), May(5), Jun(6)
+            // Q4: Jul(7), Aug(8), Sep(9)
+            let qName = "Q4";
+            if ([10, 11, 12].includes(monthNum)) qName = "Q1";
+            else if ([1, 2, 3].includes(monthNum)) qName = "Q2";
+            else if ([4, 5, 6].includes(monthNum)) qName = "Q3";
+            else if ([7, 8, 9].includes(monthNum)) qName = "Q4";
+
+            // Month Position in Quarter (1, 2, or 3)
+            // Month 1 of Q: W1 - W4/W5
+            // Month 2 of Q: W5 - W9
+            // Month 3 of Q: W10 - W14
+            let qMonthPos = 1;
+            if ([10, 1, 4, 7].includes(monthNum)) qMonthPos = 1;
+            else if ([11, 2, 5, 8].includes(monthNum)) qMonthPos = 2;
+            else if ([12, 3, 6, 9].includes(monthNum)) qMonthPos = 3;
+
+            let startWeekNum = 1;
+            if (qMonthPos === 1) startWeekNum = 1;
+            else if (qMonthPos === 2) startWeekNum = 5;
+            else if (qMonthPos === 3) startWeekNum = 10;
+
+            return {
+                monthNum,
+                yearNum,
+                qName,
+                qMonthPos,
+                startWeekNum
+            };
+        }
+
+        // Dynamic LOB Items List
         let lobItemsConfig = [
             { id: 'iphone15', name: 'iPhone 15', key: 'iPhone 15', target: 27, w10: 7, w11: 6, w12: 6, w13: 6, w14: 2 },
             { id: 'ipad11th', name: 'iPad A16', key: 'iPad 11th', target: 27, w10: 7, w11: 6, w12: 6, w13: 6, w14: 2 },
@@ -903,7 +949,6 @@
             }
         }
 
-        // HELPER JSONP FETCH (BYPASS CORS SECURELY)
         function fetchJSONP(url) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
@@ -923,7 +968,6 @@
             });
         }
 
-        // DEBOUNCED AUTOSYNC ENGINE
         function autoSyncToCloud() {
             saveConfigToLocal();
             if (syncTimeout) clearTimeout(syncTimeout);
@@ -932,7 +976,6 @@
             }, 1000);
         }
 
-        // ONLINE CLOUD SYNC ENGINE (FULL BACKUP)
         async function pushToCloudSync(isSilent = false) {
             const syncCode = (document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE').trim().toUpperCase() || 'M121-STORE';
             const btn = document.getElementById('btnPushCloud');
@@ -975,7 +1018,6 @@
             }
         }
 
-        // AUTOLOAD FROM CLOUD ON STARTUP
         async function pullFromCloudSync(isSilent = false) {
             const syncCode = (document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE').trim().toUpperCase() || 'M121-STORE';
             const btn = document.getElementById('btnPullCloud');
@@ -1320,10 +1362,29 @@
             autoSyncToCloud();
         }
 
+        // DYNAMIC LOB CONFIG RENDER WITH APPLE FISCAL WEEKS (AUTOMATIC LIVE QUARTER)
         function renderLobConfigInputs() {
             const container = document.getElementById('lobConfigListContainer');
             if (!container) return;
             container.innerHTML = '';
+
+            const uniqueDatesFromData = [...new Set(rawData.map(r => r.date))].sort();
+            const sampleDate = uniqueDatesFromData[0] || '01-08-2026';
+            const appleCal = getAppleCalendarInfo(sampleDate);
+
+            // Generate Dynamic Week Labels for Modal (5 Weeks)
+            const weekLabels = [
+                `W${appleCal.startWeekNum}`,
+                `W${appleCal.startWeekNum + 1}`,
+                `W${appleCal.startWeekNum + 2}`,
+                `W${appleCal.startWeekNum + 3}`,
+                `W${appleCal.startWeekNum + 4}`
+            ];
+
+            const subTitle = document.getElementById('lobConfigSubTitle');
+            if (subTitle) {
+                subTitle.textContent = `Set total target Qty & breakdown mingguan kalender Apple (${appleCal.qName} - ${weekLabels[0]} s/d ${weekLabels[4]}).`;
+            }
 
             lobItemsConfig.forEach((item, index) => {
                 const div = document.createElement('div');
@@ -1343,26 +1404,26 @@
                     </div>
 
                     <div class="space-y-1">
-                        <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Breakdown Target Per Week (Apple Calendar W10 - W14):</span>
+                        <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Breakdown Target Per Week (Apple Fiscal ${appleCal.qName}):</span>
                         <div class="grid grid-cols-5 gap-1.5">
                             <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W10</span>
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[0]}</span>
                                 <input type="number" id="lob_${index}_w10" value="${item.w10 || 0}" oninput="updateLobItemWeek(${index}, 'w10', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                             <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W11</span>
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[1]}</span>
                                 <input type="number" id="lob_${index}_w11" value="${item.w11 || 0}" oninput="updateLobItemWeek(${index}, 'w11', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                             <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W12</span>
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[2]}</span>
                                 <input type="number" id="lob_${index}_w12" value="${item.w12 || 0}" oninput="updateLobItemWeek(${index}, 'w12', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                             <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W13</span>
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[3]}</span>
                                 <input type="number" id="lob_${index}_w13" value="${item.w13 || 0}" oninput="updateLobItemWeek(${index}, 'w13', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                             <div class="text-center">
-                                <span class="text-[9px] font-mono opacity-70 block">W14</span>
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[4]}</span>
                                 <input type="number" id="lob_${index}_w14" value="${item.w14 || 0}" oninput="updateLobItemWeek(${index}, 'w14', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
                             </div>
                         </div>
@@ -1673,22 +1734,27 @@ ${textList.join('\n')}`;
                 allMonthDates = uniqueDatesFromData;
             }
 
-            const weekLabels = ['W10', 'W11', 'W12', 'W13', 'W14'];
+            // DYNAMIC APPLE RETAIL FISCAL QUARTER & WEEKS CALCULATION
+            const appleCal = getAppleCalendarInfo(sampleDate);
             const weekIntervals = [];
-            for (let i = 0; i < 5; i++) {
+            const numWeeksInMonth = Math.ceil(allMonthDates.length / 7);
+
+            for (let i = 0; i < numWeeksInMonth; i++) {
                 const startIdx = i * 7;
                 let wDates = [];
                 if (startIdx < allMonthDates.length) {
-                    if (i === 4) {
+                    if (i === numWeeksInMonth - 1) {
                         wDates = allMonthDates.slice(startIdx);
                     } else {
                         wDates = allMonthDates.slice(startIdx, startIdx + 7);
                     }
                 }
                 if (wDates.length > 0) {
+                    const wNum = appleCal.startWeekNum + i;
                     weekIntervals.push({
                         num: i + 1,
-                        wName: weekLabels[i] || `W${10+i}`,
+                        wNum: wNum,
+                        wName: `W${wNum}`,
                         startDate: wDates[0],
                         endDate: wDates[wDates.length - 1],
                         dates: wDates,
@@ -1902,7 +1968,7 @@ ${textList.join('\n')}`;
                 capsuleCard.innerHTML = `
                     <div class="flex justify-between items-center border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-black uppercase text-cyan-400 tracking-wider">${wk.wName || 'Week ' + wk.num}</span>
+                            <span class="text-xs font-black uppercase text-cyan-400 tracking-wider">${wk.wName}</span>
                             <span class="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">${wk.label}</span>
                         </div>
                         <span class="text-xs font-bold opacity-70">${wk.dates.length} Days</span>
@@ -2044,6 +2110,12 @@ ${textList.join('\n')}`;
                     const sW14Sold = sData.filter(r => weekIntervals[4] && weekIntervals[4].dates.includes(r.date) && matchFn(r)).length;
                     const sW14Tgt = Math.round(((lobItem.w14 || 0) * pctShare) / 100);
 
+                    const w1Lbl = weekIntervals[0] ? weekIntervals[0].wName : 'W1';
+                    const w2Lbl = weekIntervals[1] ? weekIntervals[1].wName : 'W2';
+                    const w3Lbl = weekIntervals[2] ? weekIntervals[2].wName : 'W3';
+                    const w4Lbl = weekIntervals[3] ? weekIntervals[3].wName : 'W4';
+                    const w5Lbl = weekIntervals[4] ? weekIntervals[4].wName : 'W5';
+
                     staffContributionRows += `
                         <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
                             <td class="py-2.5 px-3 font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold ml-1">(${role})</span></td>
@@ -2063,6 +2135,12 @@ ${textList.join('\n')}`;
                     `;
                 });
 
+                const w1Lbl = weekIntervals[0] ? weekIntervals[0].wName : 'W1';
+                const w2Lbl = weekIntervals[1] ? weekIntervals[1].wName : 'W2';
+                const w3Lbl = weekIntervals[2] ? weekIntervals[2].wName : 'W3';
+                const w4Lbl = weekIntervals[3] ? weekIntervals[3].wName : 'W4';
+                const w5Lbl = weekIntervals[4] ? weekIntervals[4].wName : 'W5';
+
                 const lobCard = document.createElement('div');
                 lobCard.className = 'liquid-glass rounded-3xl p-6 space-y-5';
                 lobCard.innerHTML = `
@@ -2073,7 +2151,7 @@ ${textList.join('\n')}`;
                             </div>
                             <div>
                                 <h3 class="text-lg font-extrabold">${displayName}</h3>
-                                <p class="text-xs opacity-70">Pencapaian Total Keseluruhan Store</p>
+                                <p class="text-xs opacity-70">Pencapaian Total Keseluruhan Store (${appleCal.qName})</p>
                             </div>
                         </div>
 
@@ -2089,12 +2167,12 @@ ${textList.join('\n')}`;
                     </div>
 
                     <div class="flex items-center gap-2 overflow-x-auto py-1 text-xs font-bold">
-                        <span class="text-[10px] uppercase opacity-60">Target Store Weekly:</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">W10: ${lobItem.w10 || 0}</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">W11: ${lobItem.w11 || 0}</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">W12: ${lobItem.w12 || 0}</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">W13: ${lobItem.w13 || 0}</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">W14: ${lobItem.w14 || 0}</span>
+                        <span class="text-[10px] uppercase opacity-60">Target Store Weekly (${appleCal.qName}):</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w1Lbl}: ${lobItem.w10 || 0}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w2Lbl}: ${lobItem.w11 || 0}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w3Lbl}: ${lobItem.w12 || 0}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w4Lbl}: ${lobItem.w13 || 0}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w5Lbl}: ${lobItem.w14 || 0}</span>
                     </div>
 
                     <div class="w-full bg-slate-800/40 rounded-full h-2 overflow-hidden">
@@ -2110,11 +2188,11 @@ ${textList.join('\n')}`;
                                         <th class="pb-2 px-3">Nama Staff</th>
                                         <th class="pb-2 px-3 text-center">Target Individual (QTY)</th>
                                         <th class="pb-2 px-3 text-center">Total Terjual (QTY)</th>
-                                        <th class="pb-2 px-3 text-center">W10 Qty</th>
-                                        <th class="pb-2 px-3 text-center">W11 Qty</th>
-                                        <th class="pb-2 px-3 text-center">W12 Qty</th>
-                                        <th class="pb-2 px-3 text-center">W13 Qty</th>
-                                        <th class="pb-2 px-3 text-center">W14 Qty</th>
+                                        <th class="pb-2 px-3 text-center">${w1Lbl} Qty</th>
+                                        <th class="pb-2 px-3 text-center">${w2Lbl} Qty</th>
+                                        <th class="pb-2 px-3 text-center">${w3Lbl} Qty</th>
+                                        <th class="pb-2 px-3 text-center">${w4Lbl} Qty</th>
+                                        <th class="pb-2 px-3 text-center">${w5Lbl} Qty</th>
                                         <th class="pb-2 px-3 text-center">Status</th>
                                     </tr>
                                 </thead>
@@ -2127,6 +2205,15 @@ ${textList.join('\n')}`;
                 `;
                 lobItemsContainer.appendChild(lobCard);
             });
+
+            const lobWeeklyHeader = document.getElementById('lobWeeklyHeaderTitle');
+            if (lobWeeklyHeader && weekIntervals.length > 0) {
+                const wFirst = weekIntervals[0].wName;
+                const wLast = weekIntervals[weekIntervals.length - 1].wName;
+                lobWeeklyHeader.innerHTML = `
+                    <i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i> LOB Focus Breakdown Per Week (${appleCal.qName} - ${wFirst} s/d ${wLast})
+                `;
+            }
 
             const lobWeeklyCapsulesContainer = document.getElementById('lobWeeklyCapsulesContainer');
             if (lobWeeklyCapsulesContainer) {
@@ -2145,7 +2232,8 @@ ${textList.join('\n')}`;
                             const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
                             const wkSold = rawData.filter(r => r.staff === stf && wk.dates.includes(r.date) && matchFn(r)).length;
                             
-                            const wKey = weekLabels[wkIdx] ? weekLabels[wkIdx].toLowerCase() : `w${10+wkIdx}`;
+                            const wKeys = ['w10', 'w11', 'w12', 'w13', 'w14'];
+                            const wKey = wKeys[wkIdx] || 'w10';
                             const wStoreTarget = lobItem[wKey] || 0;
                             const wStaffTarget = Math.round((wStoreTarget * pctShare) / 100);
 
@@ -2176,7 +2264,7 @@ ${textList.join('\n')}`;
                     capsuleCard.innerHTML = `
                         <div class="flex justify-between items-center border-b border-white/10 pb-3">
                             <div class="flex items-center gap-2">
-                                <span class="text-xs font-black uppercase text-purple-300 tracking-wider">${wk.wName || 'Week ' + wk.num}</span>
+                                <span class="text-xs font-black uppercase text-purple-300 tracking-wider">${wk.wName}</span>
                                 <span class="text-xs font-bold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${wk.label}</span>
                             </div>
                         </div>
@@ -2226,7 +2314,7 @@ ${textList.join('\n')}`;
                     capsuleCard.innerHTML = `
                         <div class="flex justify-between items-center border-b border-white/10 pb-3">
                             <div class="flex items-center gap-2">
-                                <span class="text-xs font-black uppercase text-indigo-400 tracking-wider">${wk.wName || 'Device Week ' + wk.num}</span>
+                                <span class="text-xs font-black uppercase text-indigo-400 tracking-wider">${wk.wName}</span>
                                 <span class="text-xs font-bold px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">${wk.label}</span>
                             </div>
                         </div>
@@ -2275,7 +2363,7 @@ ${textList.join('\n')}`;
                 capsuleCard.innerHTML = `
                     <div class="flex justify-between items-center border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-black uppercase text-cyan-400 tracking-wider">${wk.wName || 'Aksesoris Week ' + wk.num}</span>
+                            <span class="text-xs font-black uppercase text-cyan-400 tracking-wider">${wk.wName}</span>
                             <span class="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">${wk.label}</span>
                         </div>
                     </div>
@@ -2345,7 +2433,7 @@ ${textList.join('\n')}`;
                 capsuleCard.innerHTML = `
                     <div class="flex justify-between items-center border-b border-white/10 pb-3">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-black uppercase text-purple-300 tracking-wider">${wk.wName || 'VAS Week ' + wk.num}</span>
+                            <span class="text-xs font-black uppercase text-purple-300 tracking-wider">${wk.wName}</span>
                             <span class="text-xs font-bold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${wk.label}</span>
                         </div>
                     </div>
