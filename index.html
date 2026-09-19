@@ -574,22 +574,17 @@
                 </button>
             </div>
 
-            <!-- GITHUB ACTIONS TOKEN AUTOFILL SECTION -->
+            <!-- GITHUB ACTIONS MANUAL TRIGGER CONFIG -->
             <div class="space-y-3 bg-purple-950/40 p-4 rounded-2xl border border-purple-500/30">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                    <div>
-                        <h3 class="text-xs font-bold uppercase text-purple-300 tracking-wider flex items-center gap-1.5">
-                            <i data-lucide="key" class="w-4 h-4 text-purple-400"></i> GITHUB TOKEN AUTOFILL
-                        </h3>
-                        <p class="text-[11px] opacity-70 mt-0.5">Ambil & isi otomatis PAT Token dari Google Sheet (Kolom A2).</p>
+                <h3 class="text-xs font-bold uppercase text-purple-300 tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="github" class="w-4 h-4 text-purple-400"></i> GITHUB ACTIONS TRIGGER SETTINGS
+                </h3>
+                <p class="text-[11px] opacity-70">Token diambil otomatis dari Google Sheet (Kolom A2) saat tombol Run Actions ditekan.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="sm:col-span-2">
+                        <label class="text-[10px] opacity-70 font-bold block mb-1">GitHub Personal Access Token (PAT) - Opsional / Manual</label>
+                        <input type="password" id="ghTokenInput" onchange="saveConfigToLocal()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500" placeholder="Kosongkan jika ingin auto-fetch dari Google Sheet">
                     </div>
-                    <button onclick="fetchTokenFromGSheet()" id="btnFetchToken" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5 whitespace-nowrap">
-                        <i data-lucide="download" class="w-3.5 h-3.5 text-purple-200"></i> Autofill Token dari GSheet
-                    </button>
-                </div>
-                <div>
-                    <label class="text-[10px] opacity-70 font-bold block mb-1">GitHub Personal Access Token (PAT)</label>
-                    <input type="password" id="ghTokenInput" onchange="saveConfigToLocal()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500" placeholder="Tap button di atas untuk mengisi token otomatis">
                 </div>
             </div>
 
@@ -795,59 +790,54 @@
         let staffRoleConfig = {};
         let syncTimeout = null;
 
-        // FETCH TOKEN FROM GOOGLE SHEET VIA APPS SCRIPT (JSONP)
-        async function fetchTokenFromGSheet() {
-            const btn = document.getElementById('btnFetchToken');
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Fetching Token...`;
-                if (window.lucide) lucide.createIcons();
-            }
-
+        // FETCH TOKEN OTOMATIS DARI GOOGLE SHEET (KOLOM A2) VIA APPS SCRIPT JSONP
+        async function fetchTokenFromGSheetSilently() {
             try {
                 const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?action=getToken`);
                 if (resData && resData.status === 'success' && resData.token) {
-                    const fetchedToken = String(resData.token).trim();
-                    const tokenInput = document.getElementById('ghTokenInput');
-                    if (tokenInput) {
-                        tokenInput.value = fetchedToken;
+                    const token = String(resData.token).trim();
+                    if (token) {
+                        return token;
                     }
-                    saveConfigToLocal();
-                    alert('Token GitHub PAT berhasil diambil dan diisi otomatis!');
-                } else {
-                    throw new Error(resData ? resData.message : 'Cell A2 di Sheet kosong');
                 }
             } catch (err) {
-                console.error("GSheet Fetch Token Error:", err);
-                alert('Gagal mengambil token dari Apps Script/Google Sheet: ' + err.message);
-            } finally {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = `<i data-lucide="download" class="w-3.5 h-3.5 text-purple-200"></i> Autofill Token dari GSheet`;
-                    if (window.lucide) lucide.createIcons();
-                }
+                console.error("Auto fetch token error:", err);
             }
+            return null;
         }
 
-        // Trigger GitHub Action Workflow via REST API
+        // Trigger GitHub Action Workflow dengan Auto-Fill Token dari Google Sheet
         async function triggerGitHubWorkflow() {
-            const tokenInput = document.getElementById('ghTokenInput');
-            let token = tokenInput ? tokenInput.value.trim() : (localStorage.getItem('m121_gh_token') || '');
-
-            if (!token) {
-                alert('Token belum terisi! Mengambil token otomatis dari Google Sheet...');
-                await fetchTokenFromGSheet();
-                token = localStorage.getItem('m121_gh_token') || '';
-                if (!token) {
-                    alert('Token tetap kosong. Silakan buka menu Config dan tap "Autofill Token dari GSheet".');
-                    toggleConfigModal(true);
-                    return;
-                }
-            }
-
             const btn = document.getElementById('btnRunAction');
             if (btn) {
                 btn.disabled = true;
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-purple-400"></i> Fetching Token...`;
+                if (window.lucide) lucide.createIcons();
+            }
+
+            // 1. Cek token di input config lokal terlebih dahulu, jika kosong/tidak ada ambil otomatis dari GSheet (A2)
+            let token = document.getElementById('ghTokenInput') ? document.getElementById('ghTokenInput').value.trim() : '';
+            if (!token) {
+                token = localStorage.getItem('m121_gh_token') || '';
+            }
+
+            if (!token) {
+                // Ambil otomatis dari GSheet kolom A2
+                token = await fetchTokenFromGSheetSilently();
+            }
+
+            if (!token) {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 text-purple-400"></i> Run Actions`;
+                    if (window.lucide) lucide.createIcons();
+                }
+                alert('Token GitHub tidak ditemukan di GSheet (Kolom A2) maupun di LocalStorage. Pastikan token sudah diisi di Google Sheet.');
+                toggleConfigModal(true);
+                return;
+            }
+
+            if (btn) {
                 btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-purple-400"></i> Triggering...`;
                 if (window.lucide) lucide.createIcons();
             }
@@ -869,14 +859,14 @@
                 if (res.ok || res.status === 204) {
                     if (btn) btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Running!`;
                     if (window.lucide) lucide.createIcons();
-                    alert('Berhasil memicu GitHub Action! Workflow sedang berjalan di background.');
+                    alert('Berhasil memicu GitHub Action! Token terambil otomatis dari GSheet dan workflow sedang berjalan.');
                 } else {
                     const errObj = await res.json().catch(() => ({}));
                     throw new Error(errObj.message || `Status Code ${res.status}`);
                 }
             } catch (err) {
                 console.error("GitHub Action Trigger Error:", err);
-                alert('Gagal menjalankan GitHub Action: ' + err.message + '\n\nSilakan coba lagi atau perbarui Token via menu Config.');
+                alert('Gagal menjalankan GitHub Action: ' + err.message + '\n\nPastikan token di Kolom A2 Google Sheet valid dan belum di-revoke oleh GitHub.');
                 if (btn) btn.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-rose-400"></i> Failed`;
                 if (window.lucide) lucide.createIcons();
             } finally {
@@ -1027,7 +1017,7 @@
                 script.onerror = function() {
                     delete window[callbackName];
                     if (script && script.parentNode) script.parentNode.removeChild(script);
-                    reject(new Error('Koneksi Apps Script terhalang CORS'));
+                    reject(new Error('Koneksi Google Sheet terhalang CORS'));
                 };
                 document.body.appendChild(script);
             });
