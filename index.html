@@ -574,7 +574,7 @@
                 </button>
             </div>
 
-            <!-- GITHUB ACTIONS TOKEN AUTOFILL FROM GSHEET SECTION -->
+            <!-- GITHUB ACTIONS TOKEN AUTOFILL SECTION -->
             <div class="space-y-3 bg-purple-950/40 p-4 rounded-2xl border border-purple-500/30">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                     <div>
@@ -795,7 +795,7 @@
         let staffRoleConfig = {};
         let syncTimeout = null;
 
-        // FETCH TOKEN FROM GOOGLE SHEET (KOLOM A2)
+        // FETCH TOKEN FROM GOOGLE SHEET VIA APPS SCRIPT (JSONP)
         async function fetchTokenFromGSheet() {
             const btn = document.getElementById('btnFetchToken');
             if (btn) {
@@ -805,33 +805,21 @@
             }
 
             try {
-                const gsheetCsvUrl = 'https://docs.google.com/spreadsheets/d/1WGcWe1wVWGb5XAuJbCzhafB38whXKXKIOceMBMje-P8/gviz/tq?tqx=out:csv&gid=583645699';
-                const res = await fetch(gsheetCsvUrl);
-                if (!res.ok) throw new Error('Gagal mengakses Google Sheet');
-                const csvText = await res.text();
-
-                const lines = csvText.split('\n').map(l => l.trim()).filter(Boolean);
-                if (lines.length >= 2) {
-                    // Baris 2 (Index 1) Kolom A
-                    let cellA2 = lines[1].split(',')[0];
-                    cellA2 = cellA2.replace(/^"+|"$/g, '').trim();
-
-                    if (cellA2) {
-                        const tokenInput = document.getElementById('ghTokenInput');
-                        if (tokenInput) {
-                            tokenInput.value = cellA2;
-                        }
-                        saveConfigToLocal();
-                        alert('Token GitHub PAT berhasil diambil dan diisi otomatis!');
-                    } else {
-                        alert('Cell A2 di Google Sheet kosong.');
+                const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?action=getToken`);
+                if (resData && resData.status === 'success' && resData.token) {
+                    const fetchedToken = String(resData.token).trim();
+                    const tokenInput = document.getElementById('ghTokenInput');
+                    if (tokenInput) {
+                        tokenInput.value = fetchedToken;
                     }
+                    saveConfigToLocal();
+                    alert('Token GitHub PAT berhasil diambil dan diisi otomatis!');
                 } else {
-                    alert('Data di Google Sheet tidak mencukupi (A2 kosong).');
+                    throw new Error(resData ? resData.message : 'Cell A2 di Sheet kosong');
                 }
             } catch (err) {
-                console.error("GSheet Fetch Error:", err);
-                alert('Gagal mengambil token dari Google Sheet: ' + err.message);
+                console.error("GSheet Fetch Token Error:", err);
+                alert('Gagal mengambil token dari Apps Script/Google Sheet: ' + err.message);
             } finally {
                 if (btn) {
                     btn.disabled = false;
@@ -1039,7 +1027,7 @@
                 script.onerror = function() {
                     delete window[callbackName];
                     if (script && script.parentNode) script.parentNode.removeChild(script);
-                    reject(new Error('Koneksi Google Sheet terhalang CORS'));
+                    reject(new Error('Koneksi Apps Script terhalang CORS'));
                 };
                 document.body.appendChild(script);
             });
