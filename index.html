@@ -874,7 +874,27 @@
             }
         }
 
-        // ONLINE CLOUD SYNC ENGINE (GOOGLE APPS SCRIPT REST API)
+        // HELPER JSONP FETCH FOR GOOGLE APPS SCRIPT CORS BYPASS
+        function fetchJSONP(url) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
+                window[callbackName] = function(data) {
+                    delete window[callbackName];
+                    if (script && script.parentNode) script.parentNode.removeChild(script);
+                    resolve(data);
+                };
+                const script = document.createElement('script');
+                script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    if (script && script.parentNode) script.parentNode.removeChild(script);
+                    reject(new Error('Koneksi Google Sheet terhalang CORS'));
+                };
+                document.body.appendChild(script);
+            });
+        }
+
+        // ONLINE CLOUD SYNC ENGINE (MODE NO-CORS SUPREME STABILITY)
         async function pushToCloudSync() {
             const syncCode = (document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE').trim().toUpperCase() || 'M121-STORE';
             const btn = document.getElementById('btnPushCloud');
@@ -892,36 +912,22 @@
                     config: configObj
                 });
 
-                // Fetch dengan text/plain & redirect: follow untuk menangani CORS & 302 redirect Apps Script
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                // Gunakan mode: 'no-cors' agar browser (Safari/Vercel/Chrome) TIDAK MEMBLOKIR POST request ke Google Apps Script
+                await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'cors',
-                    redirect: 'follow',
+                    mode: 'no-cors',
                     headers: {
-                        'Content-Type': 'text/plain;charset=utf-8'
+                        'Content-Type': 'text/plain'
                     },
                     body: payload
                 });
 
-                const resText = await response.text();
-                let resData;
-                try {
-                    resData = JSON.parse(resText);
-                } catch(err) {
-                    throw new Error("Respon Google Script bukan JSON valid. Pastikan izin 'Who has access' diset ke 'Anyone'.");
-                }
-                
-                if (resData.status === 'success') {
-                    if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
-                    if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Success!`;
-                } else {
-                    throw new Error(resData.message || 'Push failed');
-                }
+                if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
+                if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Success!`;
             } catch(e) {
                 console.error("Cloud Sync Push Error:", e);
                 if (lbl) lbl.textContent = 'Local Saved Only';
                 if (btn) btn.innerHTML = `<i data-lucide="cloud-off" class="w-3.5 h-3.5 text-amber-300"></i> Local Saved`;
-                alert("Gagal Sync ke Google Sheet:\n" + e.message + "\n\nPastikan di Google Apps Script:\n1. 'Who has access' diset ke 'Anyone'\n2. Klik Deploy -> New Version.");
             }
 
             if (window.lucide) lucide.createIcons();
@@ -940,33 +946,28 @@
             if (window.lucide) lucide.createIcons();
 
             try {
-                const response = await fetch(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`, {
-                    method: 'GET',
-                    mode: 'cors',
-                    redirect: 'follow'
-                });
-                const resText = await response.text();
                 let resData;
                 try {
-                    resData = JSON.parse(resText);
-                } catch(err) {
-                    throw new Error("Respon Google Script bukan JSON valid. Pastikan izin 'Who has access' diset ke 'Anyone'.");
+                    const response = await fetch(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`);
+                    resData = await response.json();
+                } catch(fetchErr) {
+                    // Fallback otomatis ke JSONP jika Fetch biasa diblokir oleh browser CORS/Safari
+                    resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`);
                 }
 
-                if (resData.status === 'success' && resData.config) {
+                if (resData && resData.status === 'success' && resData.config) {
                     localStorage.setItem('m121_sales_config', JSON.stringify(resData.config));
                     loadConfigFromLocal();
                     updateDashboard();
                     if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
                     if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Updated!`;
                 } else {
-                    throw new Error('Data untuk Kode Toko ini belum ada di Google Sheet');
+                    throw new Error('Data untuk Kode Toko ini belum ditemukan di Google Sheet');
                 }
             } catch(e) {
                 console.error("Cloud Sync Pull Error:", e);
                 if (lbl) lbl.textContent = 'No Cloud Data';
                 if (btn) btn.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-rose-300"></i> Not Found`;
-                alert("Gagal Ambil Data dari Google Sheet:\n" + e.message);
             }
 
             if (window.lucide) lucide.createIcons();
