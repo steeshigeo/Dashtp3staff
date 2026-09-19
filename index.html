@@ -834,18 +834,20 @@
 
         // ==================== PERSISTENCE & LOCAL STORAGE ENGINE ====================
         function saveConfigToLocal() {
-            const configData = {
-                targetMonth: document.getElementById('targetMonth').value,
-                targetDevice: document.getElementById('targetDevice').value,
-                targetAccessories: document.getElementById('targetAccessories').value,
-                targetVAS: document.getElementById('targetVAS').value,
-                staffPercentConfig,
-                staffRoleConfig,
-                lobItemsConfig,
-                removedStaffs: Array.from(removedStaffs),
-                storeSyncCode: document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE'
-            };
-            localStorage.setItem('m121_sales_config', JSON.stringify(configData));
+            try {
+                const configData = {
+                    targetMonth: document.getElementById('targetMonth') ? document.getElementById('targetMonth').value : '100000000',
+                    targetDevice: document.getElementById('targetDevice') ? document.getElementById('targetDevice').value : '75000000',
+                    targetAccessories: document.getElementById('targetAccessories') ? document.getElementById('targetAccessories').value : '15000000',
+                    targetVAS: document.getElementById('targetVAS') ? document.getElementById('targetVAS').value : '10000000',
+                    staffPercentConfig: staffPercentConfig || {},
+                    staffRoleConfig: staffRoleConfig || {},
+                    lobItemsConfig: lobItemsConfig || [],
+                    removedStaffs: Array.from(removedStaffs || []),
+                    storeSyncCode: document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE'
+                };
+                localStorage.setItem('m121_sales_config', JSON.stringify(configData));
+            } catch(e) { console.error('Save config error:', e); }
         }
 
         function loadConfigFromLocal() {
@@ -853,14 +855,14 @@
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
-                    if (parsed.targetMonth) document.getElementById('targetMonth').value = parsed.targetMonth;
-                    if (parsed.targetDevice) document.getElementById('targetDevice').value = parsed.targetDevice;
-                    if (parsed.targetAccessories) document.getElementById('targetAccessories').value = parsed.targetAccessories;
-                    if (parsed.targetVAS) document.getElementById('targetVAS').value = parsed.targetVAS;
+                    if (parsed.targetMonth && document.getElementById('targetMonth')) document.getElementById('targetMonth').value = parsed.targetMonth;
+                    if (parsed.targetDevice && document.getElementById('targetDevice')) document.getElementById('targetDevice').value = parsed.targetDevice;
+                    if (parsed.targetAccessories && document.getElementById('targetAccessories')) document.getElementById('targetAccessories').value = parsed.targetAccessories;
+                    if (parsed.targetVAS && document.getElementById('targetVAS')) document.getElementById('targetVAS').value = parsed.targetVAS;
                     if (parsed.staffPercentConfig) staffPercentConfig = parsed.staffPercentConfig;
                     if (parsed.staffRoleConfig) staffRoleConfig = parsed.staffRoleConfig;
                     if (parsed.lobItemsConfig) lobItemsConfig = parsed.lobItemsConfig;
-                    if (parsed.removedStaffs) removedStaffs = new Set(parsed.removedStaffs);
+                    if (parsed.removedStaffs && Array.isArray(parsed.removedStaffs)) removedStaffs = new Set(parsed.removedStaffs);
                     if (parsed.storeSyncCode && document.getElementById('storeSyncCode')) {
                         document.getElementById('storeSyncCode').value = parsed.storeSyncCode;
                     }
@@ -976,10 +978,11 @@
 
         function toggleConfigModal(show) {
             const modal = document.getElementById('configModal');
+            if (!modal) return;
             if (show) {
-                renderStaffPercentInputs();
-                renderLobConfigInputs();
                 modal.classList.remove('hidden');
+                try { renderStaffPercentInputs(); } catch(e) { console.error('Error rendering staff percent inputs:', e); }
+                try { renderLobConfigInputs(); } catch(e) { console.error('Error rendering LOB config inputs:', e); }
             } else {
                 modal.classList.add('hidden');
             }
@@ -992,9 +995,10 @@
         }
 
         function autoCalcTargets() {
-            const tMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
-            document.getElementById('targetWeek').value = Math.round(tMonth / 4);
-            document.getElementById('targetDay').value = Math.round(tMonth / 30);
+            const targetMonthEl = document.getElementById('targetMonth');
+            const tMonth = targetMonthEl ? (parseFloat(targetMonthEl.value) || 0) : 0;
+            if (document.getElementById('targetWeek')) document.getElementById('targetWeek').value = Math.round(tMonth / 4);
+            if (document.getElementById('targetDay')) document.getElementById('targetDay').value = Math.round(tMonth / 30);
         }
 
         function toggleSortDropdown() {
@@ -1085,8 +1089,9 @@
         });
 
         function getActiveStaffList() {
-            return [...new Set(rawData.map(r => r.staff))]
-                .filter(s => !s.toLowerCase().includes('digimap.co.id') && !removedStaffs.has(s))
+            if (!Array.isArray(rawData)) return [];
+            return [...new Set(rawData.map(r => r && r.staff ? String(r.staff) : '').filter(Boolean))]
+                .filter(s => !s.toLowerCase().includes('digimap.co.id') && (!removedStaffs || !removedStaffs.has || !removedStaffs.has(s)))
                 .sort();
         }
 
@@ -1151,8 +1156,14 @@
             container.innerHTML = '';
 
             const activeStaffs = getActiveStaffList();
-            const tStoreMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
+            const targetMonthEl = document.getElementById('targetMonth');
+            const tStoreMonth = targetMonthEl ? (parseFloat(targetMonthEl.value) || 0) : 0;
             let sumPct = 0;
+
+            if (activeStaffs.length === 0) {
+                container.innerHTML = '<p class="text-xs text-amber-400 p-2">Belum ada data staff yang terdeteksi / data.json belum dimuat.</p>';
+                return;
+            }
 
             activeStaffs.forEach(s => {
                 if (staffPercentConfig[s] === undefined) {
@@ -1169,19 +1180,19 @@
                 div.className = 'flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-slate-900/60 p-2.5 rounded-xl border border-white/5 text-xs';
                 div.innerHTML = `
                     <div class="flex items-center gap-2 truncate max-w-[220px]">
-                        <button onclick="removeStaffFromTarget('${s}')" class="text-rose-400 hover:text-rose-300 transition p-1 hover:bg-rose-500/10 rounded-lg" title="Hapus staff dari target">
+                        <button onclick="removeStaffFromTarget('${s.replace(/'/g, "\\'")}')" class="text-rose-400 hover:text-rose-300 transition p-1 hover:bg-rose-500/10 rounded-lg" title="Hapus staff dari target">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                         </button>
                         <span class="font-bold text-white truncate">${s.split('/')[1] || s}</span>
                     </div>
 
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                        <input type="text" value="${staffRoleConfig[s]}" onchange="updateStaffRole('${s}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-indigo-300 font-bold focus:outline-none focus:border-indigo-500" placeholder="Jabatan">
+                        <input type="text" value="${staffRoleConfig[s]}" onchange="updateStaffRole('${s.replace(/'/g, "\\'")}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-indigo-300 font-bold focus:outline-none focus:border-indigo-500" placeholder="Jabatan">
                         
                         <span class="text-slate-400 text-[10px] hidden sm:inline font-mono">${fmtRp(nominalMonth)}</span>
                         
                         <div class="flex items-center gap-1">
-                            <input type="number" step="0.1" value="${pct}" oninput="updateStaffPct('${s}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-right text-xs text-white focus:outline-none focus:border-indigo-500 font-bold">
+                            <input type="number" step="0.1" value="${pct}" oninput="updateStaffPct('${s.replace(/'/g, "\\'")}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-right text-xs text-white focus:outline-none focus:border-indigo-500 font-bold">
                             <span class="text-slate-400 font-bold">%</span>
                         </div>
                     </div>
@@ -1190,14 +1201,16 @@
             });
 
             const badge = document.getElementById('totalPercentBadge');
-            const roundedSum = Math.round(sumPct * 10) / 10;
-            badge.textContent = `Total: ${roundedSum}%`;
-            if (Math.abs(roundedSum - 100) < 0.5) {
-                badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-            } else {
-                badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
+            if (badge) {
+                const roundedSum = Math.round(sumPct * 10) / 10;
+                badge.textContent = `Total: ${roundedSum}%`;
+                if (Math.abs(roundedSum - 100) < 0.5) {
+                    badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                } else {
+                    badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                }
             }
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
         function updateStaffPct(staffName, val) {
@@ -1211,222 +1224,99 @@
             saveConfigToLocal();
         }
 
-        // ==================== CLOSING REPORT & TRACKER MODAL POPUP ====================
-        function toggleClosingModal(show) {
-            const modal = document.getElementById('closingReportModal');
-            if (show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
-        }
+        // ==================== CONFIG: LOB DYNAMIC & WEEKLY CALENDAR MANAGEMENT ====================
+        function renderLobConfigInputs() {
+            const container = document.getElementById('lobConfigListContainer');
+            if (!container) return;
+            container.innerHTML = '';
 
-        function openClosingReport(dateStr) {
-            const dayTx = rawData.filter(r => r.date === dateStr);
+            lobItemsConfig.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-slate-900/80 p-3.5 rounded-2xl border border-white/10 space-y-2.5 text-xs';
+                div.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <input type="text" value="${item.name}" onchange="updateLobItem(${index}, 'name', this.value)" class="flex-1 bg-slate-800 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-indigo-500" placeholder="Nama LOB">
+                        
+                        <div class="flex items-center gap-1">
+                            <span class="text-[10px] font-bold text-purple-300">Total Qty:</span>
+                            <input type="number" value="${item.target || 0}" onchange="updateLobItemTotalTarget(${index}, this.value)" class="w-16 bg-slate-800 border border-purple-500/50 rounded-xl px-2 py-1 text-center text-xs text-white focus:outline-none font-extrabold" title="Ubah total target per bulan">
+                        </div>
 
-            const totalSales = dayTx.reduce((acc, r) => acc + r.net_price, 0);
-            const devSales = dayTx.filter(r => r.category === 'Device').reduce((acc, r) => acc + r.net_price, 0);
-            const accSales = dayTx.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
-            const vasSales = dayTx.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
+                        <button onclick="deleteLobItem(${index})" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition" title="Hapus LOB">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
 
-            // Mac = Device yang mengandung MBA, MBP, MBN, IMAC, MACMINI, MAC STUDIO (dan bukan aksesori)
-            const macRegex = /\b(MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MAC STUDIO|MACSTUDIO|MACBOOK|MAC)\b/i;
-            const macQty = dayTx.filter(r => {
-                if (r.category !== 'Device') return false;
-                const p = r.product_name.toUpperCase();
-                if (p.includes('SLEEVE') || p.includes('SLVE') || p.includes('CASE') || p.includes('SCREEN') || p.includes('PROTECTOR') || p.includes('BAG') || p.includes('VERO') || p.includes('UNIQ') || p.includes('FOLIO')) {
-                    return false;
-                }
-                return macRegex.test(r.product_name);
-            }).length;
-
-            const ipadQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPAD')).length;
-            const iphoneQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPHONE')).length;
-            const awQty = dayTx.filter(r => r.category === 'Device' && (r.product_name.toUpperCase().includes('WATCH') || r.product_name.toUpperCase().includes('AW'))).length;
-
-            // VAS Breakdown Nominal
-            const vasItems = dayTx.filter(r => r.category === 'VAS');
-            const qoalaRp = vasItems.filter(r => r.article.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('QOALA')).reduce((acc, r) => acc + r.net_price, 0);
-            const tslRp = vasItems.filter(r => r.article.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TELKOMSEL')).reduce((acc, r) => acc + r.net_price, 0);
-            const idtRp = vasItems.filter(r => r.article.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('INDOSAT')).reduce((acc, r) => acc + r.net_price, 0);
-            const xxlRp = vasItems.filter(r => r.article.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XL')).reduce((acc, r) => acc + r.net_price, 0);
-
-            // LAPORAN 1: STANDARD CLOSING REPORT (AIRPODS DIHAPUS DARI LIST BOX 1)
-            const reportStr = `*M121 - Closing Report ${dateStr}*
-
-Total Sales : ${fmtRp(totalSales)}
-Devices : ${fmtRp(devSales)}
-Accessories : ${fmtRp(accSales)}
-VAS : ${fmtRp(vasSales)}
-
-Mac : ${macQty}
-iPad : ${ipadQty}
-iPhone : ${iphoneQty}
-Apple Watch : ${awQty}
-
-Qoala : ${fmtRp(qoalaRp)}
-Telkomsel : ${fmtRp(tslRp)}
-Indosat : ${fmtRp(idtRp)}
-XL : ${fmtRp(xxlRp)}`;
-
-            // LAPORAN 2: CLOSING FOR TRACKER REPORT (KETAT MEMBLOKIR CASE / COVER / CLYDE SEPERTI CLYDE AIRPODS)
-            const airpodsBlockKws = ['CASE', 'COVER', 'SLEEVE', 'SLVE', 'CLYDE', 'POUCH', 'BAG', 'STRAP', 'HOOK', 'HOLDER', 'PROTECTOR', 'GLASS', 'SKIN', 'ARMOR'];
-            const airpodsItems = dayTx.filter(r => {
-                const p = r.product_name.toUpperCase();
-                if (!p.includes('AIRPOD')) return false;
-                if (airpodsBlockKws.some(kw => p.includes(kw))) return false;
-                return true;
-            });
-
-            const airpodsQty = airpodsItems.length;
-            const airpodsGroup = {};
-            airpodsItems.forEach(r => {
-                const name = r.product_name.trim();
-                airpodsGroup[name] = (airpodsGroup[name] || 0) + 1;
-            });
-            const airpodsListStr = Object.entries(airpodsGroup).map(([name, qty]) => `${name} (${qty})`).join(', ');
-            const airpodsDetailLine = airpodsQty > 0 ? `Airpods : ${airpodsQty} - ${airpodsListStr}` : `Airpods : 0 - None`;
-
-            const ipadItems = dayTx.filter(r => {
-                if (r.category !== 'Device') return false;
-                const p = r.product_name.toUpperCase();
-                if (p.includes('SLEEVE') || p.includes('SLVE') || p.includes('CASE') || p.includes('SCREEN') || p.includes('PROTECTOR') || p.includes('BAG') || p.includes('VERO') || p.includes('UNIQ') || p.includes('FOLIO') || p.includes('GLASS') || p.includes('KEYBOARD')) {
-                    return false;
-                }
-                return p.includes('IPAD');
-            });
-            const ipadQtyTracker = ipadItems.length;
-            const ipadGroup = {};
-            ipadItems.forEach(r => {
-                const name = r.product_name.trim();
-                ipadGroup[name] = (ipadGroup[name] || 0) + 1;
-            });
-            const ipadListStr = Object.entries(ipadGroup).map(([name, qty]) => `${name} (${qty})`).join(', ');
-            const ipadDetailLine = ipadQtyTracker > 0 ? `iPad : ${ipadQtyTracker} - ${ipadListStr}` : `iPad : 0 - None`;
-
-            const uniqueReceipts = new Set(
-                dayTx.map(r => r.receipt ? String(r.receipt).trim() : null)
-                     .filter(rc => rc && rc !== 'undefined' && rc !== 'null')
-            );
-
-            const trackerReportStr = `*M121  - Closing For Tracker ${dateStr}*
-${airpodsDetailLine}
-${ipadDetailLine}
-Total QTY Invoice : ${uniqueReceipts.size}`;
-
-            document.getElementById('closingReportText').textContent = reportStr;
-            document.getElementById('closingTrackerReportText').textContent = trackerReportStr;
-            toggleClosingModal(true);
-        }
-
-        function copyClosingReportText() {
-            const text = document.getElementById('closingReportText').textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.getElementById('btnCopyClosing');
-                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Tersalin!`;
-                lucide.createIcons();
-                setTimeout(() => {
-                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Closing Report`;
-                    lucide.createIcons();
-                }, 2000);
-            });
-        }
-
-        function copyTrackerReportText() {
-            const text = document.getElementById('closingTrackerReportText').textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.getElementById('btnCopyTracker');
-                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Tersalin!`;
-                lucide.createIcons();
-                setTimeout(() => {
-                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Tracker Report`;
-                    lucide.createIcons();
-                }, 2000);
-            });
-        }
-
-        // ==================== STAFF ITEMS DETAIL POPUP MODAL & COPY ENGINE ====================
-        function toggleStaffItemsModal(show) {
-            const modal = document.getElementById('staffItemsModal');
-            if (show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
-        }
-
-        function openStaffItemsModal(staffName, category, dateFilterArray) {
-            const displayName = staffName.split('/')[1] || staffName;
-            const role = staffRoleConfig[staffName] || 'SA';
-
-            document.getElementById('staffModalTitle').innerHTML = `
-                <i data-lucide="package" class="w-4 h-4 text-cyan-400"></i> Rincian Item ${category} - ${displayName}
-            `;
-            document.getElementById('staffModalSub').textContent = `Jabatan: ${role} | Filter: ${category}`;
-
-            let items = rawData.filter(r => r.staff === staffName);
-            if (category && category !== 'ALL') {
-                items = items.filter(r => r.category === category);
-            }
-            if (dateFilterArray && Array.isArray(dateFilterArray) && dateFilterArray.length > 0) {
-                items = items.filter(r => dateFilterArray.includes(r.date));
-            }
-
-            const tbody = document.getElementById('staffItemsTableBody');
-            tbody.innerHTML = '';
-
-            let sumPrice = 0;
-            items.forEach(r => {
-                sumPrice += r.net_price;
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-white/5 transition';
-                tr.innerHTML = `
-                    <td class="py-2 px-2 font-mono text-[11px] opacity-70">${r.date}</td>
-                    <td class="py-2 px-2 font-semibold text-white">${r.product_name}</td>
-                    <td class="py-2 px-2 font-mono text-[11px] opacity-70">${r.article}</td>
-                    <td class="py-2 px-2 text-right font-bold text-emerald-400">${fmtRp(r.net_price)}</td>
+                    <div class="space-y-1">
+                        <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Breakdown Target Per Week (Apple Calendar W10 - W14):</span>
+                        <div class="grid grid-cols-5 gap-1.5">
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">W10</span>
+                                <input type="number" value="${item.w10 || 0}" oninput="updateLobItemWeek(${index}, 'w10', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">W11</span>
+                                <input type="number" value="${item.w11 || 0}" oninput="updateLobItemWeek(${index}, 'w11', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">W12</span>
+                                <input type="number" value="${item.w12 || 0}" oninput="updateLobItemWeek(${index}, 'w12', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">W13</span>
+                                <input type="number" value="${item.w13 || 0}" oninput="updateLobItemWeek(${index}, 'w13', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">W14</span>
+                                <input type="number" value="${item.w14 || 0}" oninput="updateLobItemWeek(${index}, 'w14', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                        </div>
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                container.appendChild(div);
             });
-
-            document.getElementById('staffModalTotalQty').textContent = `Total: ${items.length} Item`;
-            document.getElementById('staffModalTotalNominal').textContent = fmtRp(sumPrice);
-
-            toggleStaffItemsModal(true);
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
-        // FUNCTION UNTUK SALIN / COPY ISI MODAL POPUP
-        function copyStaffModalItems() {
-            const title = document.getElementById('staffModalTitle').innerText;
-            const sub = document.getElementById('staffModalSub').innerText;
-            const totalQty = document.getElementById('staffModalTotalQty').innerText;
-            const totalNominal = document.getElementById('staffModalTotalNominal').innerText;
+        function addLobItemConfig() {
+            const newId = 'lob_' + Date.now();
+            lobItemsConfig.push({ id: newId, name: 'Item LOB Baru', key: 'Item LOB Baru', target: 25, w10: 5, w11: 5, w12: 5, w13: 5, w14: 5 });
+            renderLobConfigInputs();
+            saveConfigToLocal();
+        }
 
-            const rows = document.querySelectorAll('#staffItemsTableBody tr');
-            let textList = [];
-            rows.forEach((row, idx) => {
-                const cells = row.querySelectorAll('td');
-                if (cells.length >= 4) {
-                    const date = cells[0].innerText;
-                    const pName = cells[1].innerText;
-                    const art = cells[2].innerText;
-                    const amt = cells[3].innerText;
-                    textList.push(`${idx + 1}. [${date}] ${pName} (${art}) - ${amt}`);
-                }
-            });
+        function updateLobItem(index, field, val) {
+            lobItemsConfig[index][field] = val;
+            if (field === 'name') lobItemsConfig[index].key = val;
+            saveConfigToLocal();
+        }
 
-            const fullText = `*${title}*
-${sub}
-${totalQty} | Total Amount: ${totalNominal}
+        function updateLobItemWeek(index, weekKey, val) {
+            lobItemsConfig[index][weekKey] = parseInt(val) || 0;
+            const item = lobItemsConfig[index];
+            item.target = (item.w10 || 0) + (item.w11 || 0) + (item.w12 || 0) + (item.w13 || 0) + (item.w14 || 0);
+            renderLobConfigInputs();
+            saveConfigToLocal();
+        }
 
-${textList.join('\n')}`;
+        function updateLobItemTotalTarget(index, val) {
+            const total = parseInt(val) || 0;
+            lobItemsConfig[index].target = total;
+            const base = Math.floor(total / 5);
+            const rem = total % 5;
+            lobItemsConfig[index].w10 = base + rem;
+            lobItemsConfig[index].w11 = base;
+            lobItemsConfig[index].w12 = base;
+            lobItemsConfig[index].w13 = base;
+            lobItemsConfig[index].w14 = base;
+            renderLobConfigInputs();
+            saveConfigToLocal();
+        }
 
-            navigator.clipboard.writeText(fullText).then(() => {
-                const btn = document.getElementById('btnCopyStaffModal');
-                if (btn) {
-                    btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Tersalin!`;
-                    lucide.createIcons();
-                    setTimeout(() => {
-                        btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Rincian Item`;
-                        lucide.createIcons();
-                    }, 2000);
-                }
-            });
+        function deleteLobItem(index) {
+            lobItemsConfig.splice(index, 1);
+            renderLobConfigInputs();
+            saveConfigToLocal();
         }
 
         // ==================== DASHBOARD UPDATE ENGINE ====================
@@ -1487,7 +1377,7 @@ ${textList.join('\n')}`;
                         startDate: wDates[0],
                         endDate: wDates[wDates.length - 1],
                         dates: wDates,
-                        label: `${wDates[0]} s/d ${wDates[wDates.length - 1]}` // TEKS W10 PADA STRING TANGGAL TELAH DIBUANG
+                        label: `${wDates[0]} s/d ${wDates[wDates.length - 1]}`
                     });
                 }
             }
