@@ -623,7 +623,7 @@
                 <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">1. Target Sales Revenue Store (Rp)</h3>
                 <div>
                     <label class="text-xs opacity-70">Target Month Store (Rp)</label>
-                    <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets(); renderStaffPercentInputs(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets(); updateStaffNominalAndBadge(); updateDashboard(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -643,15 +643,15 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                         <label class="text-xs opacity-70">Target Device Store (Rp)</label>
-                        <input type="number" id="targetDevice" value="75000000" oninput="autoSyncToCloud()" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetDevice" value="75000000" oninput="updateDashboard(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
                         <label class="text-xs opacity-70">Target Aksesori Store (Rp)</label>
-                        <input type="number" id="targetAccessories" value="15000000" oninput="autoSyncToCloud()" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetAccessories" value="15000000" oninput="updateDashboard(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
                         <label class="text-xs opacity-70">Target VAS Store (Rp)</label>
-                        <input type="number" id="targetVAS" value="10000000" oninput="autoSyncToCloud()" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetVAS" value="10000000" oninput="updateDashboard(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                 </div>
             </div>
@@ -1221,6 +1221,37 @@
             });
             renderStaffPercentInputs();
             autoSyncToCloud();
+            updateDashboard();
+        }
+
+        // UPDATE LIVE NOMINAL & BADGE TOTAL PERSEN SANGAT CEPAT
+        function updateStaffNominalAndBadge() {
+            const activeStaffs = getActiveStaffList();
+            const targetMonthEl = document.getElementById('targetMonth');
+            const tStoreMonth = targetMonthEl ? (parseFloat(targetMonthEl.value) || 0) : 0;
+            let sumPct = 0;
+
+            activeStaffs.forEach(s => {
+                const pct = staffPercentConfig[s] || 0;
+                sumPct += parseFloat(pct);
+                const nominalMonth = Math.round((tStoreMonth * pct) / 100);
+                
+                const spanEls = document.querySelectorAll(`[data-staff-nominal="${CSS.escape(s)}"]`);
+                spanEls.forEach(el => {
+                    el.textContent = fmtRp(nominalMonth);
+                });
+            });
+
+            const badge = document.getElementById('totalPercentBadge');
+            if (badge) {
+                const roundedSum = Math.round(sumPct * 10) / 10;
+                badge.textContent = `Total: ${roundedSum}%`;
+                if (Math.abs(roundedSum - 100) < 0.5) {
+                    badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                } else {
+                    badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                }
+            }
         }
 
         function renderStaffPercentInputs() {
@@ -1262,7 +1293,7 @@
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
                         <input type="text" value="${staffRoleConfig[s]}" oninput="updateStaffRole('${s.replace(/'/g, "\\'")}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-indigo-300 font-bold focus:outline-none focus:border-indigo-500" placeholder="Jabatan">
                         
-                        <span class="text-slate-400 text-[10px] hidden sm:inline font-mono">${fmtRp(nominalMonth)}</span>
+                        <span data-staff-nominal="${s}" class="text-slate-400 text-[10px] hidden sm:inline font-mono">${fmtRp(nominalMonth)}</span>
                         
                         <div class="flex items-center gap-1">
                             <input type="number" step="0.1" value="${pct}" oninput="updateStaffPct('${s.replace(/'/g, "\\'")}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-right text-xs text-white focus:outline-none focus:border-indigo-500 font-bold">
@@ -1273,26 +1304,20 @@
                 container.appendChild(div);
             });
 
-            const badge = document.getElementById('totalPercentBadge');
-            if (badge) {
-                const roundedSum = Math.round(sumPct * 10) / 10;
-                badge.textContent = `Total: ${roundedSum}%`;
-                if (Math.abs(roundedSum - 100) < 0.5) {
-                    badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-                } else {
-                    badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
-                }
-            }
+            updateStaffNominalAndBadge();
             if (window.lucide) lucide.createIcons();
         }
 
         function updateStaffPct(staffName, val) {
             staffPercentConfig[staffName] = parseFloat(val) || 0;
+            updateStaffNominalAndBadge();
+            updateDashboard();
             autoSyncToCloud();
         }
 
         function updateStaffRole(staffName, val) {
             staffRoleConfig[staffName] = val.trim() || 'SA';
+            updateDashboard();
             autoSyncToCloud();
         }
 
@@ -1353,12 +1378,14 @@
             const newId = 'lob_' + Date.now();
             lobItemsConfig.push({ id: newId, name: 'Item LOB Baru', key: 'Item LOB Baru', target: 25, w10: 5, w11: 5, w12: 5, w13: 5, w14: 5 });
             renderLobConfigInputs();
+            updateDashboard();
             autoSyncToCloud();
         }
 
         function updateLobItem(index, field, val) {
             lobItemsConfig[index][field] = val;
             if (field === 'name') lobItemsConfig[index].key = val;
+            updateDashboard();
             autoSyncToCloud();
         }
 
@@ -1366,6 +1393,7 @@
             lobItemsConfig[index][weekKey] = parseInt(val) || 0;
             const item = lobItemsConfig[index];
             item.target = (item.w10 || 0) + (item.w11 || 0) + (item.w12 || 0) + (item.w13 || 0) + (item.w14 || 0);
+            updateDashboard();
             autoSyncToCloud();
         }
 
@@ -1379,12 +1407,14 @@
             lobItemsConfig[index].w12 = base;
             lobItemsConfig[index].w13 = base;
             lobItemsConfig[index].w14 = base;
+            updateDashboard();
             autoSyncToCloud();
         }
 
         function deleteLobItem(index) {
             lobItemsConfig.splice(index, 1);
             renderLobConfigInputs();
+            updateDashboard();
             autoSyncToCloud();
         }
 
