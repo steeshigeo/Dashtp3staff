@@ -567,18 +567,18 @@
                     <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider flex items-center gap-1.5">
                         <i data-lucide="cloud" class="w-4 h-4 text-indigo-400"></i> Online Progress Sync (Google Sheets)
                     </h3>
-                    <span id="cloudStatusLbl" class="text-[10px] font-bold text-emerald-400">Synced Local</span>
+                    <span id="cloudStatusLbl" class="text-[10px] font-bold text-emerald-400">AutoSync Active ✓</span>
                 </div>
-                <p class="text-[11px] opacity-70">Gunakan Kode Toko yang sama di device lain agar progres target & config tersimpan di Google Sheet Anda.</p>
+                <p class="text-[11px] opacity-70">Gunakan Kode Toko yang sama di device lain agar seluruh progres target, alokasi staff, & LOB focus tersinkronkan otomatis.</p>
 
                 <div class="flex flex-col sm:flex-row items-center gap-2">
-                    <input type="text" id="storeSyncCode" value="M121-STORE" class="w-full sm:w-1/2 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-indigo-500" placeholder="Kode Toko (contoh: M121-STORE)">
+                    <input type="text" id="storeSyncCode" value="M121-STORE" onchange="autoSyncToCloud()" class="w-full sm:w-1/2 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-indigo-500" placeholder="Kode Toko (contoh: M121-STORE)">
                     <div class="flex items-center gap-2 w-full sm:w-auto">
-                        <button onclick="pushToCloudSync()" id="btnPushCloud" class="flex-1 sm:flex-none bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition flex items-center justify-center gap-1">
-                            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Push to Cloud
+                        <button onclick="pushToCloudSync(false)" id="btnPushCloud" class="flex-1 sm:flex-none bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition flex items-center justify-center gap-1">
+                            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Sync Now
                         </button>
-                        <button onclick="pullFromCloudSync()" id="btnPullCloud" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 text-white border border-white/10 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center justify-center gap-1">
-                            <i data-lucide="download-cloud" class="w-3.5 h-3.5 text-cyan-400"></i> Pull from Cloud
+                        <button onclick="pullFromCloudSync(false)" id="btnPullCloud" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 text-white border border-white/10 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center justify-center gap-1">
+                            <i data-lucide="download-cloud" class="w-3.5 h-3.5 text-cyan-400"></i> Reload Cloud
                         </button>
                     </div>
                 </div>
@@ -589,7 +589,7 @@
                 <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">1. Target Sales Revenue Store (Rp)</h3>
                 <div>
                     <label class="text-xs opacity-70">Target Month Store (Rp)</label>
-                    <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets(); renderStaffPercentInputs(); saveConfigToLocal();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets(); renderStaffPercentInputs(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -609,15 +609,15 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                         <label class="text-xs opacity-70">Target Device Store (Rp)</label>
-                        <input type="number" id="targetDevice" value="75000000" onchange="saveConfigToLocal();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetDevice" value="75000000" oninput="autoSyncToCloud()" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
                         <label class="text-xs opacity-70">Target Aksesori Store (Rp)</label>
-                        <input type="number" id="targetAccessories" value="15000000" onchange="saveConfigToLocal();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetAccessories" value="15000000" oninput="autoSyncToCloud()" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
                         <label class="text-xs opacity-70">Target VAS Store (Rp)</label>
-                        <input type="number" id="targetVAS" value="10000000" onchange="saveConfigToLocal();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="targetVAS" value="10000000" oninput="autoSyncToCloud()" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     </div>
                 </div>
             </div>
@@ -658,7 +658,7 @@
 
             <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
                 <button onclick="toggleConfigModal(false)" class="px-5 py-2.5 rounded-xl text-xs font-semibold opacity-70 hover:opacity-100 bg-white/5 transition">Batal</button>
-                <button onclick="saveConfigModal()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-lg transition">Simpan Config</button>
+                <button onclick="saveConfigModal()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-lg transition">Simpan & Sync Cloud</button>
             </div>
         </div>
     </div>
@@ -676,26 +676,20 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- BOX 1: STANDARD CLOSING REPORT (TANPA AIRPODS DILIST) -->
                 <div class="space-y-3 bg-slate-900/80 p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
                     <div>
                         <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block mb-2">1. M121 - Closing Report</span>
-                        <div class="font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed select-all" id="closingReportText">
-                            <!-- Dynamic Standard Closing Report -->
-                        </div>
+                        <div class="font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed select-all" id="closingReportText"></div>
                     </div>
                     <button onclick="copyClosingReportText()" id="btnCopyClosing" class="w-full mt-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-xs py-2 rounded-xl shadow-lg transition flex items-center justify-center gap-1.5">
                         <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Closing Report
                     </button>
                 </div>
 
-                <!-- BOX 2: CLOSING FOR TRACKER REPORT -->
                 <div class="space-y-3 bg-slate-900/80 p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
                     <div>
                         <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block mb-2">2. M121 - Closing For Tracker</span>
-                        <div class="font-mono text-xs text-cyan-300 whitespace-pre-wrap leading-relaxed select-all" id="closingTrackerReportText">
-                            <!-- Dynamic Closing For Tracker Report -->
-                        </div>
+                        <div class="font-mono text-xs text-cyan-300 whitespace-pre-wrap leading-relaxed select-all" id="closingTrackerReportText"></div>
                     </div>
                     <button onclick="copyTrackerReportText()" id="btnCopyTracker" class="w-full mt-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold text-xs py-2 rounded-xl shadow-lg transition flex items-center justify-center gap-1.5">
                         <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Tracker Report
@@ -734,9 +728,7 @@
                             <th class="pb-2 px-2 text-right">AMOUNT</th>
                         </tr>
                     </thead>
-                    <tbody id="staffItemsTableBody" class="divide-y divide-white/5">
-                        <!-- Dynamic Rows -->
-                    </tbody>
+                    <tbody id="staffItemsTableBody" class="divide-y divide-white/5"></tbody>
                 </table>
             </div>
 
@@ -745,7 +737,6 @@
                     <span id="staffModalTotalQty" class="text-xs font-bold opacity-70">Total: 0 Item</span>
                     <span id="staffModalTotalNominal" class="text-xs font-black text-emerald-400">Rp 0</span>
                 </div>
-                <!-- SALIN BUTTON ON POPUP MODAL -->
                 <button onclick="copyStaffModalItems()" id="btnCopyStaffModal" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5">
                     <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Rincian Item
                 </button>
@@ -755,7 +746,7 @@
 
     <!-- MAIN APP SCRIPT -->
     <script>
-        // GOOGLE APPS SCRIPT WEB APP URL TERINTEGRASI LATEST
+        // GOOGLE APPS SCRIPT WEB APP URL TERINTEGRASI
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2BOcYHemGmeQDIwKTB197QZiQwKV428kkpmjR0OEuujY2cA2uvXvX4XFepZE_tevP3w/exec";
 
         let rawData = [];
@@ -766,6 +757,7 @@
         let removedStaffs = new Set();
         let staffPercentConfig = {};
         let staffRoleConfig = {};
+        let syncTimeout = null;
 
         // Dynamic LOB Items List with Weekly Calendar Breakdown (W10-W14)
         let lobItemsConfig = [
@@ -778,35 +770,24 @@
 
         const fmtRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
 
-        // Strict & Robust Category Classification Function
         function classifyItemCategory(productName, article, groupCol) {
             const p = String(productName || '').toUpperCase();
             const art = String(article || '').toUpperCase();
             const grp = String(groupCol || '').toUpperCase();
 
-            // 0. Hapus MAP VOUCHER secara mutlak dari klasifikasi apapun
-            if (p.includes('MAP VOUCHER') || art.includes('MAP VOUCHER')) {
-                return 'EXCLUDE';
-            }
+            if (p.includes('MAP VOUCHER') || art.includes('MAP VOUCHER')) return 'EXCLUDE';
 
-            // 1. Check VAS Keywords
             const vasKeywords = ['KLA', 'TSL', 'IDT', 'XXL', 'QOALA', 'TELKOMSEL', 'INDOSAT', 'XL', 'ESIM', 'MYPRIO', 'PROTEKSI', 'HCI'];
-            if (art !== 'MKLNEOSLEEVE' && vasKeywords.some(kw => art.includes(kw) || p.includes(kw))) {
-                return 'VAS';
-            }
+            if (art !== 'MKLNEOSLEEVE' && vasKeywords.some(kw => art.includes(kw) || p.includes(kw))) return 'VAS';
 
-            // 2. Explicit Accessory Articles Override
             const explicitAccArticles = new Set([
                 'UNQ8886463692554', 'UNQ8886463689141', 'ST1222-476GX-01', 'AUMA11-NL-BK-SL-M',
                 'UNQ8886463692561', 'PKEPL3SS-10-24', 'UNQ8886463688731', 'UNQ8886463692585',
                 'UNQ8886463688724', 'KOASP-MBA136', 'UNQ8886463692547', 'UNQ8886463688717',
                 'APPSWXY2Z/A', 'MKLNEOSLEEVE', 'UNQ8886463693117'
             ]);
-            if (explicitAccArticles.has(art)) {
-                return 'Accessories';
-            }
+            if (explicitAccArticles.has(art)) return 'Accessories';
 
-            // 3. Absolute Accessory Block Keywords (AIRPODS MAX, AIRPODS, AIRPOD, VERO, UNIQ, FOLIO, SMART FOLIO, GLASS, CASE, dll.)
             const accessoryBlockKeywords = [
                 'GLASS', 'TEMPERED', 'PROTECTOR', 'PROT', 'CASE', 'SLEEVE', 'SLVE', 'SCREEN', 
                 'KEYBOARD', 'MAGIC KEYBOARD', 'PENCIL', 'CABLE', 'ADAPTER', 'STRAP', 'BAND', 
@@ -814,28 +795,21 @@
                 'BATTERY', 'CHARGER', 'EARPODS', 'EARPOD', 'CAMDEN', 'MOVEN', 'UNIQ', 'STM', 'AUM A11', 'AC PLUS',
                 'AIRPODS MAX', 'AIRPODS', 'AIRPOD', 'VERO', 'FOLIO', 'SMART FOLIO', 'CLEARVUE', 'COMBAT', 'ICE MGSF', 'MAGXEN', 'CLYDE', 'MACSHELL'
             ];
-            if (accessoryBlockKeywords.some(ak => p.includes(ak))) {
-                return 'Accessories';
-            }
+            if (accessoryBlockKeywords.some(ak => p.includes(ak))) return 'Accessories';
 
-            // 4. Check Device Keywords (iPhone, iPad, Mac/MBN/MBA/MBP, Apple Watch)
             const deviceKeywords = [
                 'IPHONE', 'IPAD', 'MACBOOK', 'IMAC', 'MACMINI', 'MAC MINI', 'MAC PRO', 'MACSTUDIO', 
-                'MBA', 'MBP', 'MBN', 'APPLE WATCH', 'WATCH ULTRA', 'WATCH SE', 'WATCH 11', 'WATCH 10', 
-                'WATCH 9'
+                'MBA', 'MBP', 'MBN', 'APPLE WATCH', 'WATCH ULTRA', 'WATCH SE', 'WATCH 11', 'WATCH 10', 'WATCH 9'
             ];
-            if (deviceKeywords.some(dk => p.includes(dk))) {
-                return 'Device';
-            }
+            if (deviceKeywords.some(dk => p.includes(dk))) return 'Device';
 
-            // 5. Fallback to Source Group Column if available
             if (grp.includes('DEVICES')) return 'Device';
             if (grp.includes('ACCESSORIES')) return 'Accessories';
 
             return 'Accessories';
         }
 
-        // ==================== PERSISTENCE & LOCAL STORAGE ENGINE ====================
+        // PERSISTENCE LOCAL STORAGE
         function saveConfigToLocal() {
             try {
                 const configData = {
@@ -874,7 +848,7 @@
             }
         }
 
-        // HELPER JSONP FETCH FOR GOOGLE APPS SCRIPT CORS BYPASS
+        // HELPER JSONP FETCH (BYPASS CORS SECURELY)
         function fetchJSONP(url) {
             return new Promise((resolve, reject) => {
                 const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
@@ -894,8 +868,17 @@
             });
         }
 
-        // ONLINE CLOUD SYNC ENGINE (JSONP Anti-CORS)
-        async function pushToCloudSync() {
+        // DEBOUNCED AUTOSYNC ENGINE
+        function autoSyncToCloud() {
+            saveConfigToLocal();
+            if (syncTimeout) clearTimeout(syncTimeout);
+            syncTimeout = setTimeout(() => {
+                pushToCloudSync(true); // silent auto-sync
+            }, 1000);
+        }
+
+        // ONLINE CLOUD SYNC ENGINE (FULL BACKUP)
+        async function pushToCloudSync(isSilent = false) {
             const syncCode = (document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE').trim().toUpperCase() || 'M121-STORE';
             const btn = document.getElementById('btnPushCloud');
             const lbl = document.getElementById('cloudStatusLbl');
@@ -903,7 +886,8 @@
             saveConfigToLocal();
             const configObj = JSON.parse(localStorage.getItem('m121_sales_config') || '{}');
 
-            if (btn) btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Saving...`;
+            if (!isSilent && btn) btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Syncing...`;
+            if (lbl) lbl.textContent = 'Syncing...';
             if (window.lucide) lucide.createIcons();
 
             try {
@@ -917,29 +901,33 @@
 
                 if (resData && resData.status === 'success') {
                     if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
-                    if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Success!`;
+                    if (!isSilent && btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Success!`;
                 } else {
                     throw new Error(resData ? resData.message : 'Gagal simpan');
                 }
             } catch(e) {
                 console.error("Cloud Sync Push Error:", e);
                 if (lbl) lbl.textContent = 'Local Saved Only';
-                if (btn) btn.innerHTML = `<i data-lucide="cloud-off" class="w-3.5 h-3.5 text-amber-300"></i> Local Saved`;
+                if (!isSilent && btn) btn.innerHTML = `<i data-lucide="cloud-off" class="w-3.5 h-3.5 text-amber-300"></i> Local Saved`;
             }
 
             if (window.lucide) lucide.createIcons();
-            setTimeout(() => {
-                if (btn) btn.innerHTML = `<i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Push to Cloud`;
-                if (window.lucide) lucide.createIcons();
-            }, 2500);
+            if (!isSilent) {
+                setTimeout(() => {
+                    if (btn) btn.innerHTML = `<i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Sync Now`;
+                    if (window.lucide) lucide.createIcons();
+                }, 2500);
+            }
         }
 
-        async function pullFromCloudSync() {
+        // AUTOLOAD FROM CLOUD ON STARTUP
+        async function pullFromCloudSync(isSilent = false) {
             const syncCode = (document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE').trim().toUpperCase() || 'M121-STORE';
             const btn = document.getElementById('btnPullCloud');
             const lbl = document.getElementById('cloudStatusLbl');
 
-            if (btn) btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-cyan-400"></i> Fetching...`;
+            if (!isSilent && btn) btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-cyan-400"></i> Fetching...`;
+            if (lbl) lbl.textContent = 'Autoloading...';
             if (window.lucide) lucide.createIcons();
 
             try {
@@ -948,26 +936,28 @@
                 if (resData && resData.status === 'success' && resData.config) {
                     localStorage.setItem('m121_sales_config', JSON.stringify(resData.config));
                     loadConfigFromLocal();
+                    renderStaffPercentInputs();
+                    renderLobConfigInputs();
                     updateDashboard();
                     if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
-                    if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Updated!`;
+                    if (!isSilent && btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Updated!`;
                 } else {
-                    throw new Error('Data untuk Kode Toko ini belum ditemukan di Google Sheet');
+                    if (lbl) lbl.textContent = 'Synced Local';
                 }
             } catch(e) {
                 console.error("Cloud Sync Pull Error:", e);
-                if (lbl) lbl.textContent = 'No Cloud Data';
-                if (btn) btn.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-rose-300"></i> Not Found`;
+                if (lbl) lbl.textContent = 'Local Saved Only';
             }
 
             if (window.lucide) lucide.createIcons();
-            setTimeout(() => {
-                if (btn) btn.innerHTML = `<i data-lucide="download-cloud" class="w-3.5 h-3.5 text-cyan-400"></i> Pull from Cloud`;
-                if (window.lucide) lucide.createIcons();
-            }, 2500);
+            if (!isSilent) {
+                setTimeout(() => {
+                    if (btn) btn.innerHTML = `<i data-lucide="download-cloud" class="w-3.5 h-3.5 text-cyan-400"></i> Reload Cloud`;
+                    if (window.lucide) lucide.createIcons();
+                }, 2500);
+            }
         }
 
-        // Theme Switcher
         function initTheme() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'light' || (!savedTheme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
@@ -1019,6 +1009,7 @@
             saveConfigToLocal();
             toggleConfigModal(false);
             updateDashboard();
+            pushToCloudSync(false); // Immediate sync to cloud
         }
 
         function autoCalcTargets() {
@@ -1063,7 +1054,6 @@
                 }
             });
 
-            // Auto close dropdown after selection
             const menu = document.getElementById('sortDropdownMenu');
             if (menu) menu.classList.add('hidden');
             const chevron = document.getElementById('sortChevronIcon');
@@ -1072,7 +1062,6 @@
             updateDashboard();
         }
 
-        // Close dropdown when clicking outside
         window.addEventListener('click', (e) => {
             const btn = document.getElementById('sortDropdownToggleBtn');
             const menu = document.getElementById('sortDropdownMenu');
@@ -1083,6 +1072,7 @@
             }
         });
 
+        // AUTOLOAD INITIALIZATION ON PAGE LOAD
         window.addEventListener('DOMContentLoaded', async () => {
             initTheme();
             loadConfigFromLocal();
@@ -1091,7 +1081,6 @@
                 const res = await fetch('data.json');
                 if (res.ok) {
                     const data = await res.json();
-                    // Filter out MAP VOUCHER and non-positive price items completely
                     rawData = data.filter(item => {
                         if (!item || item.net_price <= 0) return false;
                         const pName = String(item.product_name || '').toUpperCase();
@@ -1113,6 +1102,9 @@
             } catch (err) {
                 console.log("Waiting for data.json...");
             }
+
+            // AUTOLOAD: Otomatis Ambil Data Terbaru Dari Cloud Begitu Web Dibuka
+            await pullFromCloudSync(true);
         });
 
         function getActiveStaffList() {
@@ -1149,19 +1141,19 @@
             updateDashboard();
         }
 
-        // ==================== CONFIG: STAFF PERCENTAGE & JABATAN MANAGEMENT ====================
+        // CONFIG: STAFF PERCENTAGE & JABATAN WITH AUTOSYNC
         function removeStaffFromTarget(staffName) {
             removedStaffs.add(staffName);
             delete staffPercentConfig[staffName];
             resetEqualStaffPercentages();
-            saveConfigToLocal();
+            autoSyncToCloud();
             updateDashboard();
         }
 
         function restoreAllRemovedStaffs() {
             removedStaffs.clear();
             resetEqualStaffPercentages();
-            saveConfigToLocal();
+            autoSyncToCloud();
             updateDashboard();
         }
 
@@ -1174,7 +1166,7 @@
                 if (!staffRoleConfig[s]) staffRoleConfig[s] = 'SA';
             });
             renderStaffPercentInputs();
-            saveConfigToLocal();
+            autoSyncToCloud();
         }
 
         function renderStaffPercentInputs() {
@@ -1214,7 +1206,7 @@
                     </div>
 
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                        <input type="text" value="${staffRoleConfig[s]}" onchange="updateStaffRole('${s.replace(/'/g, "\\'")}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-indigo-300 font-bold focus:outline-none focus:border-indigo-500" placeholder="Jabatan">
+                        <input type="text" value="${staffRoleConfig[s]}" oninput="updateStaffRole('${s.replace(/'/g, "\\'")}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-indigo-300 font-bold focus:outline-none focus:border-indigo-500" placeholder="Jabatan">
                         
                         <span class="text-slate-400 text-[10px] hidden sm:inline font-mono">${fmtRp(nominalMonth)}</span>
                         
@@ -1242,16 +1234,15 @@
 
         function updateStaffPct(staffName, val) {
             staffPercentConfig[staffName] = parseFloat(val) || 0;
-            renderStaffPercentInputs();
-            saveConfigToLocal();
+            autoSyncToCloud();
         }
 
         function updateStaffRole(staffName, val) {
             staffRoleConfig[staffName] = val.trim() || 'SA';
-            saveConfigToLocal();
+            autoSyncToCloud();
         }
 
-        // ==================== CONFIG: LOB DYNAMIC & WEEKLY CALENDAR MANAGEMENT ====================
+        // CONFIG: LOB DYNAMIC WITH AUTOSYNC
         function renderLobConfigInputs() {
             const container = document.getElementById('lobConfigListContainer');
             if (!container) return;
@@ -1262,11 +1253,11 @@
                 div.className = 'bg-slate-900/80 p-3.5 rounded-2xl border border-white/10 space-y-2.5 text-xs';
                 div.innerHTML = `
                     <div class="flex items-center gap-2">
-                        <input type="text" value="${item.name}" onchange="updateLobItem(${index}, 'name', this.value)" class="flex-1 bg-slate-800 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-indigo-500" placeholder="Nama LOB">
+                        <input type="text" value="${item.name}" oninput="updateLobItem(${index}, 'name', this.value)" class="flex-1 bg-slate-800 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-indigo-500" placeholder="Nama LOB">
                         
                         <div class="flex items-center gap-1">
                             <span class="text-[10px] font-bold text-purple-300">Total Qty:</span>
-                            <input type="number" value="${item.target || 0}" onchange="updateLobItemTotalTarget(${index}, this.value)" class="w-16 bg-slate-800 border border-purple-500/50 rounded-xl px-2 py-1 text-center text-xs text-white focus:outline-none font-extrabold" title="Ubah total target per bulan">
+                            <input type="number" value="${item.target || 0}" oninput="updateLobItemTotalTarget(${index}, this.value)" class="w-16 bg-slate-800 border border-purple-500/50 rounded-xl px-2 py-1 text-center text-xs text-white focus:outline-none font-extrabold" title="Ubah total target per bulan">
                         </div>
 
                         <button onclick="deleteLobItem(${index})" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition" title="Hapus LOB">
@@ -1309,21 +1300,20 @@
             const newId = 'lob_' + Date.now();
             lobItemsConfig.push({ id: newId, name: 'Item LOB Baru', key: 'Item LOB Baru', target: 25, w10: 5, w11: 5, w12: 5, w13: 5, w14: 5 });
             renderLobConfigInputs();
-            saveConfigToLocal();
+            autoSyncToCloud();
         }
 
         function updateLobItem(index, field, val) {
             lobItemsConfig[index][field] = val;
             if (field === 'name') lobItemsConfig[index].key = val;
-            saveConfigToLocal();
+            autoSyncToCloud();
         }
 
         function updateLobItemWeek(index, weekKey, val) {
             lobItemsConfig[index][weekKey] = parseInt(val) || 0;
             const item = lobItemsConfig[index];
             item.target = (item.w10 || 0) + (item.w11 || 0) + (item.w12 || 0) + (item.w13 || 0) + (item.w14 || 0);
-            renderLobConfigInputs();
-            saveConfigToLocal();
+            autoSyncToCloud();
         }
 
         function updateLobItemTotalTarget(index, val) {
@@ -1336,17 +1326,15 @@
             lobItemsConfig[index].w12 = base;
             lobItemsConfig[index].w13 = base;
             lobItemsConfig[index].w14 = base;
-            renderLobConfigInputs();
-            saveConfigToLocal();
+            autoSyncToCloud();
         }
 
         function deleteLobItem(index) {
             lobItemsConfig.splice(index, 1);
             renderLobConfigInputs();
-            saveConfigToLocal();
+            autoSyncToCloud();
         }
 
-        // ==================== CLOSING REPORT & TRACKER MODAL POPUP ====================
         function toggleClosingModal(show) {
             const modal = document.getElementById('closingReportModal');
             if (show) modal.classList.remove('hidden');
@@ -1361,7 +1349,6 @@
             const accSales = dayTx.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
             const vasSales = dayTx.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
 
-            // Mac = Device yang mengandung MBA, MBP, MBN, IMAC, MACMINI, MAC STUDIO (dan bukan aksesori)
             const macRegex = /\b(MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MAC STUDIO|MACSTUDIO|MACBOOK|MAC)\b/i;
             const macQty = dayTx.filter(r => {
                 if (r.category !== 'Device') return false;
@@ -1376,14 +1363,12 @@
             const iphoneQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPHONE')).length;
             const awQty = dayTx.filter(r => r.category === 'Device' && (r.product_name.toUpperCase().includes('WATCH') || r.product_name.toUpperCase().includes('AW'))).length;
 
-            // VAS Breakdown Nominal
             const vasItems = dayTx.filter(r => r.category === 'VAS');
             const qoalaRp = vasItems.filter(r => r.article.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('QOALA')).reduce((acc, r) => acc + r.net_price, 0);
             const tslRp = vasItems.filter(r => r.article.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TELKOMSEL')).reduce((acc, r) => acc + r.net_price, 0);
             const idtRp = vasItems.filter(r => r.article.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('INDOSAT')).reduce((acc, r) => acc + r.net_price, 0);
             const xxlRp = vasItems.filter(r => r.article.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XL')).reduce((acc, r) => acc + r.net_price, 0);
 
-            // LAPORAN 1: STANDARD CLOSING REPORT (AIRPODS DIHAPUS DARI LIST BOX 1)
             const reportStr = `*M121 - Closing Report ${dateStr}*
 
 Total Sales : ${fmtRp(totalSales)}
@@ -1401,7 +1386,6 @@ Telkomsel : ${fmtRp(tslRp)}
 Indosat : ${fmtRp(idtRp)}
 XL : ${fmtRp(xxlRp)}`;
 
-            // LAPORAN 2: CLOSING FOR TRACKER REPORT (STRICT BLOCK UNTUK AKSESORIS AIRPODS SEPERTI CASE/CLYDE)
             const airpodsBlockKws = ['CASE', 'COVER', 'SLEEVE', 'SLVE', 'CLYDE', 'POUCH', 'BAG', 'STRAP', 'HOOK', 'HOLDER', 'PROTECTOR', 'GLASS', 'SKIN', 'ARMOR'];
             const airpodsItems = dayTx.filter(r => {
                 const p = r.product_name.toUpperCase();
@@ -1477,7 +1461,6 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
             });
         }
 
-        // ==================== STAFF ITEMS DETAIL POPUP MODAL & COPY ENGINE ====================
         function toggleStaffItemsModal(show) {
             const modal = document.getElementById('staffItemsModal');
             if (show) modal.classList.remove('hidden');
@@ -1525,7 +1508,6 @@ Total QTY Invoice : ${uniqueReceipts.size}`;
             lucide.createIcons();
         }
 
-        // FUNCTION UNTUK SALIN / COPY ISI MODAL POPUP
         function copyStaffModalItems() {
             const title = document.getElementById('staffModalTitle').innerText;
             const sub = document.getElementById('staffModalSub').innerText;
@@ -1564,12 +1546,10 @@ ${textList.join('\n')}`;
             });
         }
 
-        // ==================== DASHBOARD UPDATE ENGINE ====================
         function updateDashboard() {
             const selectedStaff = document.getElementById('staffSelect') ? document.getElementById('staffSelect').value : 'ALL';
             const activeStaffs = getActiveStaffList();
 
-            // Target Store Inputs
             const tStoreMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
             const tStoreWeek = parseFloat(document.getElementById('targetWeek').value) || 0;
             const tStoreDay = parseFloat(document.getElementById('targetDay').value) || 0;
@@ -1578,7 +1558,6 @@ ${textList.join('\n')}`;
             const tAcc = parseFloat(document.getElementById('targetAccessories').value) || 0;
             const tVAS = parseFloat(document.getElementById('targetVAS').value) || 0;
 
-            // DATES & WEEK BREAKDOWN LOGIC
             const uniqueDatesFromData = [...new Set(rawData.map(r => r.date))].sort();
             const latestDate = uniqueDatesFromData[uniqueDatesFromData.length - 1] || '--';
 
@@ -1602,7 +1581,6 @@ ${textList.join('\n')}`;
                 allMonthDates = uniqueDatesFromData;
             }
 
-            // APPLE CALENDAR WEEKS (W10 - W14)
             const weekLabels = ['W10', 'W11', 'W12', 'W13', 'W14'];
             const weekIntervals = [];
             for (let i = 0; i < 5; i++) {
@@ -1640,7 +1618,6 @@ ${textList.join('\n')}`;
                 filtered = filtered.filter(r => r.category === currentTab);
             }
 
-            // Apply Sorting to Detail Item Terjual
             filtered = [...filtered].sort((a, b) => {
                 if (currentTxSort === 'name-asc') return a.product_name.localeCompare(b.product_name);
                 if (currentTxSort === 'name-desc') return b.product_name.localeCompare(a.product_name);
@@ -1935,7 +1912,6 @@ ${textList.join('\n')}`;
                 lflPairContainer.appendChild(pairCard);
             }
 
-            // ==================== LOB FOCUS TAB ENGINE ====================
             const lobItemsContainer = document.getElementById('lobItemsContainer');
             lobItemsContainer.innerHTML = '';
 
@@ -1956,13 +1932,11 @@ ${textList.join('\n')}`;
                     const sData = rawData.filter(r => r.staff === stf);
                     const staffSoldQty = sData.filter(matchFn).length;
 
-                    // Allocation of target QTY per staff based on percentage or equal split
                     const pctShare = staffPercentConfig[stf] || (100 / numStaff);
                     const staffTargetQty = Math.round((storeTotalTargetQty * pctShare) / 100);
                     const staffRemQty = Math.max(staffTargetQty - staffSoldQty, 0);
                     const role = staffRoleConfig[stf] || 'SA';
 
-                    // Weekly Sold & Target per week W10 - W14
                     const sW10Sold = sData.filter(r => weekIntervals[0] && weekIntervals[0].dates.includes(r.date) && matchFn(r)).length;
                     const sW10Tgt = Math.round(((lobItem.w10 || 0) * pctShare) / 100);
 
@@ -2062,7 +2036,6 @@ ${textList.join('\n')}`;
                 lobItemsContainer.appendChild(lobCard);
             });
 
-            // LOB FOCUS WEEKLY CAPSULES CONTAINER (BREAKDOWN W10 - W14)
             const lobWeeklyCapsulesContainer = document.getElementById('lobWeeklyCapsulesContainer');
             if (lobWeeklyCapsulesContainer) {
                 lobWeeklyCapsulesContainer.innerHTML = '';
