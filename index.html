@@ -141,6 +141,2477 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
+                <!-- THEME TOGGLE BUTTON -->
+                <button onclick="toggleTheme()" class="liquid-glass-card p-3 rounded-2xl flex items-center justify-center hover:bg-white/10 transition" title="Switch Dark/Light Theme">
+                    <i id="themeIcon" data-lucide="moon" class="w-4 h-4 text-amber-400"></i>
+                </button>
+
+                <!-- RUN GITHUB ACTIONS BUTTON -->
+                <button onclick="triggerGitHubWorkflow()" id="btnRunAction" class="liquid-glass-card hover:bg-white/10 text-xs font-bold px-4 py-3 rounded-2xl flex items-center gap-2 border border-purple-500/40 text-purple-300 shadow-lg shadow-purple-500/10 transition" title="Jalankan GitHub Actions Manual">
+                    <i data-lucide="play" class="w-4 h-4 text-purple-400"></i>
+                    <span>Run Actions</span>
+                </button>
+
+                <!-- BUTTON CONFIG -->
+                <button onclick="toggleConfigModal(true)" class="liquid-glass-card hover:bg-white/10 text-xs font-bold px-5 py-3 rounded-2xl flex items-center gap-2 border border-indigo-500/30 text-indigo-400 shadow-lg shadow-indigo-500/10 transition">
+                    <i data-lucide="settings" class="w-4 h-4 text-indigo-400"></i>
+                    Config
+                </button>
+
+                <!-- DATE SYNCED STATUS -->
+                <div class="text-right border-l border-white/10 pl-4">
+                    <span class="block text-[10px] opacity-60 uppercase tracking-wider font-bold">Latest Date Synced</span>
+                    <span id="dataStatus" class="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span id="syncDateLbl">--</span>
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- FLOATING MAIN NAVIGATION TABS -->
+        <div class="sticky top-4 z-40 flex justify-center">
+            <nav class="floating-nav p-2 rounded-3xl flex gap-1.5 overflow-x-auto max-w-full shadow-2xl">
+                <button onclick="switchMainTab('overview')" id="mainTab-overview" class="nav-tab-active px-4 py-2 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="pie-chart" class="w-4 h-4"></i> Store Overview
+                </button>
+                <button onclick="switchMainTab('matrix')" id="mainTab-matrix" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="users" class="w-4 h-4"></i> Staff Performance
+                </button>
+                <button onclick="switchMainTab('lfl')" id="mainTab-lfl" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="trending-up" class="w-4 h-4"></i> LFL Per Staff
+                </button>
+                <button onclick="switchMainTab('lob')" id="mainTab-lob" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="smartphone" class="w-4 h-4"></i> LOB Focus Staff
+                </button>
+                <button onclick="switchMainTab('device')" id="mainTab-device" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="tablet" class="w-4 h-4"></i> Device Staff
+                </button>
+                <button onclick="switchMainTab('aksesoris')" id="mainTab-aksesoris" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="headphones" class="w-4 h-4"></i> Aksesoris Staff
+                </button>
+                <button onclick="switchMainTab('vas')" id="mainTab-vas" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> VAS Staff
+                </button>
+                <button onclick="switchMainTab('transactions')" id="mainTab-transactions" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="list" class="w-4 h-4"></i> Data Transaksi
+                </button>
+            </nav>
+        </div>
+
+        <!-- ==================== VIEW 1: STORE OVERVIEW ==================== -->
+        <div id="view-overview" class="space-y-6">
+            <!-- REVENUE METRIC CARDS (STORE LEVEL) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Monthly Progress -->
+                <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold opacity-70 uppercase tracking-wider">PENCAPAIAN MONTH STORE</span>
+                        <span id="badgeMonth" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">0%</span>
+                    </div>
+                    <div class="mt-4">
+                        <h2 id="achMonth" class="text-2xl md:text-3xl font-black">Rp 0</h2>
+                        <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetMonth" class="font-semibold">Rp 0</span></p>
+                    </div>
+                    <div class="w-full bg-slate-800/40 rounded-full h-2.5 mt-4 overflow-hidden">
+                        <div id="barMonth" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Weekly Progress -->
+                <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold opacity-70 uppercase tracking-wider">PENCAPAIAN WEEK STORE</span>
+                        <span id="badgeWeek" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">0%</span>
+                    </div>
+                    <div class="mt-4">
+                        <h2 id="achWeek" class="text-2xl md:text-3xl font-black">Rp 0</h2>
+                        <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetWeek" class="font-semibold">Rp 0</span></p>
+                    </div>
+                    <div class="w-full bg-slate-800/40 rounded-full h-2.5 mt-4 overflow-hidden">
+                        <div id="barWeek" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Daily Progress -->
+                <div class="liquid-glass rounded-3xl p-6 relative overflow-hidden">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold opacity-70 uppercase tracking-wider">PENCAPAIAN DAY STORE</span>
+                        <span id="badgeDay" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">0%</span>
+                    </div>
+                    <div class="mt-4">
+                        <h2 id="achDay" class="text-2xl md:text-3xl font-black">Rp 0</h2>
+                        <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetDay" class="font-semibold">Rp 0</span></p>
+                    </div>
+                    <div class="w-full bg-slate-800/40 rounded-full h-2.5 mt-4 overflow-hidden">
+                        <div id="barDay" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATEGORY TARGET CARDS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Device Card -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="tablet" class="w-5 h-5 text-indigo-400"></i>
+                            <span class="text-xs font-bold uppercase tracking-wider">Pencapaian Device (Rp)</span>
+                        </div>
+                        <span id="badgeDevice" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">0%</span>
+                    </div>
+                    <div class="mt-4 flex justify-between items-end">
+                        <div>
+                            <h3 id="achDevice" class="text-2xl font-black">Rp 0</h3>
+                            <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetDevice" class="font-semibold">Rp 0</span></p>
+                        </div>
+                        <div class="text-right">
+                            <span id="remDevice" class="text-xs font-semibold text-indigo-400">Sisa: Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-800/40 rounded-full h-2 mt-3 overflow-hidden">
+                        <div id="barDevice" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Aksesori Card -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="headphones" class="w-5 h-5 text-cyan-400"></i>
+                            <span class="text-xs font-bold uppercase tracking-wider">Pencapaian Aksesori (Rp)</span>
+                        </div>
+                        <span id="badgeAcc" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">0%</span>
+                    </div>
+                    <div class="mt-4 flex justify-between items-end">
+                        <div>
+                            <h3 id="achAcc" class="text-2xl font-black">Rp 0</h3>
+                            <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetAcc" class="font-semibold">Rp 0</span></p>
+                        </div>
+                        <div class="text-right">
+                            <span id="remAcc" class="text-xs font-semibold text-cyan-400">Sisa: Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-800/40 rounded-full h-2 mt-3 overflow-hidden">
+                        <div id="barAcc" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- VAS Card -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i>
+                            <span class="text-xs font-bold uppercase tracking-wider">Pencapaian VAS (Rp)</span>
+                        </div>
+                        <span id="badgeVAS" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30">0%</span>
+                    </div>
+                    <div class="mt-4 flex justify-between items-end">
+                        <div>
+                            <h3 id="achVAS" class="text-2xl font-black">Rp 0</h3>
+                            <p class="text-xs opacity-70 mt-1">Target Store: <span id="lblTargetVAS" class="font-semibold">Rp 0</span></p>
+                        </div>
+                        <div class="text-right">
+                            <span id="remVAS" class="text-xs font-semibold text-purple-400">Sisa: Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="w-full bg-slate-800/40 rounded-full h-2 mt-3 overflow-hidden">
+                        <div id="barVAS" class="bg-gradient-to-r from-purple-400 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAILY INVOICE COUNT -->
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i> Total Qty Invoice Per Tanggal
+                    </h3>
+                    <span id="totalUniqueInvoicesLabel" class="text-xs font-extrabold text-emerald-400">0 Unique Invoices</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3" id="dailyInvoiceGrid">
+                    <!-- Dynamic Daily Invoice Count Cards -->
+                </div>
+            </div>
+
+            <!-- STORE LFL & VAS OVERVIEW -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Store LFL -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> Store LFL (Week Sebelumnya vs Week Berjalan)
+                        </h3>
+                        <span id="lflGrowthStore" class="text-xs font-bold px-2.5 py-1 rounded-full bg-white/10 text-emerald-400">0% WoW</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="liquid-glass-card p-4 rounded-2xl">
+                            <span class="text-xs opacity-70">Week Sebelumnya (W-1)</span>
+                            <p id="lflPrevStore" class="text-lg font-bold mt-1">Rp 0</p>
+                        </div>
+                        <div class="liquid-glass-card p-4 rounded-2xl">
+                            <span class="text-xs opacity-70">Week Berjalan (W-0)</span>
+                            <p id="lflCurrStore" class="text-lg font-bold text-emerald-400 mt-1">Rp 0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Store VAS Summary -->
+                <div class="liquid-glass rounded-3xl p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
+                            <i data-lucide="shield" class="w-4 h-4 text-purple-400"></i> Summary Penjualan VAS Store
+                        </h3>
+                        <span id="vasTotalSummary" class="text-xs font-bold text-purple-400">Total: 0 Item</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="vasKeywordCardsStore">
+                        <!-- Dynamic Store VAS Cards -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 2: STAFF PERFORMANCE ==================== -->
+        <div id="view-matrix" class="space-y-6 hidden">
+            <!-- MONTHLY OVERVIEW TABLE PER STAFF -->
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> Ringkasan Total Month Per Staff
+                    </h3>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-white/10 opacity-70 font-semibold uppercase tracking-wider">
+                                <th class="pb-3 px-3">Staff</th>
+                                <th class="pb-3 px-3 text-center">Jabatan</th>
+                                <th class="pb-3 px-3 text-center">Share %</th>
+                                <th class="pb-3 px-3 text-right">Target Month</th>
+                                <th class="pb-3 px-3 text-right">Ach Month</th>
+                                <th class="pb-3 px-3 text-center">% Ach Month</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffMonthlySummaryBody" class="divide-y divide-white/5 font-medium">
+                            <!-- Dynamic Staff Monthly Summary Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- WEEKLY BREAKDOWN WITH CLOSING HARIAN AT BOTTOM OF PAGE -->
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i> Breakdown Pencapaian Per Week
+                    </h3>
+                </div>
+
+                <div class="space-y-6" id="weeklyCapsulesContainer">
+                    <!-- Dynamic Weekly Tables -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 3: LFL PER STAFF ==================== -->
+        <div id="view-lfl" class="space-y-6 hidden">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> LFL (Week Sebelumnya vs Week Berjalan) Per Staff
+                    </h3>
+                </div>
+
+                <div class="space-y-6" id="lflPairCapsulesContainer">
+                    <!-- Dynamic 2-Week Pair LFL Capsules -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 4: LOB FOCUS STAFF ==================== -->
+        <div id="view-lob" class="space-y-6 hidden">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i> LOB Focus Target & Pencapaian Per Staff
+                    </h3>
+                </div>
+
+                <!-- LOB FOCUS PER ITEM CARDS -->
+                <div class="space-y-6" id="lobItemsContainer">
+                    <!-- Dynamic LOB Item Cards (Store total + Staff breakdown QTY) -->
+                </div>
+
+                <!-- LOB FOCUS WEEKLY CAPSULES BREAKDOWN PER WEEK -->
+                <div class="space-y-6 pt-4 border-t border-white/10">
+                    <div class="flex justify-between items-center">
+                        <h3 id="lobWeeklyHeaderTitle" class="text-sm font-bold flex items-center gap-2 text-purple-300">
+                            <i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i> LOB Focus Breakdown Per Week
+                        </h3>
+                    </div>
+
+                    <div class="space-y-6" id="lobWeeklyCapsulesContainer">
+                        <!-- Dynamic LOB Focus Weekly Capsules -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 5: DEVICE STAFF ==================== -->
+        <div id="view-device" class="space-y-6 hidden">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="tablet" class="w-4 h-4 text-indigo-400"></i> Detail Rincian Device Per Staff
+                    </h3>
+                </div>
+
+                <div class="space-y-6" id="deviceWeeklyCapsulesContainer">
+                    <!-- Dynamic Weekly Device Cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 6: AKSESORIS STAFF ==================== -->
+        <div id="view-aksesoris" class="space-y-6 hidden">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="headphones" class="w-4 h-4 text-cyan-400"></i> Detail Rincian Aksesori Per Staff
+                    </h3>
+                </div>
+
+                <div class="space-y-6" id="aksesorisWeeklyCapsulesContainer">
+                    <!-- Dynamic Weekly Aksesori Cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 7: VAS STAFF ==================== -->
+        <div id="view-vas" class="space-y-6 hidden">
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i> Detail Rincian VAS (KLA, TSL, IDT, XXL) Per Staff
+                    </h3>
+                </div>
+
+                <div class="space-y-6" id="vasWeeklyCapsulesContainer">
+                    <!-- Dynamic Weekly VAS Capsules -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 8: TRANSACTIONS ==================== -->
+        <div id="view-transactions" class="space-y-6 hidden">
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+                    <div class="flex items-center gap-3 w-full lg:w-auto">
+                        <i data-lucide="user" class="w-5 h-5 text-cyan-400"></i>
+                        <select id="staffSelect" onchange="updateDashboard()" class="bg-slate-900/80 border border-white/20 rounded-2xl px-4 py-2.5 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">ALL STAFF</option>
+                        </select>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full lg:w-auto">
+                        <!-- TABS CATEGORY FILTER -->
+                        <div class="liquid-glass p-1.5 rounded-2xl flex gap-1 overflow-x-auto w-full sm:w-auto">
+                            <button onclick="switchTab('ALL')" id="tab-ALL" class="ios-tab-active px-4 py-1.5 rounded-xl text-xs font-bold text-white whitespace-nowrap">Semua Items</button>
+                            <button onclick="switchTab('Device')" id="tab-Device" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">Device</button>
+                            <button onclick="switchTab('Accessories')" id="tab-Accessories" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">Accessories</button>
+                            <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">VAS</button>
+                        </div>
+
+                        <!-- SORTING BUTTON COLLAPSIBLE DROPDOWN CONTROLS -->
+                        <div class="relative w-full sm:w-auto">
+                            <button onclick="toggleSortDropdown()" id="sortDropdownToggleBtn" class="liquid-glass px-4 py-2 rounded-2xl text-xs font-bold text-white flex items-center justify-between gap-2 border border-white/10 hover:border-indigo-500/40 transition w-full sm:w-auto">
+                                <span class="flex items-center gap-1.5">
+                                    <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-indigo-400"></i>
+                                    <span id="currentSortLabel">Date Terbaru (↓)</span>
+                                </span>
+                                <i data-lucide="chevron-down" id="sortChevronIcon" class="w-3.5 h-3.5 opacity-70 transition-transform duration-300"></i>
+                            </button>
+
+                            <!-- DROPDOWN LIST (COLLAPSIBLE / DEFAULT HIDDEN) -->
+                            <div id="sortDropdownMenu" class="absolute right-0 mt-2 w-44 bg-slate-900/95 backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl p-1.5 space-y-1 z-50 hidden">
+                                <button onclick="setTxSort('date-desc')" id="sortBtn-date-desc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Date Terbaru (↓)
+                                </button>
+                                <button onclick="setTxSort('amount-desc')" id="sortBtn-amount-desc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Amount Termahal (↓)
+                                </button>
+                                <button onclick="setTxSort('amount-asc')" id="sortBtn-amount-asc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Amount Termurah (↑)
+                                </button>
+                                <button onclick="setTxSort('name-asc')" id="sortBtn-name-asc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Name A-Z
+                                </button>
+                                <button onclick="setTxSort('name-desc')" id="sortBtn-name-desc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
+                                    Name Z-A
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-bold flex items-center gap-2">
+                        <i data-lucide="list" class="w-4 h-4 text-blue-400"></i> Detail Item Terjual
+                    </h3>
+                    <span id="itemCount" class="text-xs opacity-70 font-bold text-indigo-300">0 Item</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-white/10 opacity-70 font-semibold uppercase tracking-wider">
+                                <th class="pb-3 px-2">Tanggal</th>
+                                <th class="pb-3 px-2">Staff</th>
+                                <th class="pb-3 px-2">Nama Produk</th>
+                                <th class="pb-3 px-2">Article</th>
+                                <th class="pb-3 px-2">Kategori</th>
+                                <th class="pb-3 px-2 text-right">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionBody" class="divide-y divide-white/5">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- WATERMARK FOOTER -->
+    <footer class="text-center pt-10 pb-4 text-xs font-semibold opacity-60 tracking-wider">
+        - All right reserved Ⓒfrans 2026 -
+    </footer>
+
+    <!-- MODAL 1: CONFIG TARGET & STAFF PERCENTAGE & CLOUD SYNC -->
+    <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="liquid-glass rounded-3xl p-6 max-w-3xl w-full border border-white/20 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-white/10 pb-4">
+                <h2 class="text-lg font-bold flex items-center gap-2">
+                    <i data-lucide="settings" class="w-5 h-5 text-indigo-400"></i> Set Config Target Sales & Alokasi Staff
+                </h2>
+                <button onclick="toggleConfigModal(false)" class="opacity-70 hover:opacity-100 transition">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- ONLINE CLOUD SYNC CONTROL SECTION -->
+            <div class="space-y-3 bg-indigo-950/40 p-4 rounded-2xl border border-indigo-500/30">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="cloud" class="w-4 h-4 text-indigo-400"></i> ONLINE PROGRESS SYNC - AUTOMATIC
+                    </h3>
+                    <span id="cloudStatusLbl" class="text-[10px] font-bold text-emerald-400">Synced ✓</span>
+                </div>
+                <p class="text-[11px] font-bold text-indigo-300 opacity-90 tracking-wide uppercase">KALO MAU SYNC MANUAL GUNAKAN TOMBOL DI BAWAH INI</p>
+
+                <div class="flex flex-col sm:flex-row items-center gap-2">
+                    <input type="text" id="storeSyncCode" value="M121-STORE" onchange="autoSyncToCloud()" class="w-full sm:w-1/2 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-indigo-500" placeholder="Kode Toko (contoh: M121-STORE)">
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <button onclick="pushToCloudSync(false)" id="btnPushCloud" class="flex-1 sm:flex-none bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition flex items-center justify-center gap-1">
+                            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Sync Now
+                        </button>
+                        <button onclick="pullFromCloudSync(false)" id="btnPullCloud" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 text-white border border-white/10 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center justify-center gap-1">
+                            <i data-lucide="download-cloud" class="w-3.5 h-3.5 text-cyan-400"></i> Reload Cloud
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. TARGET REVENUE STORE -->
+            <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+                <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">1. Target Sales Revenue Store (Rp)</h3>
+                <div>
+                    <label class="text-xs opacity-70">Target Month Store (Rp)</label>
+                    <input type="number" id="targetMonth" value="100000000" oninput="autoCalcTargets(); updateStaffNominalAndBadge(); updateDashboard(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs opacity-70">Target Week Store (Auto /4)</label>
+                        <input type="number" id="targetWeek" value="25000000" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm opacity-60 cursor-not-allowed">
+                    </div>
+                    <div>
+                        <label class="text-xs opacity-70">Target Day Store (Auto /30)</label>
+                        <input type="number" id="targetDay" value="3333333" readonly class="w-full mt-1 bg-slate-800/80 border border-white/5 rounded-xl px-3 py-2 text-sm opacity-60 cursor-not-allowed">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. TARGET CATEGORY STORE (RP) INCLUDING DEVICE -->
+            <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+                <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">2. Target Category Store (Rp)</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="text-xs opacity-70">Target Device Store (Rp)</label>
+                        <input type="number" id="targetDevice" value="75000000" oninput="updateDashboard(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-xs opacity-70">Target Aksesori Store (Rp)</label>
+                        <input type="number" id="targetAccessories" value="15000000" oninput="updateDashboard(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-xs opacity-70">Target VAS Store (Rp)</label>
+                        <input type="number" id="targetVAS" value="10000000" oninput="updateDashboard(); autoSyncToCloud();" class="w-full mt-1 bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. MANUAL ALOKASI TARGET & JABATAN PER STAFF (%) -->
+            <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">3. Alokasi Pembagian Target & Jabatan Staff (%)</h3>
+                    <div class="flex items-center gap-2">
+                        <span id="totalPercentBadge" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Total: 100%</span>
+                        <button onclick="resetEqualStaffPercentages()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition">Reset Sama Rata</button>
+                        <button onclick="restoreAllRemovedStaffs()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition">Restore All Staff</button>
+                    </div>
+                </div>
+                <p class="text-[11px] opacity-70">Atur Jabatan (misal SA, IC) dan persentase target.</p>
+
+                <div class="space-y-2 max-h-56 overflow-y-auto pr-1" id="staffPercentInputsContainer">
+                    <!-- Dynamic Inputs Staff Percent + Jabatan -->
+                </div>
+            </div>
+
+            <!-- 4. DYNAMIC LOB FOCUS ITEMS WITH APPLE QUARTER WEEKLY CALENDAR -->
+            <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">4. Dynamic LOB Focus Items</h3>
+                        <p class="text-[10px] opacity-60" id="lobConfigSubTitle">Set total target Qty & breakdown mingguan kalender Apple.</p>
+                    </div>
+                    <button onclick="addLobItemConfig()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 transition flex items-center gap-1">
+                        <i data-lucide="plus" class="w-3 h-3"></i> Tambah Item LOB
+                    </button>
+                </div>
+
+                <div class="space-y-3 max-h-64 overflow-y-auto pr-1" id="lobConfigListContainer">
+                    <!-- Dynamic LOB Item Rows with Target Inputs -->
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+                <button onclick="toggleConfigModal(false)" class="px-5 py-2.5 rounded-xl text-xs font-semibold opacity-70 hover:opacity-100 bg-white/5 transition">Batal</button>
+                <button onclick="saveConfigModal()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-lg transition">Simpan & Sync Cloud</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CLOSING REPORT & TRACKER REPORT DAILY TAP -->
+    <div id="closingReportModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="liquid-glass rounded-3xl p-6 max-w-2xl w-full border border-white/20 shadow-2xl relative space-y-5 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <h3 class="text-sm font-bold flex items-center gap-2 text-white">
+                    <i data-lucide="file-text" class="w-5 h-5 text-emerald-400"></i> Closing & Tracker Report
+                </h3>
+                <button onclick="toggleClosingModal(false)" class="opacity-70 hover:opacity-100 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-3 bg-slate-900/80 p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block mb-2">1. M121 - Closing Report</span>
+                        <div class="font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed select-all" id="closingReportText"></div>
+                    </div>
+                    <button onclick="copyClosingReportText()" id="btnCopyClosing" class="w-full mt-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-xs py-2 rounded-xl shadow-lg transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Closing Report
+                    </button>
+                </div>
+
+                <div class="space-y-3 bg-slate-900/80 p-4 rounded-2xl border border-white/10 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block mb-2">2. M121 - Closing For Tracker</span>
+                        <div class="font-mono text-xs text-cyan-300 whitespace-pre-wrap leading-relaxed select-all" id="closingTrackerReportText"></div>
+                    </div>
+                    <button onclick="copyTrackerReportText()" id="btnCopyTracker" class="w-full mt-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold text-xs py-2 rounded-xl shadow-lg transition flex items-center justify-center gap-1.5">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Tracker Report
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t border-white/10">
+                <button onclick="toggleClosingModal(false)" class="px-6 py-2 rounded-xl text-xs font-semibold opacity-80 hover:opacity-100 bg-white/10 transition">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: DETAIL ITEMS STAFF TAP WITH COPY BUTTON -->
+    <div id="staffItemsModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="liquid-glass rounded-3xl p-6 max-w-2xl w-full border border-white/20 shadow-2xl relative space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <div>
+                    <h3 id="staffModalTitle" class="text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="package" class="w-4 h-4 text-cyan-400"></i> Detail Transaksi
+                    </h3>
+                    <p id="staffModalSub" class="text-xs opacity-60 mt-0.5">--</p>
+                </div>
+                <button onclick="toggleStaffItemsModal(false)" class="opacity-70 hover:opacity-100 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto flex-1 pr-1">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="border-b border-white/10 opacity-70 font-semibold uppercase tracking-wider">
+                            <th class="pb-2 px-2">Tanggal</th>
+                            <th class="pb-2 px-2">Nama Produk</th>
+                            <th class="pb-2 px-2">Article</th>
+                            <th class="pb-2 px-2 text-right">AMOUNT</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffItemsTableBody" class="divide-y divide-white/5"></tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-between items-center border-t border-white/10 pt-3 gap-2">
+                <div class="flex flex-col">
+                    <span id="staffModalTotalQty" class="text-xs font-bold opacity-70">Total: 0 Item</span>
+                    <span id="staffModalTotalNominal" class="text-xs font-black text-emerald-400">Rp 0</span>
+                </div>
+                <button onclick="copyStaffModalItems()" id="btnCopyStaffModal" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Rincian Item
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP SCRIPT -->
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2BOcYHemGmeQDIwKTB197QZiQwKV428kkpmjR0OEuujY2cA2uvXvX4XFepZE_tevP3w/exec";
+
+        // EMBEDDED GITHUB ACTIONS CREDENTIALS
+        const GH_PAT = "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";
+        const GH_OWNER = "steeshigeo";
+        const GH_REPO = "Dashtp3staff";
+        const GH_WORKFLOW = "onedrive_sync.yml";
+
+        let rawData = [];
+        let currentTab = 'ALL';
+        let currentMainView = 'overview';
+        let currentTxSort = 'date-desc';
+
+        let removedStaffs = new Set();
+        let staffPercentConfig = {};
+        let staffRoleConfig = {};
+        let syncTimeout = null;
+
+        // Trigger GitHub Action Workflow via REST API
+        async function triggerGitHubWorkflow() {
+            const btn = document.getElementById('btnRunAction');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-purple-400"></i> Triggering...`;
+                if (window.lucide) lucide.createIcons();
+            }
+
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/dispatches`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/vnd.github+json',
+                        'Authorization': `Bearer ${GH_PAT}`,
+                        'X-GitHub-Api-Version': '2022-11-28',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main'
+                    })
+                });
+
+                if (res.ok || res.status === 204) {
+                    if (btn) btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Running!`;
+                    if (window.lucide) lucide.createIcons();
+                    alert('Berhasil memicu GitHub Action! Workflow sedang berjalan di background.');
+                } else {
+                    const errObj = await res.json().catch(() => ({}));
+                    throw new Error(errObj.message || `Status Code ${res.status}`);
+                }
+            } catch (err) {
+                console.error("GitHub Action Trigger Error:", err);
+                alert('Gagal menjalankan GitHub Action: ' + err.message);
+                if (btn) btn.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-rose-400"></i> Failed`;
+                if (window.lucide) lucide.createIcons();
+            } finally {
+                setTimeout(() => {
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 text-purple-400"></i> Run Actions`;
+                        if (window.lucide) lucide.createIcons();
+                    }
+                }, 3500);
+            }
+        }
+
+        function checkAuth() {
+            const isAuth = sessionStorage.getItem('m121_auth');
+            if (isAuth === 'true') {
+                document.getElementById('authModal').classList.add('hidden');
+            } else {
+                document.getElementById('authModal').classList.remove('hidden');
+            }
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const pass = document.getElementById('passInput').value.trim();
+            if (pass === 'maptech') {
+                sessionStorage.setItem('m121_auth', 'true');
+                document.getElementById('authModal').classList.add('hidden');
+            } else {
+                document.getElementById('passError').classList.remove('hidden');
+            }
+        }
+
+        function getAppleCalendarInfo(sampleDateStr) {
+            let monthNum = 8;
+            let yearNum = 2026;
+            if (sampleDateStr && sampleDateStr.includes('-')) {
+                const parts = sampleDateStr.split('-');
+                if (parts.length === 3) {
+                    monthNum = parseInt(parts[1], 10) || 8;
+                    yearNum = parseInt(parts[2], 10) || 2026;
+                }
+            }
+
+            let qName = "Q4";
+            if ([10, 11, 12].includes(monthNum)) qName = "Q1";
+            else if ([1, 2, 3].includes(monthNum)) qName = "Q2";
+            else if ([4, 5, 6].includes(monthNum)) qName = "Q3";
+            else if ([7, 8, 9].includes(monthNum)) qName = "Q4";
+
+            let qMonthPos = 1;
+            if ([10, 1, 4, 7].includes(monthNum)) qMonthPos = 1;
+            else if ([11, 2, 5, 8].includes(monthNum)) qMonthPos = 2;
+            else if ([12, 3, 6, 9].includes(monthNum)) qMonthPos = 3;
+
+            let startWeekNum = 1;
+            if (qMonthPos === 1) startWeekNum = 1;
+            else if (qMonthPos === 2) startWeekNum = 5;
+            else if (qMonthPos === 3) startWeekNum = 10;
+
+            return { monthNum, yearNum, qName, qMonthPos, startWeekNum };
+        }
+
+        let lobItemsConfig = [
+            { id: 'iphone15', name: 'iPhone 15', key: 'iPhone 15', target: 27, w10: 7, w11: 6, w12: 6, w13: 6, w14: 2 },
+            { id: 'ipad11th', name: 'iPad A16', key: 'iPad 11th', target: 27, w10: 7, w11: 6, w12: 6, w13: 6, w14: 2 },
+            { id: 'mbn', name: 'MBN', key: 'MBN', target: 20, w10: 5, w11: 5, w12: 5, w13: 4, w14: 1 },
+            { id: 'aw', name: 'AW', key: 'AW', target: 15, w10: 4, w11: 4, w12: 3, w13: 3, w14: 1 },
+            { id: 'airpods', name: 'AirPods', key: 'AirPods', target: 30, w10: 8, w11: 7, w12: 7, w13: 6, w14: 2 }
+        ];
+
+        const fmtRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
+
+        function classifyItemCategory(productName, article, groupCol) {
+            const p = String(productName || '').toUpperCase();
+            const art = String(article || '').toUpperCase();
+            const grp = String(groupCol || '').toUpperCase();
+
+            if (p.includes('MAP VOUCHER') || art.includes('MAP VOUCHER')) return 'EXCLUDE';
+
+            const vasKeywords = ['KLA', 'TSL', 'IDT', 'XXL', 'QOALA', 'TELKOMSEL', 'INDOSAT', 'XL', 'ESIM', 'MYPRIO', 'PROTEKSI', 'HCI'];
+            if (art !== 'MKLNEOSLEEVE' && vasKeywords.some(kw => art.includes(kw) || p.includes(kw))) return 'VAS';
+
+            const explicitAccArticles = new Set([
+                'UNQ8886463692554', 'UNQ8886463689141', 'ST1222-476GX-01', 'AUMA11-NL-BK-SL-M',
+                'UNQ8886463692561', 'PKEPL3SS-10-24', 'UNQ8886463688731', 'UNQ8886463692585',
+                'UNQ8886463688724', 'KOASP-MBA136', 'UNQ8886463692547', 'UNQ8886463688717',
+                'APPSWXY2Z/A', 'MKLNEOSLEEVE', 'UNQ8886463693117'
+            ]);
+            if (explicitAccArticles.has(art)) return 'Accessories';
+
+            const accessoryBlockKeywords = [
+                'GLASS', 'TEMPERED', 'PROTECTOR', 'PROT', 'CASE', 'SLEEVE', 'SLVE', 'SCREEN', 
+                'KEYBOARD', 'MAGIC KEYBOARD', 'PENCIL', 'CABLE', 'ADAPTER', 'STRAP', 'BAND', 
+                'POUCH', 'BAG', 'HUB', 'AIRTAG', 'MOUSE', 'STAND', 'HOLDER', 'COVER', 'GUARD', 
+                'BATTERY', 'CHARGER', 'EARPODS', 'EARPOD', 'CAMDEN', 'MOVEN', 'UNIQ', 'STM', 'AUM A11', 'AC PLUS',
+                'AIRPODS MAX', 'AIRPODS', 'AIRPOD', 'VERO', 'FOLIO', 'SMART FOLIO', 'CLEARVUE', 'COMBAT', 'ICE MGSF', 'MAGXEN', 'CLYDE', 'MACSHELL'
+            ];
+            if (accessoryBlockKeywords.some(ak => p.includes(ak))) return 'Accessories';
+
+            const deviceKeywords = [
+                'IPHONE', 'IPAD', 'MACBOOK', 'IMAC', 'MACMINI', 'MAC MINI', 'MAC PRO', 'MACSTUDIO', 
+                'MBA', 'MBP', 'MBN', 'APPLE WATCH', 'WATCH ULTRA', 'WATCH SE', 'WATCH 11', 'WATCH 10', 'WATCH 9'
+            ];
+            if (deviceKeywords.some(dk => p.includes(dk))) return 'Device';
+
+            if (grp.includes('DEVICES')) return 'Device';
+            if (grp.includes('ACCESSORIES')) return 'Accessories';
+
+            return 'Accessories';
+        }
+
+        function saveConfigToLocal() {
+            try {
+                const configData = {
+                    targetMonth: document.getElementById('targetMonth') ? document.getElementById('targetMonth').value : '100000000',
+                    targetDevice: document.getElementById('targetDevice') ? document.getElementById('targetDevice').value : '75000000',
+                    targetAccessories: document.getElementById('targetAccessories') ? document.getElementById('targetAccessories').value : '15000000',
+                    targetVAS: document.getElementById('targetVAS') ? document.getElementById('targetVAS').value : '10000000',
+                    staffPercentConfig: staffPercentConfig || {},
+                    staffRoleConfig: staffRoleConfig || {},
+                    lobItemsConfig: lobItemsConfig || [],
+                    removedStaffs: Array.from(removedStaffs || []),
+                    storeSyncCode: document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE'
+                };
+                localStorage.setItem('m121_sales_config', JSON.stringify(configData));
+            } catch(e) { console.error('Save config error:', e); }
+        }
+
+        function loadConfigFromLocal() {
+            const saved = localStorage.getItem('m121_sales_config');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.targetMonth && document.getElementById('targetMonth')) document.getElementById('targetMonth').value = parsed.targetMonth;
+                    if (parsed.targetDevice && document.getElementById('targetDevice')) document.getElementById('targetDevice').value = parsed.targetDevice;
+                    if (parsed.targetAccessories && document.getElementById('targetAccessories')) document.getElementById('targetAccessories').value = parsed.targetAccessories;
+                    if (parsed.targetVAS && document.getElementById('targetVAS')) document.getElementById('targetVAS').value = parsed.targetVAS;
+                    if (parsed.staffPercentConfig) staffPercentConfig = parsed.staffPercentConfig;
+                    if (parsed.staffRoleConfig) staffRoleConfig = parsed.staffRoleConfig;
+                    if (parsed.lobItemsConfig) lobItemsConfig = parsed.lobItemsConfig;
+                    if (parsed.removedStaffs && Array.isArray(parsed.removedStaffs)) removedStaffs = new Set(parsed.removedStaffs);
+                    if (parsed.storeSyncCode && document.getElementById('storeSyncCode')) document.getElementById('storeSyncCode').value = parsed.storeSyncCode;
+
+                    autoCalcTargets();
+                } catch(e) { console.error("Error loading config", e); }
+            }
+        }
+
+        function fetchJSONP(url) {
+            return new Promise((resolve, reject) => {
+                const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
+                window[callbackName] = function(data) {
+                    delete window[callbackName];
+                    if (script && script.parentNode) script.parentNode.removeChild(script);
+                    resolve(data);
+                };
+                const script = document.createElement('script');
+                script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    if (script && script.parentNode) script.parentNode.removeChild(script);
+                    reject(new Error('Koneksi Google Sheet terhalang CORS'));
+                };
+                document.body.appendChild(script);
+            });
+        }
+
+        function autoSyncToCloud() {
+            saveConfigToLocal();
+            if (syncTimeout) clearTimeout(syncTimeout);
+            syncTimeout = setTimeout(() => {
+                pushToCloudSync(true);
+            }, 1000);
+        }
+
+        async function pushToCloudSync(isSilent = false) {
+            const syncCode = (document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE').trim().toUpperCase() || 'M121-STORE';
+            const btn = document.getElementById('btnPushCloud');
+            const lbl = document.getElementById('cloudStatusLbl');
+
+            saveConfigToLocal();
+            const configObj = JSON.parse(localStorage.getItem('m121_sales_config') || '{}');
+
+            if (!isSilent && btn) btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Syncing...`;
+            if (lbl) lbl.textContent = 'Syncing...';
+            if (window.lucide) lucide.createIcons();
+
+            try {
+                const payloadObj = {
+                    storeCode: syncCode,
+                    config: configObj
+                };
+                const encodedPayload = encodeURIComponent(JSON.stringify(payloadObj));
+
+                const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?action=save&payload=${encodedPayload}`);
+
+                if (resData && resData.status === 'success') {
+                    if (lbl) lbl.textContent = 'Synced ✓';
+                    if (!isSilent && btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Success!`;
+                } else {
+                    throw new Error(resData ? resData.message : 'Gagal simpan');
+                }
+            } catch(e) {
+                console.error("Cloud Sync Push Error:", e);
+                if (lbl) lbl.textContent = 'Local Saved Only';
+                if (!isSilent && btn) btn.innerHTML = `<i data-lucide="cloud-off" class="w-3.5 h-3.5 text-amber-300"></i> Local Saved`;
+            }
+
+            if (window.lucide) lucide.createIcons();
+            if (!isSilent) {
+                setTimeout(() => {
+                    if (btn) btn.innerHTML = `<i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> Sync Now`;
+                    if (window.lucide) lucide.createIcons();
+                }, 2500);
+            }
+        }
+
+        async function pullFromCloudSync(isSilent = false) {
+            const syncCode = (document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE').trim().toUpperCase() || 'M121-STORE';
+            const btn = document.getElementById('btnPullCloud');
+            const lbl = document.getElementById('cloudStatusLbl');
+
+            if (!isSilent && btn) btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-cyan-400"></i> Fetching...`;
+            if (lbl) lbl.textContent = 'Autoloading...';
+            if (window.lucide) lucide.createIcons();
+
+            try {
+                const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`);
+
+                if (resData && resData.status === 'success' && resData.config) {
+                    localStorage.setItem('m121_sales_config', JSON.stringify(resData.config));
+                    loadConfigFromLocal();
+                    renderStaffPercentInputs();
+                    renderLobConfigInputs();
+                    updateDashboard();
+                    if (lbl) lbl.textContent = 'Synced ✓';
+                    if (!isSilent && btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Updated!`;
+                } else {
+                    if (lbl) lbl.textContent = 'Synced ✓';
+                }
+            } catch(e) {
+                console.error("Cloud Sync Pull Error:", e);
+                if (lbl) lbl.textContent = 'Local Saved Only';
+            }
+
+            if (window.lucide) lucide.createIcons();
+            if (!isSilent) {
+                setTimeout(() => {
+                    if (btn) btn.innerHTML = `<i data-lucide="download-cloud" class="w-3.5 h-3.5 text-cyan-400"></i> Reload Cloud`;
+                    if (window.lucide) lucide.createIcons();
+                }, 2500);
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light' || (!savedTheme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+                document.documentElement.classList.add('light-mode');
+                document.getElementById('themeIcon').setAttribute('data-lucide', 'sun');
+            } else {
+                document.documentElement.classList.remove('light-mode');
+                document.getElementById('themeIcon').setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        }
+
+        function toggleTheme() {
+            const isLight = document.documentElement.classList.toggle('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            document.getElementById('themeIcon').setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+            lucide.createIcons();
+        }
+
+        function switchMainTab(viewName) {
+            currentMainView = viewName;
+            ['overview', 'matrix', 'lfl', 'lob', 'device', 'aksesoris', 'vas', 'transactions'].forEach(v => {
+                const btn = document.getElementById(`mainTab-${v}`);
+                const view = document.getElementById(`view-${v}`);
+                if (v === viewName) {
+                    if (btn) btn.className = "nav-tab-active px-4 py-2 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap transition";
+                    if (view) view.classList.remove('hidden');
+                } else {
+                    if (btn) btn.className = "px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition";
+                    if (view) view.classList.add('hidden');
+                }
+            });
+            updateDashboard();
+        }
+
+        function toggleConfigModal(show) {
+            const modal = document.getElementById('configModal');
+            if (!modal) return;
+            if (show) {
+                modal.classList.remove('hidden');
+                try { renderStaffPercentInputs(); } catch(e) { console.error('Error rendering staff percent inputs:', e); }
+                try { renderLobConfigInputs(); } catch(e) { console.error('Error rendering LOB config inputs:', e); }
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function saveConfigModal() {
+            saveConfigToLocal();
+            toggleConfigModal(false);
+            updateDashboard();
+            pushToCloudSync(false);
+        }
+
+        function autoCalcTargets() {
+            const targetMonthEl = document.getElementById('targetMonth');
+            const tMonth = targetMonthEl ? (parseFloat(targetMonthEl.value) || 0) : 0;
+            if (document.getElementById('targetWeek')) document.getElementById('targetWeek').value = Math.round(tMonth / 4);
+            if (document.getElementById('targetDay')) document.getElementById('targetDay').value = Math.round(tMonth / 30);
+        }
+
+        function toggleSortDropdown() {
+            const menu = document.getElementById('sortDropdownMenu');
+            const chevron = document.getElementById('sortChevronIcon');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+            } else {
+                menu.classList.add('hidden');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function setTxSort(sortType) {
+            currentTxSort = sortType;
+            const sortLabels = {
+                'date-desc': 'Date Terbaru (↓)',
+                'amount-desc': 'Amount Termahal (↓)',
+                'amount-asc': 'Amount Termurah (↑)',
+                'name-asc': 'Name A-Z',
+                'name-desc': 'Name Z-A'
+            };
+            if (document.getElementById('currentSortLabel')) {
+                document.getElementById('currentSortLabel').textContent = sortLabels[sortType] || 'Sort';
+            }
+
+            ['date-desc', 'amount-desc', 'amount-asc', 'name-asc', 'name-desc'].forEach(st => {
+                const btn = document.getElementById(`sortBtn-${st}`);
+                if (!btn) return;
+                if (st === sortType) {
+                    btn.className = "w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold bg-indigo-500 text-white transition flex items-center justify-between";
+                } else {
+                    btn.className = "w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between";
+                }
+            });
+
+            const menu = document.getElementById('sortDropdownMenu');
+            if (menu) menu.classList.add('hidden');
+            const chevron = document.getElementById('sortChevronIcon');
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+
+            updateDashboard();
+        }
+
+        window.addEventListener('click', (e) => {
+            const btn = document.getElementById('sortDropdownToggleBtn');
+            const menu = document.getElementById('sortDropdownMenu');
+            if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.add('hidden');
+                const chevron = document.getElementById('sortChevronIcon');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', async () => {
+            checkAuth();
+            initTheme();
+            loadConfigFromLocal();
+
+            try {
+                const res = await fetch('data.json');
+                if (res.ok) {
+                    const data = await res.json();
+                    rawData = data.filter(item => {
+                        if (!item || item.net_price <= 0) return false;
+                        const pName = String(item.product_name || '').toUpperCase();
+                        const art = String(item.article || '').toUpperCase();
+                        if (pName.includes('MAP VOUCHER') || art.includes('MAP VOUCHER')) return false;
+                        return true;
+                    }).map(item => ({
+                        ...item,
+                        category: classifyItemCategory(item.product_name, item.article, item.category)
+                    })).filter(item => item.category !== 'EXCLUDE');
+
+                    initStaffSelector();
+                    autoCalcTargets();
+                    if (Object.keys(staffPercentConfig).length === 0) {
+                        resetEqualStaffPercentages();
+                    }
+                    updateDashboard();
+                }
+            } catch (err) {
+                console.log("Waiting for data.json...");
+            }
+
+            await pullFromCloudSync(true);
+        });
+
+        function getActiveStaffList() {
+            if (!Array.isArray(rawData)) return [];
+            return [...new Set(rawData.map(r => r && r.staff ? String(r.staff) : '').filter(Boolean))]
+                .filter(s => !s.toLowerCase().includes('digimap.co.id') && (!removedStaffs || !removedStaffs.has || !removedStaffs.has(s)))
+                .sort();
+        }
+
+        function initStaffSelector() {
+            const select = document.getElementById('staffSelect');
+            if (!select) return;
+            select.innerHTML = '<option value="ALL">ALL STAFF</option>';
+            const staffList = [...new Set(rawData.map(r => r.staff))].sort();
+            staffList.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s;
+                select.appendChild(opt);
+            });
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            ['ALL', 'Device', 'Accessories', 'VAS'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (!btn) return;
+                if (t === tab) {
+                    btn.className = "ios-tab-active px-4 py-1.5 rounded-xl text-xs font-bold text-white whitespace-nowrap";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap";
+                }
+            });
+            updateDashboard();
+        }
+
+        function removeStaffFromTarget(staffName) {
+            removedStaffs.add(staffName);
+            delete staffPercentConfig[staffName];
+            resetEqualStaffPercentages();
+            autoSyncToCloud();
+            updateDashboard();
+        }
+
+        function restoreAllRemovedStaffs() {
+            removedStaffs.clear();
+            resetEqualStaffPercentages();
+            autoSyncToCloud();
+            updateDashboard();
+        }
+
+        function resetEqualStaffPercentages() {
+            const activeStaffs = getActiveStaffList();
+            if (activeStaffs.length === 0) return;
+            const equalPct = (100 / activeStaffs.length).toFixed(2);
+            activeStaffs.forEach(s => {
+                staffPercentConfig[s] = parseFloat(equalPct);
+                if (!staffRoleConfig[s]) staffRoleConfig[s] = 'SA';
+            });
+            renderStaffPercentInputs();
+            autoSyncToCloud();
+            updateDashboard();
+        }
+
+        function updateStaffNominalAndBadge() {
+            const activeStaffs = getActiveStaffList();
+            const targetMonthEl = document.getElementById('targetMonth');
+            const tStoreMonth = targetMonthEl ? (parseFloat(targetMonthEl.value) || 0) : 0;
+            let sumPct = 0;
+
+            activeStaffs.forEach(s => {
+                const pct = staffPercentConfig[s] || 0;
+                sumPct += parseFloat(pct);
+                const nominalMonth = Math.round((tStoreMonth * pct) / 100);
+                
+                const spanEls = document.querySelectorAll(`[data-staff-nominal="${CSS.escape(s)}"]`);
+                spanEls.forEach(el => {
+                    el.textContent = fmtRp(nominalMonth);
+                });
+            });
+
+            const badge = document.getElementById('totalPercentBadge');
+            if (badge) {
+                const roundedSum = Math.round(sumPct * 10) / 10;
+                badge.textContent = `Total: ${roundedSum}%`;
+                if (Math.abs(roundedSum - 100) < 0.5) {
+                    badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                } else {
+                    badge.className = 'text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                }
+            }
+        }
+
+        function renderStaffPercentInputs() {
+            const container = document.getElementById('staffPercentInputsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const activeStaffs = getActiveStaffList();
+            const targetMonthEl = document.getElementById('targetMonth');
+            const tStoreMonth = targetMonthEl ? (parseFloat(targetMonthEl.value) || 0) : 0;
+            let sumPct = 0;
+
+            if (activeStaffs.length === 0) {
+                container.innerHTML = '<p class="text-xs text-amber-400 p-2">Belum ada data staff yang terdeteksi / data.json belum dimuat.</p>';
+                return;
+            }
+
+            activeStaffs.forEach(s => {
+                if (staffPercentConfig[s] === undefined) {
+                    staffPercentConfig[s] = (100 / activeStaffs.length);
+                }
+                if (!staffRoleConfig[s]) staffRoleConfig[s] = 'SA';
+
+                const pct = staffPercentConfig[s] || 0;
+                sumPct += parseFloat(pct);
+
+                const nominalMonth = Math.round((tStoreMonth * pct) / 100);
+
+                const div = document.createElement('div');
+                div.className = 'flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-slate-900/60 p-2.5 rounded-xl border border-white/5 text-xs';
+                div.innerHTML = `
+                    <div class="flex items-center gap-2 truncate max-w-[220px]">
+                        <button onclick="removeStaffFromTarget('${s.replace(/'/g, "\\'")}')" class="text-rose-400 hover:text-rose-300 transition p-1 hover:bg-rose-500/10 rounded-lg" title="Hapus staff dari target">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <span class="font-bold text-white truncate">${s.split('/')[1] || s}</span>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                        <input type="text" value="${staffRoleConfig[s]}" oninput="updateStaffRole('${s.replace(/'/g, "\\'")}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-center text-xs text-indigo-300 font-bold focus:outline-none focus:border-indigo-500" placeholder="Jabatan">
+                        
+                        <span data-staff-nominal="${s}" class="text-slate-400 text-[10px] hidden sm:inline font-mono">${fmtRp(nominalMonth)}</span>
+                        
+                        <div class="flex items-center gap-1">
+                            <input type="number" step="0.1" value="${pct}" oninput="updateStaffPct('${s.replace(/'/g, "\\'")}', this.value)" class="w-16 bg-slate-800 border border-white/10 rounded-lg px-2 py-1 text-right text-xs text-white focus:outline-none focus:border-indigo-500 font-bold">
+                            <span class="text-slate-400 font-bold">%</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            updateStaffNominalAndBadge();
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function updateStaffPct(staffName, val) {
+            staffPercentConfig[staffName] = parseFloat(val) || 0;
+            updateStaffNominalAndBadge();
+            updateDashboard();
+            autoSyncToCloud();
+        }
+
+        function updateStaffRole(staffName, val) {
+            staffRoleConfig[staffName] = val.trim() || 'SA';
+            updateDashboard();
+            autoSyncToCloud();
+        }
+
+        function renderLobConfigInputs() {
+            const container = document.getElementById('lobConfigListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const uniqueDatesFromData = [...new Set(rawData.map(r => r.date))].sort();
+            const sampleDate = uniqueDatesFromData[0] || '01-08-2026';
+            const appleCal = getAppleCalendarInfo(sampleDate);
+
+            const weekLabels = [
+                `W${appleCal.startWeekNum}`,
+                `W${appleCal.startWeekNum + 1}`,
+                `W${appleCal.startWeekNum + 2}`,
+                `W${appleCal.startWeekNum + 3}`,
+                `W${appleCal.startWeekNum + 4}`
+            ];
+
+            const subTitle = document.getElementById('lobConfigSubTitle');
+            if (subTitle) {
+                subTitle.textContent = `Set total target Qty & breakdown mingguan kalender Apple (${appleCal.qName} - ${weekLabels[0]} s/d ${weekLabels[4]}).`;
+            }
+
+            lobItemsConfig.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-slate-900/80 p-3.5 rounded-2xl border border-white/10 space-y-2.5 text-xs';
+                div.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <input type="text" value="${item.name}" oninput="updateLobItem(${index}, 'name', this.value)" class="flex-1 bg-slate-800 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-indigo-500" placeholder="Nama LOB">
+                        
+                        <div class="flex items-center gap-1">
+                            <span class="text-[10px] font-bold text-purple-300">Total Qty:</span>
+                            <input type="number" id="lob_${index}_total" value="${item.target || 0}" oninput="updateLobItemTotalTarget(${index}, this.value)" class="w-16 bg-slate-800 border border-purple-500/50 rounded-xl px-2 py-1 text-center text-xs text-white focus:outline-none font-extrabold" title="Ubah total target per bulan">
+                        </div>
+
+                        <button onclick="deleteLobItem(${index})" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition" title="Hapus LOB">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-1">
+                        <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Breakdown Target Per Week (Apple Fiscal ${appleCal.qName}):</span>
+                        <div class="grid grid-cols-5 gap-1.5">
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[0]}</span>
+                                <input type="number" id="lob_${index}_w10" value="${item.w10 || 0}" oninput="updateLobItemWeek(${index}, 'w10', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[1]}</span>
+                                <input type="number" id="lob_${index}_w11" value="${item.w11 || 0}" oninput="updateLobItemWeek(${index}, 'w11', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[2]}</span>
+                                <input type="number" id="lob_${index}_w12" value="${item.w12 || 0}" oninput="updateLobItemWeek(${index}, 'w12', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[3]}</span>
+                                <input type="number" id="lob_${index}_w13" value="${item.w13 || 0}" oninput="updateLobItemWeek(${index}, 'w13', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                            <div class="text-center">
+                                <span class="text-[9px] font-mono opacity-70 block">${weekLabels[4]}</span>
+                                <input type="number" id="lob_${index}_w14" value="${item.w14 || 0}" oninput="updateLobItemWeek(${index}, 'w14', this.value)" class="w-full mt-0.5 bg-slate-800 border border-white/10 rounded-lg py-1 text-center text-xs text-white focus:outline-none focus:border-purple-500 font-bold">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function addLobItemConfig() {
+            const newId = 'lob_' + Date.now();
+            lobItemsConfig.push({ id: newId, name: 'Item LOB Baru', key: 'Item LOB Baru', target: 25, w10: 5, w11: 5, w12: 5, w13: 5, w14: 5 });
+            renderLobConfigInputs();
+            updateDashboard();
+            autoSyncToCloud();
+        }
+
+        function updateLobItem(index, field, val) {
+            lobItemsConfig[index][field] = val;
+            if (field === 'name') lobItemsConfig[index].key = val;
+            updateDashboard();
+            autoSyncToCloud();
+        }
+
+        function updateLobItemWeek(index, weekKey, val) {
+            lobItemsConfig[index][weekKey] = parseInt(val) || 0;
+            const item = lobItemsConfig[index];
+            item.target = (item.w10 || 0) + (item.w11 || 0) + (item.w12 || 0) + (item.w13 || 0) + (item.w14 || 0);
+
+            const totalInput = document.getElementById(`lob_${index}_total`);
+            if (totalInput) totalInput.value = item.target;
+
+            updateDashboard();
+            autoSyncToCloud();
+        }
+
+        function updateLobItemTotalTarget(index, val) {
+            const total = parseInt(val) || 0;
+            lobItemsConfig[index].target = total;
+            const base = Math.floor(total / 5);
+            const rem = total % 5;
+            lobItemsConfig[index].w10 = base + rem;
+            lobItemsConfig[index].w11 = base;
+            lobItemsConfig[index].w12 = base;
+            lobItemsConfig[index].w13 = base;
+            lobItemsConfig[index].w14 = base;
+
+            ['w10', 'w11', 'w12', 'w13', 'w14'].forEach(wk => {
+                const inputEl = document.getElementById(`lob_${index}_${wk}`);
+                if (inputEl) inputEl.value = lobItemsConfig[index][wk];
+            });
+
+            updateDashboard();
+            autoSyncToCloud();
+        }
+
+        function deleteLobItem(index) {
+            lobItemsConfig.splice(index, 1);
+            renderLobConfigInputs();
+            updateDashboard();
+            autoSyncToCloud();
+        }
+
+        function toggleClosingModal(show) {
+            const modal = document.getElementById('closingReportModal');
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        function openClosingReport(dateStr) {
+            const dayTx = rawData.filter(r => r.date === dateStr);
+
+            const totalSales = dayTx.reduce((acc, r) => acc + r.net_price, 0);
+            const devSales = dayTx.filter(r => r.category === 'Device').reduce((acc, r) => acc + r.net_price, 0);
+            const accSales = dayTx.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
+            const vasSales = dayTx.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
+
+            const macRegex = /\b(MBA|MBP|MBN|IMAC|MACMINI|MAC MINI|MAC STUDIO|MACSTUDIO|MACBOOK|MAC)\b/i;
+            const macQty = dayTx.filter(r => {
+                if (r.category !== 'Device') return false;
+                const p = r.product_name.toUpperCase();
+                if (p.includes('SLEEVE') || p.includes('SLVE') || p.includes('CASE') || p.includes('SCREEN') || p.includes('PROTECTOR') || p.includes('BAG') || p.includes('VERO') || p.includes('UNIQ') || p.includes('FOLIO')) {
+                    return false;
+                }
+                return macRegex.test(r.product_name);
+            }).length;
+
+            const ipadQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPAD')).length;
+            const iphoneQty = dayTx.filter(r => r.category === 'Device' && r.product_name.toUpperCase().includes('IPHONE')).length;
+            const awQty = dayTx.filter(r => r.category === 'Device' && (r.product_name.toUpperCase().includes('WATCH') || r.product_name.toUpperCase().includes('AW'))).length;
+
+            const vasItems = dayTx.filter(r => r.category === 'VAS');
+            const qoalaRp = vasItems.filter(r => r.article.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('KLA') || r.product_name.toUpperCase().includes('QOALA')).reduce((acc, r) => acc + r.net_price, 0);
+            const tslRp = vasItems.filter(r => r.article.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TSL') || r.product_name.toUpperCase().includes('TELKOMSEL')).reduce((acc, r) => acc + r.net_price, 0);
+            const idtRp = vasItems.filter(r => r.article.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('IDT') || r.product_name.toUpperCase().includes('INDOSAT')).reduce((acc, r) => acc + r.net_price, 0);
+            const xxlRp = vasItems.filter(r => r.article.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XXL') || r.product_name.toUpperCase().includes('XL')).reduce((acc, r) => acc + r.net_price, 0);
+
+            const reportStr = `*M121 - Closing Report ${dateStr}*
+
+Total Sales : ${fmtRp(totalSales)}
+Devices : ${fmtRp(devSales)}
+Accessories : ${fmtRp(accSales)}
+VAS : ${fmtRp(vasSales)}
+
+Mac : ${macQty}
+iPad : ${ipadQty}
+iPhone : ${iphoneQty}
+Apple Watch : ${awQty}
+
+Qoala : ${fmtRp(qoalaRp)}
+Telkomsel : ${fmtRp(tslRp)}
+Indosat : ${fmtRp(idtRp)}
+XL : ${fmtRp(xxlRp)}`;
+
+            const airpodsBlockKws = ['CASE', 'COVER', 'SLEEVE', 'SLVE', 'CLYDE', 'POUCH', 'BAG', 'STRAP', 'HOOK', 'HOLDER', 'PROTECTOR', 'GLASS', 'SKIN', 'ARMOR'];
+            const airpodsItems = dayTx.filter(r => {
+                const p = r.product_name.toUpperCase();
+                if (!p.includes('AIRPOD')) return false;
+                if (airpodsBlockKws.some(kw => p.includes(kw))) return false;
+                return true;
+            });
+
+            const airpodsQty = airpodsItems.length;
+            const airpodsGroup = {};
+            airpodsItems.forEach(r => {
+                const name = r.product_name.trim();
+                airpodsGroup[name] = (airpodsGroup[name] || 0) + 1;
+            });
+            const airpodsListStr = Object.entries(airpodsGroup).map(([name, qty]) => `${name} (${qty})`).join(', ');
+            const airpodsDetailLine = airpodsQty > 0 ? `Airpods : ${airpodsQty} - ${airpodsListStr}` : `Airpods : 0 - None`;
+
+            const ipadItems = dayTx.filter(r => {
+                if (r.category !== 'Device') return false;
+                const p = r.product_name.toUpperCase();
+                if (p.includes('SLEEVE') || p.includes('SLVE') || p.includes('CASE') || p.includes('SCREEN') || p.includes('PROTECTOR') || p.includes('BAG') || p.includes('VERO') || p.includes('UNIQ') || p.includes('FOLIO') || p.includes('GLASS') || p.includes('KEYBOARD')) {
+                    return false;
+                }
+                return p.includes('IPAD');
+            });
+            const ipadQtyTracker = ipadItems.length;
+            const ipadGroup = {};
+            ipadItems.forEach(r => {
+                const name = r.product_name.trim();
+                ipadGroup[name] = (ipadGroup[name] || 0) + 1;
+            });
+            const ipadListStr = Object.entries(ipadGroup).map(([name, qty]) => `${name} (${qty})`).join(', ');
+            const ipadDetailLine = ipadQtyTracker > 0 ? `iPad : ${ipadQtyTracker} - ${ipadListStr}` : `iPad : 0 - None`;
+
+            const uniqueReceipts = new Set(
+                dayTx.map(r => r.receipt ? String(r.receipt).trim() : null)
+                     .filter(rc => rc && rc !== 'undefined' && rc !== 'null')
+            );
+
+            const trackerReportStr = `*M121  - Closing For Tracker ${dateStr}*
+${airpodsDetailLine}
+${ipadDetailLine}
+Total QTY Invoice : ${uniqueReceipts.size}`;
+
+            document.getElementById('closingReportText').textContent = reportStr;
+            document.getElementById('closingTrackerReportText').textContent = trackerReportStr;
+            toggleClosingModal(true);
+        }
+
+        function copyClosingReportText() {
+            const text = document.getElementById('closingReportText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('btnCopyClosing');
+                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Tersalin!`;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Closing Report`;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        function copyTrackerReportText() {
+            const text = document.getElementById('closingTrackerReportText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('btnCopyTracker');
+                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Tersalin!`;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Tracker Report`;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        function toggleStaffItemsModal(show) {
+            const modal = document.getElementById('staffItemsModal');
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        function openStaffItemsModal(staffName, category, dateFilterArray) {
+            const displayName = staffName.split('/')[1] || staffName;
+            const role = staffRoleConfig[staffName] || 'SA';
+
+            document.getElementById('staffModalTitle').innerHTML = `
+                <i data-lucide="package" class="w-4 h-4 text-cyan-400"></i> Rincian Item ${category} - ${displayName}
+            `;
+            document.getElementById('staffModalSub').textContent = `Jabatan: ${role} | Filter: ${category}`;
+
+            let items = rawData.filter(r => r.staff === staffName);
+            if (category && category !== 'ALL') {
+                items = items.filter(r => r.category === category);
+            }
+            if (dateFilterArray && Array.isArray(dateFilterArray) && dateFilterArray.length > 0) {
+                items = items.filter(r => dateFilterArray.includes(r.date));
+            }
+
+            const tbody = document.getElementById('staffItemsTableBody');
+            tbody.innerHTML = '';
+
+            let sumPrice = 0;
+            items.forEach(r => {
+                sumPrice += r.net_price;
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/5 transition';
+                tr.innerHTML = `
+                    <td class="py-2 px-2 font-mono text-[11px] opacity-70">${r.date}</td>
+                    <td class="py-2 px-2 font-semibold text-white">${r.product_name}</td>
+                    <td class="py-2 px-2 font-mono text-[11px] opacity-70">${r.article}</td>
+                    <td class="py-2 px-2 text-right font-bold text-emerald-400">${fmtRp(r.net_price)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('staffModalTotalQty').textContent = `Total: ${items.length} Item`;
+            document.getElementById('staffModalTotalNominal').textContent = fmtRp(sumPrice);
+
+            toggleStaffItemsModal(true);
+            lucide.createIcons();
+        }
+
+        function copyStaffModalItems() {
+            const title = document.getElementById('staffModalTitle').innerText;
+            const sub = document.getElementById('staffModalSub').innerText;
+            const totalQty = document.getElementById('staffModalTotalQty').innerText;
+            const totalNominal = document.getElementById('staffModalTotalNominal').innerText;
+
+            const rows = document.querySelectorAll('#staffItemsTableBody tr');
+            let textList = [];
+            rows.forEach((row, idx) => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length >= 4) {
+                    const date = cells[0].innerText;
+                    const pName = cells[1].innerText;
+                    const art = cells[2].innerText;
+                    const amt = cells[3].innerText;
+                    textList.push(`${idx + 1}. [${date}] ${pName} (${art}) - ${amt}`);
+                }
+            });
+
+            const fullText = `*${title}*
+${sub}
+${totalQty} | Total Amount: ${totalNominal}
+
+${textList.join('\n')}`;
+
+            navigator.clipboard.writeText(fullText).then(() => {
+                const btn = document.getElementById('btnCopyStaffModal');
+                if (btn) {
+                    btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Tersalin!`;
+                    lucide.createIcons();
+                    setTimeout(() => {
+                        btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Rincian Item`;
+                        lucide.createIcons();
+                    }, 2000);
+                }
+            });
+        }
+
+        function updateDashboard() {
+            const selectedStaff = document.getElementById('staffSelect') ? document.getElementById('staffSelect').value : 'ALL';
+            const activeStaffs = getActiveStaffList();
+
+            const tStoreMonth = parseFloat(document.getElementById('targetMonth').value) || 0;
+            const tStoreWeek = parseFloat(document.getElementById('targetWeek').value) || 0;
+            const tStoreDay = parseFloat(document.getElementById('targetDay').value) || 0;
+
+            const tDev = parseFloat(document.getElementById('targetDevice') ? document.getElementById('targetDevice').value : 0) || 0;
+            const tAcc = parseFloat(document.getElementById('targetAccessories').value) || 0;
+            const tVAS = parseFloat(document.getElementById('targetVAS').value) || 0;
+
+            const uniqueDatesFromData = [...new Set(rawData.map(r => r.date))].sort();
+            const latestDate = uniqueDatesFromData[uniqueDatesFromData.length - 1] || '--';
+
+            if (document.getElementById('syncDateLbl')) {
+                document.getElementById('syncDateLbl').textContent = latestDate;
+            }
+
+            let allMonthDates = [];
+            let sampleDate = uniqueDatesFromData[0] || '01-08-2026';
+            const dateParts = sampleDate.split('-');
+            if (dateParts.length === 3) {
+                const monthNum = parseInt(dateParts[1], 10);
+                const yearNum = parseInt(dateParts[2], 10);
+                const lastDay = new Date(yearNum, monthNum, 0).getDate();
+                for (let d = 1; d <= lastDay; d++) {
+                    const dd = String(d).padStart(2, '0');
+                    const mm = String(monthNum).padStart(2, '0');
+                    allMonthDates.push(`${dd}-${mm}-${yearNum}`);
+                }
+            } else {
+                allMonthDates = uniqueDatesFromData;
+            }
+
+            const appleCal = getAppleCalendarInfo(sampleDate);
+            const weekIntervals = [];
+            const numWeeksInMonth = Math.ceil(allMonthDates.length / 7);
+
+            for (let i = 0; i < numWeeksInMonth; i++) {
+                const startIdx = i * 7;
+                let wDates = [];
+                if (startIdx < allMonthDates.length) {
+                    if (i === numWeeksInMonth - 1) {
+                        wDates = allMonthDates.slice(startIdx);
+                    } else {
+                        wDates = allMonthDates.slice(startIdx, startIdx + 7);
+                    }
+                }
+                if (wDates.length > 0) {
+                    const wNum = appleCal.startWeekNum + i;
+                    weekIntervals.push({
+                        num: i + 1,
+                        wNum: wNum,
+                        wName: `W${wNum}`,
+                        startDate: wDates[0],
+                        endDate: wDates[wDates.length - 1],
+                        dates: wDates,
+                        label: `${wDates[0]} s/d ${wDates[wDates.length - 1]}`
+                    });
+                }
+            }
+
+            const last7Dates = uniqueDatesFromData.slice(-7);
+            const prev7Dates = uniqueDatesFromData.slice(-14, -7);
+
+            let staffData = rawData;
+            if (selectedStaff !== 'ALL') {
+                staffData = staffData.filter(r => r.staff === selectedStaff);
+            }
+
+            let filtered = staffData;
+            if (currentTab !== 'ALL') {
+                filtered = filtered.filter(r => r.category === currentTab);
+            }
+
+            filtered = [...filtered].sort((a, b) => {
+                if (currentTxSort === 'name-asc') return a.product_name.localeCompare(b.product_name);
+                if (currentTxSort === 'name-desc') return b.product_name.localeCompare(a.product_name);
+                if (currentTxSort === 'amount-desc') return b.net_price - a.net_price;
+                if (currentTxSort === 'amount-asc') return a.net_price - b.net_price;
+                if (currentTxSort === 'date-desc') return b.date.localeCompare(a.date);
+                return 0;
+            });
+
+            const storeDataAll = rawData;
+            const totalMonthStore = storeDataAll.reduce((acc, r) => acc + r.net_price, 0);
+            const totalDayStore = storeDataAll.filter(r => r.date === latestDate).reduce((acc, r) => acc + r.net_price, 0);
+            const totalWeek0Store = storeDataAll.filter(r => last7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+            const totalWeek1Store = storeDataAll.filter(r => prev7Dates.includes(r.date)).reduce((acc, r) => acc + r.net_price, 0);
+
+            document.getElementById('achMonth').textContent = fmtRp(totalMonthStore);
+            document.getElementById('lblTargetMonth').textContent = fmtRp(tStoreMonth);
+            const pMonthStore = tStoreMonth ? Math.min(Math.round((totalMonthStore / tStoreMonth) * 100), 100) : 0;
+            document.getElementById('badgeMonth').textContent = `${pMonthStore}%`;
+            document.getElementById('barMonth').style.width = `${pMonthStore}%`;
+
+            document.getElementById('achWeek').textContent = fmtRp(totalWeek0Store);
+            document.getElementById('lblTargetWeek').textContent = fmtRp(tStoreWeek);
+            const pWeekStore = tStoreWeek ? Math.min(Math.round((totalWeek0Store / tStoreWeek) * 100), 100) : 0;
+            document.getElementById('badgeWeek').textContent = `${pWeekStore}%`;
+            document.getElementById('barWeek').style.width = `${pWeekStore}%`;
+
+            document.getElementById('achDay').textContent = fmtRp(totalDayStore);
+            document.getElementById('lblTargetDay').textContent = fmtRp(tStoreDay);
+            const pDayStore = tStoreDay ? Math.min(Math.round((totalDayStore / tStoreDay) * 100), 100) : 0;
+            document.getElementById('badgeDay').textContent = `${pDayStore}%`;
+            document.getElementById('barDay').style.width = `${pDayStore}%`;
+
+            const devAmountStore = storeDataAll.filter(r => r.category === 'Device').reduce((acc, r) => acc + r.net_price, 0);
+            const accAmountStore = storeDataAll.filter(r => r.category === 'Accessories').reduce((acc, r) => acc + r.net_price, 0);
+            const vasAmountStore = storeDataAll.filter(r => r.category === 'VAS').reduce((acc, r) => acc + r.net_price, 0);
+
+            if (document.getElementById('achDevice')) {
+                document.getElementById('achDevice').textContent = fmtRp(devAmountStore);
+                document.getElementById('lblTargetDevice').textContent = fmtRp(tDev);
+                const remDevVal = Math.max(tDev - devAmountStore, 0);
+                document.getElementById('remDevice').textContent = remDevVal === 0 ? 'Target Achieved!' : `Sisa: ${fmtRp(remDevVal)}`;
+                const pDev = tDev ? Math.min(Math.round((devAmountStore / tDev) * 100), 100) : 0;
+                document.getElementById('badgeDevice').textContent = `${pDev}%`;
+                document.getElementById('barDevice').style.width = `${pDev}%`;
+            }
+
+            document.getElementById('achAcc').textContent = fmtRp(accAmountStore);
+            document.getElementById('lblTargetAcc').textContent = fmtRp(tAcc);
+            const remAccVal = Math.max(tAcc - accAmountStore, 0);
+            document.getElementById('remAcc').textContent = remAccVal === 0 ? 'Target Achieved!' : `Sisa: ${fmtRp(remAccVal)}`;
+            const pAcc = tAcc ? Math.min(Math.round((accAmountStore / tAcc) * 100), 100) : 0;
+            document.getElementById('badgeAcc').textContent = `${pAcc}%`;
+            document.getElementById('barAcc').style.width = `${pAcc}%`;
+
+            document.getElementById('achVAS').textContent = fmtRp(vasAmountStore);
+            document.getElementById('lblTargetVAS').textContent = fmtRp(tVAS);
+            const remVASVal = Math.max(tVAS - vasAmountStore, 0);
+            document.getElementById('remVAS').textContent = remVASVal === 0 ? 'Target Achieved!' : `Sisa: ${fmtRp(remVASVal)}`;
+            const pVAS = tVAS ? Math.min(Math.round((vasAmountStore / tVAS) * 100), 100) : 0;
+            document.getElementById('badgeVAS').textContent = `${pVAS}%`;
+            document.getElementById('barVAS').style.width = `${pVAS}%`;
+
+            const dailyInvoiceGrid = document.getElementById('dailyInvoiceGrid');
+            dailyInvoiceGrid.innerHTML = '';
+            let totalStoreUniqueInvoices = 0;
+
+            allMonthDates.forEach(dt => {
+                const dayTx = storeDataAll.filter(r => r.date === dt);
+                const uniqueReceipts = new Set(
+                    dayTx.map(r => r.receipt ? String(r.receipt).trim() : null)
+                         .filter(rc => rc && rc !== 'undefined' && rc !== 'null')
+                );
+                const invCount = uniqueReceipts.size;
+                totalStoreUniqueInvoices += invCount;
+
+                const card = document.createElement('div');
+                card.className = 'liquid-glass-card p-2 rounded-xl text-center flex flex-col justify-between cursor-pointer hover:border-emerald-400/50 hover:scale-105 transition';
+                card.onclick = () => openClosingReport(dt);
+                card.innerHTML = `
+                    <span class="text-[9px] font-mono opacity-60 block">${dt}</span>
+                    <div class="text-xs font-black text-emerald-400 mt-0.5">${invCount} <span class="text-[8px] font-normal opacity-60">Inv</span></div>
+                `;
+                dailyInvoiceGrid.appendChild(card);
+            });
+
+            document.getElementById('totalUniqueInvoicesLabel').textContent = `${totalStoreUniqueInvoices} Unique Invoices`;
+
+            document.getElementById('lflPrevStore').textContent = fmtRp(totalWeek1Store);
+            document.getElementById('lflCurrStore').textContent = fmtRp(totalWeek0Store);
+            const lflValStore = totalWeek1Store ? (((totalWeek0Store - totalWeek1Store) / totalWeek1Store) * 100).toFixed(1) : 0;
+            const lflBadgeStore = document.getElementById('lflGrowthStore');
+            lflBadgeStore.textContent = `${lflValStore > 0 ? '+' : ''}${lflValStore}% WoW`;
+            lflBadgeStore.className = `text-xs font-bold px-2.5 py-1 rounded-full ${lflValStore >= 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`;
+
+            const vasKeywords = ['kla', 'tsl', 'idt', 'xxl'];
+            const vasContainerStore = document.getElementById('vasKeywordCardsStore');
+            vasContainerStore.innerHTML = '';
+
+            const vasItemsStore = storeDataAll.filter(r => r.category === 'VAS');
+            document.getElementById('vasTotalSummary').textContent = `Total VAS Store: ${vasItemsStore.length} Item (${fmtRp(vasAmountStore)})`;
+
+            vasKeywords.forEach(kw => {
+                const matched = vasItemsStore.filter(r => 
+                    r.article.toLowerCase().includes(kw) || r.product_name.toLowerCase().includes(kw)
+                );
+                const count = matched.length;
+                const sum = matched.reduce((acc, r) => acc + r.net_price, 0);
+
+                const card = document.createElement('div');
+                card.className = 'liquid-glass-card p-3.5 rounded-2xl flex flex-col justify-between';
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black uppercase text-purple-300 tracking-wider">${kw.toUpperCase()}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Item</span>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-base font-extrabold">${fmtRp(sum)}</p>
+                    </div>
+                `;
+                vasContainerStore.appendChild(card);
+            });
+
+            const summaryBody = document.getElementById('staffMonthlySummaryBody');
+            summaryBody.innerHTML = '';
+
+            activeStaffs.forEach(stf => {
+                const sData = rawData.filter(r => r.staff === stf);
+                const sAchM = sData.reduce((acc, r) => acc + r.net_price, 0);
+
+                const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
+                const tStaffM = Math.round((tStoreMonth * pctShare) / 100);
+                const pctM = tStaffM ? Math.round((sAchM / tStaffM) * 100) : 0;
+                const role = staffRoleConfig[stf] || 'SA';
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/5 transition';
+                tr.innerHTML = `
+                    <td class="py-3 px-3 font-bold">${stf.split('/')[1] || stf}</td>
+                    <td class="py-3 px-3 text-center"><span class="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 text-[10px] font-bold border border-indigo-500/30">${role}</span></td>
+                    <td class="py-3 px-3 text-center opacity-70 font-mono">${pctShare}%</td>
+                    <td class="py-3 px-3 text-right opacity-70">${fmtRp(tStaffM)}</td>
+                    <td class="py-3 px-3 text-right font-bold text-indigo-400">${fmtRp(sAchM)}</td>
+                    <td class="py-3 px-3 text-center font-bold ${pctM >= 100 ? 'text-emerald-400' : 'text-indigo-400'}">${pctM}%</td>
+                `;
+                summaryBody.appendChild(tr);
+            });
+
+            const weeklyCapsulesContainer = document.getElementById('weeklyCapsulesContainer');
+            weeklyCapsulesContainer.innerHTML = '';
+
+            weekIntervals.forEach((wk) => {
+                const capsuleCard = document.createElement('div');
+                capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-5';
+
+                let rowsHtml = '';
+                activeStaffs.forEach(stf => {
+                    const sData = rawData.filter(r => r.staff === stf && wk.dates.includes(r.date));
+                    const sAchWeek = sData.reduce((acc, r) => acc + r.net_price, 0);
+
+                    const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
+                    const tStaffM = Math.round((tStoreMonth * pctShare) / 100);
+                    const tStaffW = Math.round(tStaffM / 4);
+                    const tStaffD = Math.round(tStaffM / 30);
+                    const pctW = tStaffW ? Math.round((sAchWeek / tStaffW) * 100) : 0;
+                    const role = staffRoleConfig[stf] || 'SA';
+
+                    rowsHtml += `
+                        <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
+                            <td class="py-2.5 px-3 font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold ml-1">(${role})</span></td>
+                            <td class="py-2.5 px-3 text-right opacity-70">${fmtRp(tStaffW)}</td>
+                            <td class="py-2.5 px-3 text-right opacity-70 font-mono text-cyan-400">${fmtRp(tStaffD)}</td>
+                            <td class="py-2.5 px-3 text-right font-bold text-cyan-300">${fmtRp(sAchWeek)}</td>
+                            <td class="py-2.5 px-3 text-center font-bold ${pctW >= 100 ? 'text-emerald-400' : 'text-cyan-400'}">${pctW}%</td>
+                        </tr>
+                    `;
+                });
+
+                let calendarDatesHtml = '';
+                wk.dates.forEach(dt => {
+                    const dayAch = storeDataAll.filter(r => r.date === dt).reduce((acc, r) => acc + r.net_price, 0);
+                    calendarDatesHtml += `
+                        <div class="liquid-glass-card p-2 rounded-xl text-center">
+                            <span class="text-[9px] font-mono opacity-60 block">${dt}</span>
+                            <span class="text-[10px] font-bold text-emerald-400 mt-0.5 block truncate">${fmtRp(dayAch)}</span>
+                        </div>
+                    `;
+                });
+
+                capsuleCard.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black uppercase text-cyan-400 tracking-wider">${wk.wName}</span>
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">${wk.label}</span>
+                        </div>
+                        <span class="text-xs font-bold opacity-70">${wk.dates.length} Days</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="opacity-70 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
+                                    <th class="pb-2 px-3">Staff</th>
+                                    <th class="pb-2 px-3 text-right">Target Week</th>
+                                    <th class="pb-2 px-3 text-right">Target Day</th>
+                                    <th class="pb-2 px-3 text-right">Ach Week</th>
+                                    <th class="pb-2 px-3 text-center">% Achieved</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="space-y-1.5 pt-3 border-t border-white/10">
+                        <span class="text-[10px] uppercase font-bold opacity-60">CLOSING HARIAN (STORE):</span>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+                            ${calendarDatesHtml}
+                        </div>
+                    </div>
+                `;
+                weeklyCapsulesContainer.appendChild(capsuleCard);
+            });
+
+            const lflPairContainer = document.getElementById('lflPairCapsulesContainer');
+            lflPairContainer.innerHTML = '';
+
+            for (let i = 0; i < weekIntervals.length - 1; i++) {
+                const wPrev = weekIntervals[i];
+                const wCurr = weekIntervals[i + 1];
+
+                const pairCard = document.createElement('div');
+                pairCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+
+                let rowsHtml = '';
+                activeStaffs.forEach(stf => {
+                    const sDataPrev = rawData.filter(r => r.staff === stf && wPrev.dates.includes(r.date));
+                    const sDataCurr = rawData.filter(r => r.staff === stf && wCurr.dates.includes(r.date));
+
+                    const achPrev = sDataPrev.reduce((acc, r) => acc + r.net_price, 0);
+                    const achCurr = sDataCurr.reduce((acc, r) => acc + r.net_price, 0);
+
+                    const diff = achCurr - achPrev;
+                    const lflVal = achPrev ? (((achCurr - achPrev) / achPrev) * 100).toFixed(1) : 0;
+                    const role = staffRoleConfig[stf] || 'SA';
+
+                    rowsHtml += `
+                        <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
+                            <td class="py-2.5 px-3 font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold ml-1">(${role})</span></td>
+                            <td class="py-2.5 px-3 text-right opacity-80">${fmtRp(achPrev)}</td>
+                            <td class="py-2.5 px-3 text-right font-bold text-emerald-400">${fmtRp(achCurr)}</td>
+                            <td class="py-2.5 px-3 text-right font-mono ${diff >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${diff >= 0 ? '+' : ''}${fmtRp(diff)}</td>
+                            <td class="py-2.5 px-3 text-center">
+                                <span class="text-[10px] font-bold px-2.5 py-1 rounded-full ${lflVal >= 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}">
+                                    ${lflVal > 0 ? '+' : ''}${lflVal}% WoW
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                pairCard.innerHTML = `
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-white/10 pb-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="git-compare" class="w-4 h-4 text-emerald-400"></i>
+                            <span class="text-xs font-black uppercase text-emerald-400 tracking-wider">LFL Comparison Pair ${i+1}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs font-semibold">
+                            <span class="px-3 py-1 rounded-full bg-slate-800 opacity-80 border border-white/10">${wPrev.label} (${wPrev.wName})</span>
+                            <span class="text-emerald-400 font-bold">VS</span>
+                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">${wCurr.label} (${wCurr.wName})</span>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="opacity-70 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
+                                    <th class="pb-2 px-3">Staff</th>
+                                    <th class="pb-2 px-3 text-right">${wPrev.label}</th>
+                                    <th class="pb-2 px-3 text-right">${wCurr.label}</th>
+                                    <th class="pb-2 px-3 text-right">Selisih (Rp)</th>
+                                    <th class="pb-2 px-3 text-center">Growth %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                lflPairContainer.appendChild(pairCard);
+            }
+
+            const lobItemsContainer = document.getElementById('lobItemsContainer');
+            lobItemsContainer.innerHTML = '';
+
+            const numStaff = activeStaffs.length || 1;
+
+            lobItemsConfig.forEach((lobItem) => {
+                const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
+
+                const storeTotalSoldQty = storeDataAll.filter(matchFn).length;
+                const storeTotalTargetQty = lobItem.target || 0;
+                const storePct = storeTotalTargetQty ? Math.min(Math.round((storeTotalSoldQty / storeTotalTargetQty) * 100), 100) : 0;
+                const storeRemainingQty = Math.max(storeTotalTargetQty - storeTotalSoldQty, 0);
+
+                const displayName = lobItem.name === 'iPad 11th' ? 'iPad A16' : lobItem.name;
+
+                let staffContributionRows = '';
+                activeStaffs.forEach(stf => {
+                    const sData = rawData.filter(r => r.staff === stf);
+                    const staffSoldQty = sData.filter(matchFn).length;
+
+                    const pctShare = staffPercentConfig[stf] || (100 / numStaff);
+                    const staffTargetQty = Math.round((storeTotalTargetQty * pctShare) / 100);
+                    const staffRemQty = Math.max(staffTargetQty - staffSoldQty, 0);
+                    const role = staffRoleConfig[stf] || 'SA';
+
+                    const sW10Sold = sData.filter(r => weekIntervals[0] && weekIntervals[0].dates.includes(r.date) && matchFn(r)).length;
+                    const sW10Tgt = Math.round(((lobItem.w10 || 0) * pctShare) / 100);
+
+                    const sW11Sold = sData.filter(r => weekIntervals[1] && weekIntervals[1].dates.includes(r.date) && matchFn(r)).length;
+                    const sW11Tgt = Math.round(((lobItem.w11 || 0) * pctShare) / 100);
+
+                    const sW12Sold = sData.filter(r => weekIntervals[2] && weekIntervals[2].dates.includes(r.date) && matchFn(r)).length;
+                    const sW12Tgt = Math.round(((lobItem.w12 || 0) * pctShare) / 100);
+
+                    const sW13Sold = sData.filter(r => weekIntervals[3] && weekIntervals[3].dates.includes(r.date) && matchFn(r)).length;
+                    const sW13Tgt = Math.round(((lobItem.w13 || 0) * pctShare) / 100);
+
+                    const sW14Sold = sData.filter(r => weekIntervals[4] && weekIntervals[4].dates.includes(r.date) && matchFn(r)).length;
+                    const sW14Tgt = Math.round(((lobItem.w14 || 0) * pctShare) / 100);
+
+                    const w1Lbl = weekIntervals[0] ? weekIntervals[0].wName : 'W1';
+                    const w2Lbl = weekIntervals[1] ? weekIntervals[1].wName : 'W2';
+                    const w3Lbl = weekIntervals[2] ? weekIntervals[2].wName : 'W3';
+                    const w4Lbl = weekIntervals[3] ? weekIntervals[3].wName : 'W4';
+                    const w5Lbl = weekIntervals[4] ? weekIntervals[4].wName : 'W5';
+
+                    staffContributionRows += `
+                        <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
+                            <td class="py-2.5 px-3 font-bold">${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold ml-1">(${role})</span></td>
+                            <td class="py-2.5 px-3 text-center font-bold text-indigo-300 font-mono">${staffTargetQty} Item</td>
+                            <td class="py-2.5 px-3 text-center font-bold text-purple-300 font-mono">${staffSoldQty} Item</td>
+                            <td class="py-2.5 px-3 text-center opacity-90 font-mono">${sW10Sold} <span class="text-[9px] opacity-50">/ ${sW10Tgt}</span></td>
+                            <td class="py-2.5 px-3 text-center opacity-90 font-mono">${sW11Sold} <span class="text-[9px] opacity-50">/ ${sW11Tgt}</span></td>
+                            <td class="py-2.5 px-3 text-center opacity-90 font-mono">${sW12Sold} <span class="text-[9px] opacity-50">/ ${sW12Tgt}</span></td>
+                            <td class="py-2.5 px-3 text-center opacity-90 font-mono">${sW13Sold} <span class="text-[9px] opacity-50">/ ${sW13Tgt}</span></td>
+                            <td class="py-2.5 px-3 text-center opacity-90 font-mono">${sW14Sold} <span class="text-[9px] opacity-50">/ ${sW14Tgt}</span></td>
+                            <td class="py-2.5 px-3 text-center">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${staffRemQty === 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-purple-500/20 text-purple-300'}">
+                                    ${staffRemQty === 0 ? 'Achieved!' : `Sisa: ${staffRemQty} Item`}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                const w1Lbl = weekIntervals[0] ? weekIntervals[0].wName : 'W1';
+                const w2Lbl = weekIntervals[1] ? weekIntervals[1].wName : 'W2';
+                const w3Lbl = weekIntervals[2] ? weekIntervals[2].wName : 'W3';
+                const w4Lbl = weekIntervals[3] ? weekIntervals[3].wName : 'W4';
+                const w5Lbl = weekIntervals[4] ? weekIntervals[4].wName : 'W5';
+
+                const lobCard = document.createElement('div');
+                lobCard.className = 'liquid-glass rounded-3xl p-6 space-y-5';
+                lobCard.innerHTML = `
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/10 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-3 bg-purple-500/20 rounded-2xl border border-purple-500/30">
+                                <i data-lucide="smartphone" class="w-6 h-6 text-purple-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-extrabold">${displayName}</h3>
+                                <p class="text-xs opacity-70">Pencapaian Total Keseluruhan Store (${appleCal.qName})</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-6">
+                            <div class="text-right">
+                                <span class="text-2xl font-black">${storeTotalSoldQty} <span class="text-xs font-normal opacity-70">/ ${storeTotalTargetQty} Item</span></span>
+                                <p class="text-[11px] font-semibold ${storeRemainingQty === 0 ? 'text-emerald-400' : 'text-purple-300'}">
+                                    ${storeRemainingQty === 0 ? 'Target Store Achieved!' : `Sisa Store: ${storeRemainingQty} Item`}
+                                </p>
+                            </div>
+                            <span class="text-xs font-black px-3 py-1.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${storePct}% Store</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 overflow-x-auto py-1 text-xs font-bold">
+                        <span class="text-[10px] uppercase opacity-60">Target Store Weekly (${appleCal.qName}):</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w1Lbl}: ${lobItem.w10 || 0}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w2Lbl}: ${lobItem.w11 || 0}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w3Lbl}: ${lobItem.w12 || 0}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w4Lbl}: ${lobItem.w13 || 0}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">${w5Lbl}: ${lobItem.w14 || 0}</span>
+                    </div>
+
+                    <div class="w-full bg-slate-800/40 rounded-full h-2 overflow-hidden">
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: ${storePct}%"></div>
+                    </div>
+
+                    <div class="pt-2">
+                        <h4 class="text-xs font-bold uppercase opacity-70 tracking-wider mb-3">Detail Breakdown Target Individual (Nominal QTY) Per Staff:</h4>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="opacity-70 text-[11px] font-semibold uppercase tracking-wider border-b border-white/10">
+                                        <th class="pb-2 px-3">Nama Staff</th>
+                                        <th class="pb-2 px-3 text-center">Target Individual (QTY)</th>
+                                        <th class="pb-2 px-3 text-center">Total Terjual (QTY)</th>
+                                        <th class="pb-2 px-3 text-center">${w1Lbl} Qty</th>
+                                        <th class="pb-2 px-3 text-center">${w2Lbl} Qty</th>
+                                        <th class="pb-2 px-3 text-center">${w3Lbl} Qty</th>
+                                        <th class="pb-2 px-3 text-center">${w4Lbl} Qty</th>
+                                        <th class="pb-2 px-3 text-center">${w5Lbl} Qty</th>
+                                        <th class="pb-2 px-3 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${staffContributionRows}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                lobItemsContainer.appendChild(lobCard);
+            });
+
+            const lobWeeklyHeader = document.getElementById('lobWeeklyHeaderTitle');
+            if (lobWeeklyHeader && weekIntervals.length > 0) {
+                const wFirst = weekIntervals[0].wName;
+                const wLast = weekIntervals[weekIntervals.length - 1].wName;
+                lobWeeklyHeader.innerHTML = `
+                    <i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i> LOB Focus Breakdown Per Week (${appleCal.qName} - ${wFirst} s/d ${wLast})
+                `;
+            }
+
+            const lobWeeklyCapsulesContainer = document.getElementById('lobWeeklyCapsulesContainer');
+            if (lobWeeklyCapsulesContainer) {
+                lobWeeklyCapsulesContainer.innerHTML = '';
+                weekIntervals.forEach((wk, wkIdx) => {
+                    const capsuleCard = document.createElement('div');
+                    capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+
+                    let rowsHtml = '';
+                    activeStaffs.forEach(stf => {
+                        const role = staffRoleConfig[stf] || 'SA';
+                        const pctShare = staffPercentConfig[stf] || (100 / numStaff);
+                        let lobItemsHtml = '';
+
+                        lobItemsConfig.forEach(lobItem => {
+                            const matchFn = (r) => r.lob_focus === lobItem.key || (r.product_name && r.product_name.toLowerCase().includes(lobItem.name.toLowerCase()));
+                            const wkSold = rawData.filter(r => r.staff === stf && wk.dates.includes(r.date) && matchFn(r)).length;
+                            
+                            const wKeys = ['w10', 'w11', 'w12', 'w13', 'w14'];
+                            const wKey = wKeys[wkIdx] || 'w10';
+                            const wStoreTarget = lobItem[wKey] || 0;
+                            const wStaffTarget = Math.round((wStoreTarget * pctShare) / 100);
+
+                            const displayName = lobItem.name === 'iPad 11th' ? 'iPad A16' : lobItem.name;
+
+                            lobItemsHtml += `
+                                <div class="bg-white/5 px-2.5 py-1.5 rounded-xl flex justify-between items-center text-xs">
+                                    <span class="text-[10px] font-bold text-purple-300">${displayName}</span>
+                                    <span class="font-extrabold text-white font-mono">${wkSold} <span class="text-[9px] opacity-60 font-normal">/ ${wStaffTarget} Item</span></span>
+                                </div>
+                            `;
+                        });
+
+                        rowsHtml += `
+                            <div class="liquid-glass-card p-4 rounded-2xl space-y-2">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                    <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                                        ${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span>
+                                    </h4>
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 pt-1">
+                                    ${lobItemsHtml}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    capsuleCard.innerHTML = `
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-black uppercase text-purple-300 tracking-wider">${wk.wName}</span>
+                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${wk.label}</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${rowsHtml}
+                        </div>
+                    `;
+                    lobWeeklyCapsulesContainer.appendChild(capsuleCard);
+                });
+            }
+
+            const deviceWeeklyContainer = document.getElementById('deviceWeeklyCapsulesContainer');
+            if (deviceWeeklyContainer) {
+                deviceWeeklyContainer.innerHTML = '';
+                weekIntervals.forEach((wk) => {
+                    const capsuleCard = document.createElement('div');
+                    capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+                    let staffCardsHtml = '';
+                    activeStaffs.forEach(stf => {
+                        const sData = rawData.filter(r => r.staff === stf && r.category === 'Device' && wk.dates.includes(r.date));
+                        const sDevTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
+                        const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
+                        const tStaffDevM = Math.round((tDev * pctShare) / 100);
+                        const tStaffDevW = Math.round(tStaffDevM / 4);
+                        const role = staffRoleConfig[stf] || 'SA';
+                        const safeStfName = stf.replace(/'/g, "\\'");
+                        const wkDatesJson = JSON.stringify(wk.dates).replace(/"/g, '&quot;');
+
+                        staffCardsHtml += `
+                            <div onclick="openStaffItemsModal('${safeStfName}', 'Device', ${wkDatesJson})" class="liquid-glass-card p-4 rounded-2xl space-y-3 cursor-pointer hover:border-indigo-400/50 hover:scale-[1.01] transition" title="Klik untuk rincian item Device">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                    <div>
+                                        <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                                            ${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span>
+                                            <i data-lucide="external-link" class="w-3 h-3 text-indigo-400 opacity-60"></i>
+                                        </h4>
+                                        <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-xs font-black text-indigo-400">${fmtRp(sDevTotal)} (${sData.length} Item)</span>
+                                        <span class="text-[10px] block opacity-60">Target: ${fmtRp(tStaffDevW)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    capsuleCard.innerHTML = `
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-black uppercase text-indigo-400 tracking-wider">${wk.wName}</span>
+                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">${wk.label}</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${staffCardsHtml}
+                        </div>
+                    `;
+                    deviceWeeklyContainer.appendChild(capsuleCard);
+                });
+            }
+
+            const aksesorisWeeklyContainer = document.getElementById('aksesorisWeeklyCapsulesContainer');
+            aksesorisWeeklyContainer.innerHTML = '';
+            weekIntervals.forEach((wk) => {
+                const capsuleCard = document.createElement('div');
+                capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+                let staffCardsHtml = '';
+                activeStaffs.forEach(stf => {
+                    const sData = rawData.filter(r => r.staff === stf && r.category === 'Accessories' && wk.dates.includes(r.date));
+                    const sAccTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
+                    const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
+                    const tStaffAccM = Math.round((tAcc * pctShare) / 100);
+                    const tStaffAccW = Math.round(tStaffAccM / 4);
+                    const role = staffRoleConfig[stf] || 'SA';
+                    const safeStfName = stf.replace(/'/g, "\\'");
+                    const wkDatesJson = JSON.stringify(wk.dates).replace(/"/g, '&quot;');
+
+                    staffCardsHtml += `
+                        <div onclick="openStaffItemsModal('${safeStfName}', 'Accessories', ${wkDatesJson})" class="liquid-glass-card p-4 rounded-2xl space-y-3 cursor-pointer hover:border-cyan-400/50 hover:scale-[1.01] transition" title="Klik untuk rincian item Aksesori">
+                            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                <div>
+                                    <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                                        ${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span>
+                                        <i data-lucide="external-link" class="w-3 h-3 text-cyan-400 opacity-60"></i>
+                                    </h4>
+                                    <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-xs font-black text-cyan-400">${fmtRp(sAccTotal)} (${sData.length} Item)</span>
+                                    <span class="text-[10px] block opacity-60">Target: ${fmtRp(tStaffAccW)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                capsuleCard.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black uppercase text-cyan-400 tracking-wider">${wk.wName}</span>
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">${wk.label}</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${staffCardsHtml}
+                    </div>
+                `;
+                aksesorisWeeklyContainer.appendChild(capsuleCard);
+            });
+
+            const vasWeeklyContainer = document.getElementById('vasWeeklyCapsulesContainer');
+            vasWeeklyContainer.innerHTML = '';
+            weekIntervals.forEach((wk) => {
+                const capsuleCard = document.createElement('div');
+                capsuleCard.className = 'liquid-glass rounded-3xl p-6 space-y-4';
+                let staffCardsHtml = '';
+                activeStaffs.forEach(stf => {
+                    const sData = rawData.filter(r => r.staff === stf && r.category === 'VAS' && wk.dates.includes(r.date));
+                    const sVasTotal = sData.reduce((acc, r) => acc + r.net_price, 0);
+                    const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
+                    const tStaffVasM = Math.round((tVAS * pctShare) / 100);
+                    const tStaffVasW = Math.round(tStaffVasM / 4);
+                    const role = staffRoleConfig[stf] || 'SA';
+                    const safeStfName = stf.replace(/'/g, "\\'");
+                    const wkDatesJson = JSON.stringify(wk.dates).replace(/"/g, '&quot;');
+
+                    let vasKwHtml = '';
+                    vasKeywords.forEach(kw => {
+                        const matched = sData.filter(r => 
+                            r.article.toLowerCase().includes(kw) || r.product_name.toLowerCase().includes(kw)
+                        );
+                        const count = matched.length;
+                        const sum = matched.reduce((acc, r) => acc + r.net_price, 0);
+
+                        vasKwHtml += `
+                            <div class="bg-white/5 p-2 rounded-xl flex justify-between items-center text-xs">
+                                <div>
+                                    <span class="font-bold text-purple-300 uppercase text-[10px] block">${kw.toUpperCase()}</span>
+                                    <span class="font-semibold">${fmtRp(sum)}</span>
+                                </div>
+                                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">${count} Item</span>
+                            </div>
+                        `;
+                    });
+
+                    staffCardsHtml += `
+                        <div onclick="openStaffItemsModal('${safeStfName}', 'VAS', ${wkDatesJson})" class="liquid-glass-card p-4 rounded-2xl space-y-2 cursor-pointer hover:border-purple-400/50 hover:scale-[1.01] transition" title="Klik untuk rincian item VAS">
+                            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                <div>
+                                    <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                                        ${stf.split('/')[1] || stf} <span class="text-[9px] opacity-60 font-semibold">(${role})</span>
+                                        <i data-lucide="external-link" class="w-3 h-3 text-purple-400 opacity-60"></i>
+                                    </h4>
+                                    <span class="text-[10px] opacity-60">${sData.length} Item Terjual</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-xs font-black text-purple-300">${fmtRp(sVasTotal)} (${sData.length} Item)</span>
+                                    <span class="text-[10px] block opacity-60">Target: ${fmtRp(tStaffVasW)}</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                ${vasKwHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+                capsuleCard.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black uppercase text-purple-300 tracking-wider">${wk.wName}</span>
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">${wk.label}</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${staffCardsHtml}
+                    </div>
+                `;
+                vasWeeklyContainer.appendChild(capsuleCard);
+            });
+
+            const tbody = document.getElementById('transactionBody');
+            tbody.innerHTML = '';
+            document.getElementById('itemCount').textContent = `${filtered.length} Item`;
+
+            filtered.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/5 transition';
+                tr.innerHTML = `
+                    <td class="py-2.5 px-2 font-mono text-[11px] opacity-70">${r.date}</td>
+                    <td class="py-2.5 px-2 font-medium">${r.staff.split('/')[1] || r.staff}</td>
+                    <td class="py-2.5 px-2 font-semibold">${r.product_name}</td>
+                    <td class="py-2.5 px-2 font-mono text-[11px] opacity-70">${r.article}</td>
+                    <td class="py-2.5 px-2">
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${r.category === 'Device' ? 'bg-blue-500/20 text-blue-300' : r.category === 'VAS' ? 'bg-purple-500/20 text-purple-300' : 'bg-slate-500/20 text-slate-300'}">
+                            ${r.category}
+                        </span>
+                    </td>
+                    <td class="py-2.5 px-2 text-right font-bold text-emerald-400">${fmtRp(r.net_price)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
+        .light-mode {
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --card-border: rgba(203, 213, 225, 0.6);
+            --text-main: #0f172a;
+            --text-sub: #475569;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px) saturate(210%);
+            -webkit-backdrop-filter: blur(30px) saturate(210%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .liquid-glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--card-border);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .liquid-glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .floating-nav {
+            background: var(--nav-bg);
+            backdrop-filter: blur(25px) saturate(200%);
+            -webkit-backdrop-filter: blur(25px) saturate(200%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-tab-active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(168, 85, 247, 0.4) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff !important;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 pb-12 font-sans antialiased">
+
+    <!-- PASSWORD AUTHENTICATION MODAL -->
+    <div id="authModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-2xl z-[100] flex items-center justify-center p-4">
+        <div class="liquid-glass rounded-3xl p-8 max-w-md w-full border border-white/20 shadow-2xl text-center space-y-6">
+            <div class="inline-flex p-4 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-3xl shadow-xl shadow-indigo-500/30">
+                <i data-lucide="lock" class="w-8 h-8 text-white"></i>
+            </div>
+            
+            <div>
+                <h2 class="text-xl font-extrabold text-white">Protected Dashboard</h2>
+                <p class="text-xs opacity-70 mt-1">Masukkan password untuk mengakses data Sales Progress.</p>
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="passInput" placeholder="Masukkan Password" class="w-full bg-slate-900/90 border border-white/15 rounded-2xl px-4 py-3 text-sm text-center text-white focus:outline-none focus:border-indigo-500 font-bold placeholder:font-normal placeholder:opacity-50">
+                    <p id="passError" class="text-xs text-rose-400 font-semibold mt-2 hidden flex items-center justify-center gap-1">
+                        <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> Password salah! Silakan coba lagi.
+                    </p>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 text-white font-bold text-sm py-3 rounded-2xl shadow-lg transition">
+                    Unlock Access
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <div class="max-w-7xl mx-auto space-y-8">
+
+        <!-- HEADER -->
+        <header class="liquid-glass rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="p-3.5 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-xl shadow-indigo-500/20">
+                    <i data-lucide="layout-dashboard" class="w-8 h-8 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-300 bg-clip-text text-transparent">
+                        Sales Progress Dashboard
+                    </h1>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <p class="text-xs md:text-sm opacity-70">
+                            Staff Achievement Tracker | <span class="text-[10px] opacity-60 font-medium">made with ❤️ by frans</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
                 <!-- RUN GITHUB ACTIONS BUTTON -->
                 <button onclick="triggerGitHubWorkflow()" id="btnRunAction" class="liquid-glass-card hover:bg-white/10 text-xs font-bold px-4 py-3 rounded-2xl flex items-center gap-2 border border-purple-500/40 text-purple-300 shadow-lg shadow-purple-500/10 transition" title="Jalankan GitHub Actions Manual">
                     <i data-lucide="play" class="w-4 h-4 text-purple-400"></i>
