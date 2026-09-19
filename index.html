@@ -140,7 +140,13 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- RUN GITHUB ACTIONS BUTTON -->
+                <button onclick="triggerGitHubWorkflow()" id="btnRunAction" class="liquid-glass-card hover:bg-white/10 text-xs font-bold px-4 py-3 rounded-2xl flex items-center gap-2 border border-purple-500/40 text-purple-300 shadow-lg shadow-purple-500/10 transition" title="Jalankan GitHub Actions Manual">
+                    <i data-lucide="play" class="w-4 h-4 text-purple-400"></i>
+                    <span>Run Actions</span>
+                </button>
+
                 <!-- THEME TOGGLE BUTTON -->
                 <button onclick="toggleTheme()" class="liquid-glass-card p-3 rounded-2xl flex items-center justify-center hover:bg-white/10 transition" title="Switch Dark/Light Theme">
                     <i id="themeIcon" data-lucide="moon" class="w-4 h-4 text-amber-400"></i>
@@ -583,7 +589,7 @@
         - All right reserved Ⓒfrans 2026 -
     </footer>
 
-    <!-- MODAL 1: CONFIG TARGET & STAFF PERCENTAGE & CLOUD SYNC -->
+    <!-- MODAL 1: CONFIG TARGET & STAFF PERCENTAGE & CLOUD SYNC & GITHUB TRIGGER -->
     <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="liquid-glass rounded-3xl p-6 max-w-3xl w-full border border-white/20 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-white/10 pb-4">
@@ -593,6 +599,32 @@
                 <button onclick="toggleConfigModal(false)" class="opacity-70 hover:opacity-100 transition">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
+            </div>
+
+            <!-- GITHUB ACTIONS MANUAL TRIGGER CONFIG -->
+            <div class="space-y-3 bg-purple-950/40 p-4 rounded-2xl border border-purple-500/30">
+                <h3 class="text-xs font-bold uppercase text-purple-300 tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="github" class="w-4 h-4 text-purple-400"></i> GITHUB ACTIONS MANUAL TRIGGER SETTINGS
+                </h3>
+                <p class="text-[11px] opacity-70">Masukkan Personal Access Token (PAT) GitHub untuk memicu sync data langsung dari tombol "Run Actions" di dashboard.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] opacity-70 font-bold block mb-1">GitHub Personal Access Token (PAT)</label>
+                        <input type="password" id="ghTokenInput" onchange="autoSyncToLocalAndCloud()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500" placeholder="ghp_xxxxxxxxxxxxxx">
+                    </div>
+                    <div>
+                        <label class="text-[10px] opacity-70 font-bold block mb-1">GitHub Owner / Username</label>
+                        <input type="text" id="ghOwnerInput" onchange="autoSyncToLocalAndCloud()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-purple-500" placeholder="Username GitHub">
+                    </div>
+                    <div>
+                        <label class="text-[10px] opacity-70 font-bold block mb-1">Repository Name</label>
+                        <input type="text" id="ghRepoInput" onchange="autoSyncToLocalAndCloud()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-purple-500" placeholder="Nama Repo">
+                    </div>
+                    <div>
+                        <label class="text-[10px] opacity-70 font-bold block mb-1">Workflow File Name</label>
+                        <input type="text" id="ghWorkflowInput" onchange="autoSyncToLocalAndCloud()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-purple-500" placeholder="sync.yml">
+                    </div>
+                </div>
             </div>
 
             <!-- ONLINE CLOUD SYNC CONTROL SECTION -->
@@ -780,7 +812,6 @@
 
     <!-- MAIN APP SCRIPT -->
     <script>
-        // GOOGLE APPS SCRIPT WEB APP URL TERINTEGRASI
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2BOcYHemGmeQDIwKTB197QZiQwKV428kkpmjR0OEuujY2cA2uvXvX4XFepZE_tevP3w/exec";
 
         let rawData = [];
@@ -793,7 +824,64 @@
         let staffRoleConfig = {};
         let syncTimeout = null;
 
-        // Password Authentication Check
+        // Trigger GitHub Action Workflow via REST API
+        async function triggerGitHubWorkflow() {
+            const token = document.getElementById('ghTokenInput') ? document.getElementById('ghTokenInput').value.trim() : '';
+            const owner = document.getElementById('ghOwnerInput') ? document.getElementById('ghOwnerInput').value.trim() : '';
+            const repo = document.getElementById('ghRepoInput') ? document.getElementById('ghRepoInput').value.trim() : '';
+            const workflow = document.getElementById('ghWorkflowInput') ? (document.getElementById('ghWorkflowInput').value.trim() || 'sync.yml') : 'sync.yml';
+
+            if (!token || !owner || !repo) {
+                alert('Silakan isi GitHub PAT, Owner, dan Repo Name di menu Config terlebih dahulu!');
+                toggleConfigModal(true);
+                return;
+            }
+
+            const btn = document.getElementById('btnRunAction');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-purple-400"></i> Triggering...`;
+                if (window.lucide) lucide.createIcons();
+            }
+
+            try {
+                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflow}/dispatches`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/vnd.github+json',
+                        'Authorization': `Bearer ${token}`,
+                        'X-GitHub-Api-Version': '2022-11-28',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ref: 'main'
+                    })
+                });
+
+                if (res.ok || res.status === 204) {
+                    if (btn) btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Running!`;
+                    if (window.lucide) lucide.createIcons();
+                    alert('Berhasil memicu GitHub Action! Workflow sedang berjalan di background.');
+                } else {
+                    const errObj = await res.json().catch(() => ({}));
+                    throw new Error(errObj.message || `Status Code ${res.status}`);
+                }
+            } catch (err) {
+                console.error("GitHub Action Trigger Error:", err);
+                alert('Gagal menjalankan GitHub Action: ' + err.message);
+                if (btn) btn.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-rose-400"></i> Failed`;
+                if (window.lucide) lucide.createIcons();
+            } finally {
+                setTimeout(() => {
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 text-purple-400"></i> Run Actions`;
+                        if (window.lucide) lucide.createIcons();
+                    }
+                }, 3500);
+            }
+        }
+
         function checkAuth() {
             const isAuth = sessionStorage.getItem('m121_auth');
             if (isAuth === 'true') {
@@ -814,7 +902,6 @@
             }
         }
 
-        // DYNAMIC APPLE RETAIL FISCAL QUARTER & WEEK CALENDAR HELPER
         function getAppleCalendarInfo(sampleDateStr) {
             let monthNum = 8;
             let yearNum = 2026;
@@ -826,21 +913,12 @@
                 }
             }
 
-            // Apple Retail Fiscal Quarter Mapping
-            // Q1: Oct(10), Nov(11), Dec(12)
-            // Q2: Jan(1), Feb(2), Mar(3)
-            // Q3: Apr(4), May(5), Jun(6)
-            // Q4: Jul(7), Aug(8), Sep(9)
             let qName = "Q4";
             if ([10, 11, 12].includes(monthNum)) qName = "Q1";
             else if ([1, 2, 3].includes(monthNum)) qName = "Q2";
             else if ([4, 5, 6].includes(monthNum)) qName = "Q3";
             else if ([7, 8, 9].includes(monthNum)) qName = "Q4";
 
-            // Month Position in Quarter (1, 2, or 3)
-            // Month 1 of Q: W1 - W4/W5
-            // Month 2 of Q: W5 - W9
-            // Month 3 of Q: W10 - W14
             let qMonthPos = 1;
             if ([10, 1, 4, 7].includes(monthNum)) qMonthPos = 1;
             else if ([11, 2, 5, 8].includes(monthNum)) qMonthPos = 2;
@@ -851,16 +929,9 @@
             else if (qMonthPos === 2) startWeekNum = 5;
             else if (qMonthPos === 3) startWeekNum = 10;
 
-            return {
-                monthNum,
-                yearNum,
-                qName,
-                qMonthPos,
-                startWeekNum
-            };
+            return { monthNum, yearNum, qName, qMonthPos, startWeekNum };
         }
 
-        // Dynamic LOB Items List
         let lobItemsConfig = [
             { id: 'iphone15', name: 'iPhone 15', key: 'iPhone 15', target: 27, w10: 7, w11: 6, w12: 6, w13: 6, w14: 2 },
             { id: 'ipad11th', name: 'iPad A16', key: 'iPad 11th', target: 27, w10: 7, w11: 6, w12: 6, w13: 6, w14: 2 },
@@ -910,7 +981,6 @@
             return 'Accessories';
         }
 
-        // PERSISTENCE LOCAL STORAGE
         function saveConfigToLocal() {
             try {
                 const configData = {
@@ -922,7 +992,11 @@
                     staffRoleConfig: staffRoleConfig || {},
                     lobItemsConfig: lobItemsConfig || [],
                     removedStaffs: Array.from(removedStaffs || []),
-                    storeSyncCode: document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE'
+                    storeSyncCode: document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE',
+                    ghToken: document.getElementById('ghTokenInput') ? document.getElementById('ghTokenInput').value : '',
+                    ghOwner: document.getElementById('ghOwnerInput') ? document.getElementById('ghOwnerInput').value : '',
+                    ghRepo: document.getElementById('ghRepoInput') ? document.getElementById('ghRepoInput').value : '',
+                    ghWorkflow: document.getElementById('ghWorkflowInput') ? document.getElementById('ghWorkflowInput').value : 'sync.yml'
                 };
                 localStorage.setItem('m121_sales_config', JSON.stringify(configData));
             } catch(e) { console.error('Save config error:', e); }
@@ -941,9 +1015,13 @@
                     if (parsed.staffRoleConfig) staffRoleConfig = parsed.staffRoleConfig;
                     if (parsed.lobItemsConfig) lobItemsConfig = parsed.lobItemsConfig;
                     if (parsed.removedStaffs && Array.isArray(parsed.removedStaffs)) removedStaffs = new Set(parsed.removedStaffs);
-                    if (parsed.storeSyncCode && document.getElementById('storeSyncCode')) {
-                        document.getElementById('storeSyncCode').value = parsed.storeSyncCode;
-                    }
+                    if (parsed.storeSyncCode && document.getElementById('storeSyncCode')) document.getElementById('storeSyncCode').value = parsed.storeSyncCode;
+                    
+                    if (parsed.ghToken && document.getElementById('ghTokenInput')) document.getElementById('ghTokenInput').value = parsed.ghToken;
+                    if (parsed.ghOwner && document.getElementById('ghOwnerInput')) document.getElementById('ghOwnerInput').value = parsed.ghOwner;
+                    if (parsed.ghRepo && document.getElementById('ghRepoInput')) document.getElementById('ghRepoInput').value = parsed.ghRepo;
+                    if (parsed.ghWorkflow && document.getElementById('ghWorkflowInput')) document.getElementById('ghWorkflowInput').value = parsed.ghWorkflow;
+
                     autoCalcTargets();
                 } catch(e) { console.error("Error loading config", e); }
             }
@@ -974,6 +1052,11 @@
             syncTimeout = setTimeout(() => {
                 pushToCloudSync(true);
             }, 1000);
+        }
+
+        function autoSyncToLocalAndCloud() {
+            saveConfigToLocal();
+            autoSyncToCloud();
         }
 
         async function pushToCloudSync(isSilent = false) {
@@ -1362,7 +1445,6 @@
             autoSyncToCloud();
         }
 
-        // DYNAMIC LOB CONFIG RENDER WITH APPLE FISCAL WEEKS (AUTOMATIC LIVE QUARTER)
         function renderLobConfigInputs() {
             const container = document.getElementById('lobConfigListContainer');
             if (!container) return;
@@ -1372,7 +1454,6 @@
             const sampleDate = uniqueDatesFromData[0] || '01-08-2026';
             const appleCal = getAppleCalendarInfo(sampleDate);
 
-            // Generate Dynamic Week Labels for Modal (5 Weeks)
             const weekLabels = [
                 `W${appleCal.startWeekNum}`,
                 `W${appleCal.startWeekNum + 1}`,
@@ -1734,7 +1815,6 @@ ${textList.join('\n')}`;
                 allMonthDates = uniqueDatesFromData;
             }
 
-            // DYNAMIC APPLE RETAIL FISCAL QUARTER & WEEKS CALCULATION
             const appleCal = getAppleCalendarInfo(sampleDate);
             const weekIntervals = [];
             const numWeeksInMonth = Math.ceil(allMonthDates.length / 7);
