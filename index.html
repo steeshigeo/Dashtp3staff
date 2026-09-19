@@ -90,7 +90,36 @@
         }
     </style>
 </head>
-<body class="p-4 md:p-8 pb-28 font-sans antialiased">
+<body class="p-4 md:p-8 pb-12 font-sans antialiased">
+
+    <!-- PASSWORD AUTHENTICATION MODAL -->
+    <div id="authModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-2xl z-[100] flex items-center justify-center p-4">
+        <div class="liquid-glass rounded-3xl p-8 max-w-md w-full border border-white/20 shadow-2xl text-center space-y-6">
+            <div class="inline-flex p-4 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-3xl shadow-xl shadow-indigo-500/30">
+                <i data-lucide="lock" class="w-8 h-8 text-white"></i>
+            </div>
+            
+            <div>
+                <h2 class="text-xl font-extrabold text-white">Protected Dashboard</h2>
+                <p class="text-xs opacity-70 mt-1">Masukkan password untuk mengakses data Sales Progress.</p>
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="passInput" placeholder="Masukkan Password" class="w-full bg-slate-900/90 border border-white/15 rounded-2xl px-4 py-3 text-sm text-center text-white focus:outline-none focus:border-indigo-500 font-bold placeholder:font-normal placeholder:opacity-50">
+                    <p id="passError" class="text-xs text-rose-400 font-semibold mt-2 hidden flex items-center justify-center gap-1">
+                        <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> Password salah! Silakan coba lagi.
+                    </p>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:opacity-90 text-white font-bold text-sm py-3 rounded-2xl shadow-lg transition">
+                    Unlock Access
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD CONTENT -->
     <div class="max-w-7xl mx-auto space-y-8">
 
         <!-- HEADER -->
@@ -549,6 +578,11 @@
 
     </div>
 
+    <!-- WATERMARK FOOTER -->
+    <footer class="text-center pt-10 pb-4 text-xs font-semibold opacity-60 tracking-wider">
+        - All right reserved Ⓒfrans 2026 -
+    </footer>
+
     <!-- MODAL 1: CONFIG TARGET & STAFF PERCENTAGE & CLOUD SYNC -->
     <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="liquid-glass rounded-3xl p-6 max-w-3xl w-full border border-white/20 shadow-2xl relative space-y-6 max-h-[90vh] overflow-y-auto">
@@ -565,11 +599,11 @@
             <div class="space-y-3 bg-indigo-950/40 p-4 rounded-2xl border border-indigo-500/30">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xs font-bold uppercase text-indigo-300 tracking-wider flex items-center gap-1.5">
-                        <i data-lucide="cloud" class="w-4 h-4 text-indigo-400"></i> Online Progress Sync (Google Sheets)
+                        <i data-lucide="cloud" class="w-4 h-4 text-indigo-400"></i> ONLINE PROGRESS SYNC - AUTOMATIC
                     </h3>
-                    <span id="cloudStatusLbl" class="text-[10px] font-bold text-emerald-400">AutoSync Active ✓</span>
+                    <span id="cloudStatusLbl" class="text-[10px] font-bold text-emerald-400">Synced ✓</span>
                 </div>
-                <p class="text-[11px] opacity-70">Gunakan Kode Toko yang sama di device lain agar seluruh progres target, alokasi staff, & LOB focus tersinkronkan otomatis.</p>
+                <p class="text-[11px] font-bold text-indigo-300 opacity-90 tracking-wide uppercase">KALO MAU SYNC MANUAL GUNAKAN TOMBOL DI BAWAH INI</p>
 
                 <div class="flex flex-col sm:flex-row items-center gap-2">
                     <input type="text" id="storeSyncCode" value="M121-STORE" onchange="autoSyncToCloud()" class="w-full sm:w-1/2 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-indigo-500" placeholder="Kode Toko (contoh: M121-STORE)">
@@ -759,6 +793,27 @@
         let staffRoleConfig = {};
         let syncTimeout = null;
 
+        // Password Authentication Check
+        function checkAuth() {
+            const isAuth = sessionStorage.getItem('m121_auth');
+            if (isAuth === 'true') {
+                document.getElementById('authModal').classList.add('hidden');
+            } else {
+                document.getElementById('authModal').classList.remove('hidden');
+            }
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const pass = document.getElementById('passInput').value.trim();
+            if (pass === 'maptech') {
+                sessionStorage.setItem('m121_auth', 'true');
+                document.getElementById('authModal').classList.add('hidden');
+            } else {
+                document.getElementById('passError').classList.remove('hidden');
+            }
+        }
+
         // Dynamic LOB Items List with Weekly Calendar Breakdown (W10-W14)
         let lobItemsConfig = [
             { id: 'iphone15', name: 'iPhone 15', key: 'iPhone 15', target: 27, w10: 7, w11: 6, w12: 6, w13: 6, w14: 2 },
@@ -873,7 +928,7 @@
             saveConfigToLocal();
             if (syncTimeout) clearTimeout(syncTimeout);
             syncTimeout = setTimeout(() => {
-                pushToCloudSync(true); // silent auto-sync
+                pushToCloudSync(true);
             }, 1000);
         }
 
@@ -900,7 +955,7 @@
                 const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?action=save&payload=${encodedPayload}`);
 
                 if (resData && resData.status === 'success') {
-                    if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
+                    if (lbl) lbl.textContent = 'Synced ✓';
                     if (!isSilent && btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Success!`;
                 } else {
                     throw new Error(resData ? resData.message : 'Gagal simpan');
@@ -939,10 +994,10 @@
                     renderStaffPercentInputs();
                     renderLobConfigInputs();
                     updateDashboard();
-                    if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
+                    if (lbl) lbl.textContent = 'Synced ✓';
                     if (!isSilent && btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Updated!`;
                 } else {
-                    if (lbl) lbl.textContent = 'Synced Local';
+                    if (lbl) lbl.textContent = 'Synced ✓';
                 }
             } catch(e) {
                 console.error("Cloud Sync Pull Error:", e);
@@ -1009,7 +1064,7 @@
             saveConfigToLocal();
             toggleConfigModal(false);
             updateDashboard();
-            pushToCloudSync(false); // Immediate sync to cloud
+            pushToCloudSync(false);
         }
 
         function autoCalcTargets() {
@@ -1072,8 +1127,9 @@
             }
         });
 
-        // AUTOLOAD INITIALIZATION ON PAGE LOAD
+        // INITIALIZATION
         window.addEventListener('DOMContentLoaded', async () => {
+            checkAuth();
             initTheme();
             loadConfigFromLocal();
 
@@ -1103,7 +1159,6 @@
                 console.log("Waiting for data.json...");
             }
 
-            // AUTOLOAD: Otomatis Ambil Data Terbaru Dari Cloud Begitu Web Dibuka
             await pullFromCloudSync(true);
         });
 
@@ -1141,7 +1196,6 @@
             updateDashboard();
         }
 
-        // CONFIG: STAFF PERCENTAGE & JABATAN WITH AUTOSYNC
         function removeStaffFromTarget(staffName) {
             removedStaffs.add(staffName);
             delete staffPercentConfig[staffName];
@@ -1242,7 +1296,6 @@
             autoSyncToCloud();
         }
 
-        // CONFIG: LOB DYNAMIC WITH AUTOSYNC
         function renderLobConfigInputs() {
             const container = document.getElementById('lobConfigListContainer');
             if (!container) return;
