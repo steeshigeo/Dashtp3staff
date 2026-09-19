@@ -755,8 +755,8 @@
 
     <!-- MAIN APP SCRIPT -->
     <script>
-        // GOOGLE APPS SCRIPT WEB APP URL TERINTEGRASI
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTfWkaFPdDN_mkBIVCIYroF1DM4Twj5KZGb96sYc3FohT1PcrsgTHAyPqiXOJsuSMuQ/exec";
+        // GOOGLE APPS SCRIPT WEB APP URL TERINTEGRASI LATEST
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2BOcYHemGmeQDIwKTB197QZiQwKV428kkpmjR0OEuujY2cA2uvXvX4XFepZE_tevP3w/exec";
 
         let rawData = [];
         let currentTab = 'ALL';
@@ -894,7 +894,7 @@
             });
         }
 
-        // ONLINE CLOUD SYNC ENGINE (MODE NO-CORS SUPREME STABILITY)
+        // ONLINE CLOUD SYNC ENGINE (JSONP Anti-CORS)
         async function pushToCloudSync() {
             const syncCode = (document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE').trim().toUpperCase() || 'M121-STORE';
             const btn = document.getElementById('btnPushCloud');
@@ -907,23 +907,20 @@
             if (window.lucide) lucide.createIcons();
 
             try {
-                const payload = JSON.stringify({
+                const payloadObj = {
                     storeCode: syncCode,
                     config: configObj
-                });
+                };
+                const encodedPayload = encodeURIComponent(JSON.stringify(payloadObj));
 
-                // Gunakan mode: 'no-cors' agar browser (Safari/Vercel/Chrome) TIDAK MEMBLOKIR POST request ke Google Apps Script
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'text/plain'
-                    },
-                    body: payload
-                });
+                const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?action=save&payload=${encodedPayload}`);
 
-                if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
-                if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Success!`;
+                if (resData && resData.status === 'success') {
+                    if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
+                    if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-300"></i> Success!`;
+                } else {
+                    throw new Error(resData ? resData.message : 'Gagal simpan');
+                }
             } catch(e) {
                 console.error("Cloud Sync Push Error:", e);
                 if (lbl) lbl.textContent = 'Local Saved Only';
@@ -946,14 +943,7 @@
             if (window.lucide) lucide.createIcons();
 
             try {
-                let resData;
-                try {
-                    const response = await fetch(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`);
-                    resData = await response.json();
-                } catch(fetchErr) {
-                    // Fallback otomatis ke JSONP jika Fetch biasa diblokir oleh browser CORS/Safari
-                    resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`);
-                }
+                const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`);
 
                 if (resData && resData.status === 'success' && resData.config) {
                     localStorage.setItem('m121_sales_config', JSON.stringify(resData.config));
