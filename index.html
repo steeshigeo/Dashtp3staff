@@ -887,15 +887,29 @@
             if (window.lucide) lucide.createIcons();
 
             try {
+                const payload = JSON.stringify({
+                    storeCode: syncCode,
+                    config: configObj
+                });
+
+                // Fetch dengan text/plain & redirect: follow untuk menangani CORS & 302 redirect Apps Script
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({
-                        storeCode: syncCode,
-                        config: configObj
-                    })
+                    mode: 'cors',
+                    redirect: 'follow',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
+                    body: payload
                 });
-                const resData = await response.json();
+
+                const resText = await response.text();
+                let resData;
+                try {
+                    resData = JSON.parse(resText);
+                } catch(err) {
+                    throw new Error("Respon Google Script bukan JSON valid. Pastikan izin 'Who has access' diset ke 'Anyone'.");
+                }
                 
                 if (resData.status === 'success') {
                     if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
@@ -904,9 +918,10 @@
                     throw new Error(resData.message || 'Push failed');
                 }
             } catch(e) {
-                console.error(e);
+                console.error("Cloud Sync Push Error:", e);
                 if (lbl) lbl.textContent = 'Local Saved Only';
                 if (btn) btn.innerHTML = `<i data-lucide="cloud-off" class="w-3.5 h-3.5 text-amber-300"></i> Local Saved`;
+                alert("Gagal Sync ke Google Sheet:\n" + e.message + "\n\nPastikan di Google Apps Script:\n1. 'Who has access' diset ke 'Anyone'\n2. Klik Deploy -> New Version.");
             }
 
             if (window.lucide) lucide.createIcons();
@@ -925,8 +940,18 @@
             if (window.lucide) lucide.createIcons();
 
             try {
-                const response = await fetch(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`);
-                const resData = await response.json();
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    redirect: 'follow'
+                });
+                const resText = await response.text();
+                let resData;
+                try {
+                    resData = JSON.parse(resText);
+                } catch(err) {
+                    throw new Error("Respon Google Script bukan JSON valid. Pastikan izin 'Who has access' diset ke 'Anyone'.");
+                }
 
                 if (resData.status === 'success' && resData.config) {
                     localStorage.setItem('m121_sales_config', JSON.stringify(resData.config));
@@ -935,12 +960,13 @@
                     if (lbl) lbl.textContent = 'Synced Google Sheet ✓';
                     if (btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Updated!`;
                 } else {
-                    throw new Error('Data tidak ditemukan');
+                    throw new Error('Data untuk Kode Toko ini belum ada di Google Sheet');
                 }
             } catch(e) {
-                console.error(e);
+                console.error("Cloud Sync Pull Error:", e);
                 if (lbl) lbl.textContent = 'No Cloud Data';
                 if (btn) btn.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-rose-300"></i> Not Found`;
+                alert("Gagal Ambil Data dari Google Sheet:\n" + e.message);
             }
 
             if (window.lucide) lucide.createIcons();
