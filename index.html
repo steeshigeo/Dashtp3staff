@@ -151,6 +151,9 @@
                 <button onclick="switchMainTab('matrix')" id="mainTab-matrix" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="users" class="w-4 h-4"></i> Staff Performance
                 </button>
+                <button onclick="switchMainTab('report')" id="mainTab-report" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
+                    <i data-lucide="file-text" class="w-4 h-4"></i> Daily Report
+                </button>
                 <button onclick="switchMainTab('lfl')" id="mainTab-lfl" class="px-4 py-2 rounded-2xl text-xs font-bold opacity-70 hover:opacity-100 flex items-center gap-2 whitespace-nowrap transition">
                     <i data-lucide="trending-up" class="w-4 h-4"></i> LFL Per Staff
                 </button>
@@ -294,19 +297,6 @@
                 </div>
             </div>
 
-            <!-- DAILY INVOICE COUNT -->
-            <div class="liquid-glass rounded-3xl p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-sm font-bold flex items-center gap-2">
-                        <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i> Total Qty Invoice Per Tanggal
-                    </h3>
-                    <span id="totalUniqueInvoicesLabel" class="text-xs font-extrabold text-emerald-400">0 Unique Invoices</span>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3" id="dailyInvoiceGrid">
-                    <!-- Dynamic Daily Invoice Count Cards -->
-                </div>
-            </div>
-
             <!-- STORE LFL & VAS OVERVIEW -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Store LFL -->
@@ -346,12 +336,18 @@
 
         <!-- ==================== VIEW 2: STAFF PERFORMANCE ==================== -->
         <div id="view-matrix" class="space-y-6 hidden">
-            <!-- MONTHLY OVERVIEW TABLE PER STAFF -->
+            <!-- MONTHLY OVERVIEW TABLE PER STAFF WITH SORTING CONTROLS -->
             <div class="liquid-glass rounded-3xl p-6">
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
                     <h3 class="text-sm font-bold flex items-center gap-2">
                         <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> Ringkasan Total Month Per Staff
                     </h3>
+                    <div class="flex items-center gap-1.5 bg-slate-900/80 p-1 rounded-2xl border border-white/10">
+                        <span class="text-[10px] opacity-60 font-bold px-2">Sort:</span>
+                        <button onclick="setStaffSummarySort('ach-desc')" id="btnSortStaff-ach-desc" class="px-3 py-1 rounded-xl text-[10px] font-bold bg-indigo-500 text-white shadow-md transition">% Ach Month (↓)</button>
+                        <button onclick="setStaffSummarySort('name-asc')" id="btnSortStaff-name-asc" class="px-3 py-1 rounded-xl text-[10px] font-bold bg-white/5 text-slate-300 hover:bg-white/10 transition">Name (A-Z)</button>
+                        <button onclick="setStaffSummarySort('target-desc')" id="btnSortStaff-target-desc" class="px-3 py-1 rounded-xl text-[10px] font-bold bg-white/5 text-slate-300 hover:bg-white/10 transition">Target (↓)</button>
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -387,7 +383,26 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 3: LFL PER STAFF ==================== -->
+        <!-- ==================== VIEW 3: DAILY REPORT (TAB BARU) ==================== -->
+        <div id="view-report" class="space-y-6 hidden">
+            <!-- DAILY INVOICE COUNT CARD -->
+            <div class="liquid-glass rounded-3xl p-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                    <div>
+                        <h3 class="text-sm font-bold flex items-center gap-2">
+                            <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i> Total Qty Invoice Per Tanggal
+                        </h3>
+                        <p class="text-xs opacity-60 mt-0.5">Klik pada salah satu tanggal di bawah ini untuk melihat & menyalin Closing Report & Tracker Report.</p>
+                    </div>
+                    <span id="totalUniqueInvoicesLabel" class="text-xs font-extrabold text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20">0 Unique Invoices</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3" id="dailyInvoiceGrid">
+                    <!-- Dynamic Daily Invoice Count Cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 4: LFL PER STAFF ==================== -->
         <div id="view-lfl" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
@@ -402,7 +417,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 4: LOB FOCUS STAFF ==================== -->
+        <!-- ==================== VIEW 5: LOB FOCUS STAFF ==================== -->
         <div id="view-lob" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
@@ -413,7 +428,7 @@
 
                 <!-- LOB FOCUS PER ITEM CARDS -->
                 <div class="space-y-6" id="lobItemsContainer">
-                    <!-- Dynamic LOB Item Cards (Store total + Staff breakdown QTY) -->
+                    <!-- Dynamic LOB Item Cards -->
                 </div>
 
                 <!-- LOB FOCUS WEEKLY CAPSULES BREAKDOWN PER WEEK -->
@@ -431,7 +446,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 5: DEVICE STAFF ==================== -->
+        <!-- ==================== VIEW 6: DEVICE STAFF ==================== -->
         <div id="view-device" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
@@ -446,7 +461,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 6: AKSESORIS STAFF ==================== -->
+        <!-- ==================== VIEW 7: AKSESORIS STAFF ==================== -->
         <div id="view-aksesoris" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
@@ -461,7 +476,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 7: VAS STAFF ==================== -->
+        <!-- ==================== VIEW 8: VAS STAFF ==================== -->
         <div id="view-vas" class="space-y-6 hidden">
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
@@ -476,7 +491,7 @@
             </div>
         </div>
 
-        <!-- ==================== VIEW 8: TRANSACTIONS ==================== -->
+        <!-- ==================== VIEW 9: TRANSACTIONS ==================== -->
         <div id="view-transactions" class="space-y-6 hidden">
             <div class="liquid-glass rounded-3xl p-6">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
@@ -496,7 +511,7 @@
                             <button onclick="switchTab('VAS')" id="tab-VAS" class="px-4 py-1.5 rounded-xl text-xs font-bold opacity-70 hover:opacity-100 whitespace-nowrap">VAS</button>
                         </div>
 
-                        <!-- SORTING BUTTON COLLAPSIBLE DROPDOWN CONTROLS -->
+                        <!-- SORTING BUTTON DROPDOWN CONTROLS -->
                         <div class="relative w-full sm:w-auto">
                             <button onclick="toggleSortDropdown()" id="sortDropdownToggleBtn" class="liquid-glass px-4 py-2 rounded-2xl text-xs font-bold text-white flex items-center justify-between gap-2 border border-white/10 hover:border-indigo-500/40 transition w-full sm:w-auto">
                                 <span class="flex items-center gap-1.5">
@@ -506,7 +521,7 @@
                                 <i data-lucide="chevron-down" id="sortChevronIcon" class="w-3.5 h-3.5 opacity-70 transition-transform duration-300"></i>
                             </button>
 
-                            <!-- DROPDOWN LIST (COLLAPSIBLE / DEFAULT HIDDEN) -->
+                            <!-- DROPDOWN LIST -->
                             <div id="sortDropdownMenu" class="absolute right-0 mt-2 w-44 bg-slate-900/95 backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl p-1.5 space-y-1 z-50 hidden">
                                 <button onclick="setTxSort('date-desc')" id="sortBtn-date-desc" class="w-full text-left px-3 py-1.5 rounded-xl text-[11px] font-bold hover:bg-white/10 transition flex items-center justify-between">
                                     Date Terbaru (↓)
@@ -630,7 +645,7 @@
                 </div>
             </div>
 
-            <!-- 2. TARGET CATEGORY STORE (RP) INCLUDING DEVICE -->
+            <!-- 2. TARGET CATEGORY STORE (RP) -->
             <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
                 <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">2. Target Category Store (Rp)</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -655,7 +670,7 @@
                     <h3 class="text-xs font-bold uppercase text-indigo-400 tracking-wider">3. Alokasi Pembagian Target & Jabatan Staff (%)</h3>
                     <div class="flex items-center gap-2">
                         <span id="totalPercentBadge" class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Total: 100%</span>
-                        <button onclick="resetEqualStaffPercentages()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition">Reset Sama Rata</button>
+                        <button onclick="resetEqualStaffPercentages(true)" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition">Reset Sama Rata</button>
                         <button onclick="restoreAllRemovedStaffs()" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 transition">Restore All Staff</button>
                     </div>
                 </div>
@@ -679,7 +694,7 @@
                 </div>
 
                 <div class="space-y-3 max-h-64 overflow-y-auto pr-1" id="lobConfigListContainer">
-                    <!-- Dynamic LOB Item Rows with Target Inputs -->
+                    <!-- Dynamic LOB Item Rows -->
                 </div>
             </div>
 
@@ -773,7 +788,7 @@
 
     <!-- MAIN APP SCRIPT -->
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfvd-zz6aki5jj6RKCU_JLljx-MOjqNTFMZHIJXWni6nxmgvbgpKh0jqI2B203-_SSsg/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2BOcYHemGmeQDIwKTB197QZiQwKV428kkpmjR0OEuujY2cA2uvXvX4XFepZE_tevP3w/exec";
 
         // GITHUB CONFIGURATION
         const GH_OWNER = "steeshigeo";
@@ -784,45 +799,43 @@
         let currentTab = 'ALL';
         let currentMainView = 'overview';
         let currentTxSort = 'date-desc';
+        let staffSummarySort = 'ach-desc'; // Default Sort Total Month Staff
 
         let removedStaffs = new Set();
         let staffPercentConfig = {};
         let staffRoleConfig = {};
         let syncTimeout = null;
+        let isInitializing = true; // Guard flag agar device baru tidak meng-overwrite cloud data
 
-        // FETCH TOKEN OTOMATIS DARI GOOGLE SHEET (KOLOM A2) VIA APPS SCRIPT JSONP
+        // FETCH TOKEN OTOMATIS DARI GOOGLE SHEET (KOLOM A2) VIA APPS SCRIPT
         async function fetchTokenFromGSheetSilently() {
             try {
                 const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?action=getToken`);
                 if (resData && resData.status === 'success' && resData.token) {
                     const token = String(resData.token).trim();
-                    if (token) {
-                        return token;
-                    }
+                    if (token) return token;
                 }
             } catch (err) {
-                console.error("Auto fetch token error:", err);
+                console.warn("Auto fetch GSheet terhalang CORS/Network.");
             }
             return null;
         }
 
-        // Trigger GitHub Action Workflow dengan Auto-Fill Token dari Google Sheet
+        // Trigger GitHub Action Workflow
         async function triggerGitHubWorkflow() {
             const btn = document.getElementById('btnRunAction');
             if (btn) {
                 btn.disabled = true;
-                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-purple-400"></i> Fetching Token...`;
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-purple-400"></i> Checking Token...`;
                 if (window.lucide) lucide.createIcons();
             }
 
-            // 1. Cek token di input config lokal terlebih dahulu, jika kosong/tidak ada ambil otomatis dari GSheet (A2)
             let token = document.getElementById('ghTokenInput') ? document.getElementById('ghTokenInput').value.trim() : '';
-            if (!token) {
-                token = localStorage.getItem('m121_gh_token') || '';
-            }
+            if (!token) token = localStorage.getItem('m121_gh_token') || '';
 
             if (!token) {
-                // Ambil otomatis dari GSheet kolom A2
+                if (btn) btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-purple-400"></i> Fetching GSheet...`;
+                if (window.lucide) lucide.createIcons();
                 token = await fetchTokenFromGSheetSilently();
             }
 
@@ -832,7 +845,7 @@
                     btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 text-purple-400"></i> Run Actions`;
                     if (window.lucide) lucide.createIcons();
                 }
-                alert('Token GitHub tidak ditemukan di GSheet (Kolom A2) maupun di LocalStorage. Pastikan token sudah diisi di Google Sheet.');
+                alert('Gagal mengambil token otomatis dari Google Sheet. Silakan masukkan token GitHub PAT Anda di menu "Config" (1x saja).');
                 toggleConfigModal(true);
                 return;
             }
@@ -851,22 +864,20 @@
                         'X-GitHub-Api-Version': '2022-11-28',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        ref: 'main'
-                    })
+                    body: JSON.stringify({ ref: 'main' })
                 });
 
                 if (res.ok || res.status === 204) {
                     if (btn) btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Running!`;
                     if (window.lucide) lucide.createIcons();
-                    alert('Berhasil memicu GitHub Action! Token terambil otomatis dari GSheet dan workflow sedang berjalan.');
+                    alert('Berhasil memicu GitHub Action! Workflow sedang berjalan.');
                 } else {
                     const errObj = await res.json().catch(() => ({}));
                     throw new Error(errObj.message || `Status Code ${res.status}`);
                 }
             } catch (err) {
                 console.error("GitHub Action Trigger Error:", err);
-                alert('Gagal menjalankan GitHub Action: ' + err.message + '\n\nPastikan token di Kolom A2 Google Sheet valid dan belum di-revoke oleh GitHub.');
+                alert('Gagal menjalankan GitHub Action: ' + err.message);
                 if (btn) btn.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-rose-400"></i> Failed`;
                 if (window.lucide) lucide.createIcons();
             } finally {
@@ -876,7 +887,7 @@
                         btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 text-purple-400"></i> Run Actions`;
                         if (window.lucide) lucide.createIcons();
                     }
-                }, 3500);
+                }, 3000);
             }
         }
 
@@ -1024,6 +1035,7 @@
         }
 
         function autoSyncToCloud() {
+            if (isInitializing) return; // Prevent overwriting cloud on startup!
             saveConfigToLocal();
             if (syncTimeout) clearTimeout(syncTimeout);
             syncTimeout = setTimeout(() => {
@@ -1032,6 +1044,7 @@
         }
 
         async function pushToCloudSync(isSilent = false) {
+            if (isInitializing) return; // Guard against startup accidental push
             const syncCode = (document.getElementById('storeSyncCode') ? document.getElementById('storeSyncCode').value : 'M121-STORE').trim().toUpperCase() || 'M121-STORE';
             const btn = document.getElementById('btnPushCloud');
             const lbl = document.getElementById('cloudStatusLbl');
@@ -1044,12 +1057,8 @@
             if (window.lucide) lucide.createIcons();
 
             try {
-                const payloadObj = {
-                    storeCode: syncCode,
-                    config: configObj
-                };
+                const payloadObj = { storeCode: syncCode, config: configObj };
                 const encodedPayload = encodeURIComponent(JSON.stringify(payloadObj));
-
                 const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?action=save&payload=${encodedPayload}`);
 
                 if (resData && resData.status === 'success') {
@@ -1085,12 +1094,11 @@
             try {
                 const resData = await fetchJSONP(`${GOOGLE_SCRIPT_URL}?storeCode=${encodeURIComponent(syncCode)}`);
 
-                if (resData && resData.status === 'success' && resData.config) {
+                if (resData && resData.status === 'success' && resData.config && Object.keys(resData.config).length > 0) {
                     localStorage.setItem('m121_sales_config', JSON.stringify(resData.config));
                     loadConfigFromLocal();
                     renderStaffPercentInputs();
                     renderLobConfigInputs();
-                    updateDashboard();
                     if (lbl) lbl.textContent = 'Synced ✓';
                     if (!isSilent && btn) btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-cyan-300"></i> Updated!`;
                 } else {
@@ -1131,7 +1139,7 @@
 
         function switchMainTab(viewName) {
             currentMainView = viewName;
-            ['overview', 'matrix', 'lfl', 'lob', 'device', 'aksesoris', 'vas', 'transactions'].forEach(v => {
+            ['overview', 'matrix', 'report', 'lfl', 'lob', 'device', 'aksesoris', 'vas', 'transactions'].forEach(v => {
                 const btn = document.getElementById(`mainTab-${v}`);
                 const view = document.getElementById(`view-${v}`);
                 if (v === viewName) {
@@ -1214,6 +1222,21 @@
             updateDashboard();
         }
 
+        // FITUR SORTING PADA RINGKASAN MONTH STAFF
+        function setStaffSummarySort(sortType) {
+            staffSummarySort = sortType;
+            ['ach-desc', 'name-asc', 'target-desc'].forEach(st => {
+                const btn = document.getElementById(`btnSortStaff-${st}`);
+                if (!btn) return;
+                if (st === sortType) {
+                    btn.className = "px-3 py-1 rounded-xl text-[10px] font-bold bg-indigo-500 text-white shadow-md transition";
+                } else {
+                    btn.className = "px-3 py-1 rounded-xl text-[10px] font-bold bg-white/5 text-slate-300 hover:bg-white/10 transition";
+                }
+            });
+            updateDashboard();
+        }
+
         window.addEventListener('click', (e) => {
             const btn = document.getElementById('sortDropdownToggleBtn');
             const menu = document.getElementById('sortDropdownMenu');
@@ -1224,10 +1247,13 @@
             }
         });
 
-        // INITIALIZATION
+        // INITIALIZATION SAFE FLOW (PULL CLOUD FIRST)
         window.addEventListener('DOMContentLoaded', async () => {
             initTheme();
             loadConfigFromLocal();
+
+            // Pull cloud config first to prevent overwriting cloud with defaults
+            await pullFromCloudSync(true);
 
             try {
                 const res = await fetch('data.json');
@@ -1246,16 +1272,17 @@
 
                     initStaffSelector();
                     autoCalcTargets();
+
                     if (Object.keys(staffPercentConfig).length === 0) {
-                        resetEqualStaffPercentages();
+                        resetEqualStaffPercentages(false); // Don't auto-push on startup
                     }
-                    updateDashboard();
                 }
             } catch (err) {
                 console.log("Waiting for data.json...");
             }
 
-            await pullFromCloudSync(true);
+            isInitializing = false; // System initialized safely
+            updateDashboard();
         });
 
         function getActiveStaffList() {
@@ -1295,19 +1322,19 @@
         function removeStaffFromTarget(staffName) {
             removedStaffs.add(staffName);
             delete staffPercentConfig[staffName];
-            resetEqualStaffPercentages();
+            resetEqualStaffPercentages(true);
             autoSyncToCloud();
             updateDashboard();
         }
 
         function restoreAllRemovedStaffs() {
             removedStaffs.clear();
-            resetEqualStaffPercentages();
+            resetEqualStaffPercentages(true);
             autoSyncToCloud();
             updateDashboard();
         }
 
-        function resetEqualStaffPercentages() {
+        function resetEqualStaffPercentages(shouldSync = true) {
             const activeStaffs = getActiveStaffList();
             if (activeStaffs.length === 0) return;
             const equalPct = (100 / activeStaffs.length).toFixed(2);
@@ -1316,7 +1343,7 @@
                 if (!staffRoleConfig[s]) staffRoleConfig[s] = 'SA';
             });
             renderStaffPercentInputs();
-            autoSyncToCloud();
+            if (shouldSync && !isInitializing) autoSyncToCloud();
             updateDashboard();
         }
 
@@ -1787,23 +1814,28 @@ ${textList.join('\n')}`;
             }
 
             const appleCal = getAppleCalendarInfo(sampleDate);
-            const weekIntervals = [];
-            const numWeeksInMonth = Math.ceil(allMonthDates.length / 7);
 
-            for (let i = 0; i < numWeeksInMonth; i++) {
-                const startIdx = i * 7;
-                let wDates = [];
-                if (startIdx < allMonthDates.length) {
-                    if (i === numWeeksInMonth - 1) {
-                        wDates = allMonthDates.slice(startIdx);
-                    } else {
-                        wDates = allMonthDates.slice(startIdx, startIdx + 7);
-                    }
-                }
-                if (wDates.length > 0) {
-                    const wNum = appleCal.startWeekNum + i;
+            // LOGIKA PEMBAGIAN WEEK BERDASARKAN ATURAN (SISA HARIAN < 5 DIGABUNG KE WEEK SEBELUMNYA)
+            const weekIntervals = [];
+            let dayIdx = 0;
+            let weekCounter = 1;
+
+            while (dayIdx < allMonthDates.length) {
+                let remainingDaysCount = allMonthDates.length - dayIdx;
+                // Jika sisa hari di akhir bulan kurang dari 5 hari dan sudah ada week sebelumnya, gabungkan!
+                if (remainingDaysCount < 5 && weekIntervals.length > 0) {
+                    const lastWeek = weekIntervals[weekIntervals.length - 1];
+                    const extraDates = allMonthDates.slice(dayIdx);
+                    lastWeek.dates = lastWeek.dates.concat(extraDates);
+                    lastWeek.endDate = extraDates[extraDates.length - 1];
+                    lastWeek.label = `${lastWeek.startDate} s/d ${lastWeek.endDate}`;
+                    break;
+                } else {
+                    let chunkSize = Math.min(7, remainingDaysCount);
+                    let wDates = allMonthDates.slice(dayIdx, dayIdx + chunkSize);
+                    let wNum = appleCal.startWeekNum + (weekCounter - 1);
                     weekIntervals.push({
-                        num: i + 1,
+                        num: weekCounter,
                         wNum: wNum,
                         wName: `W${wNum}`,
                         startDate: wDates[0],
@@ -1811,6 +1843,8 @@ ${textList.join('\n')}`;
                         dates: wDates,
                         label: `${wDates[0]} s/d ${wDates[wDates.length - 1]}`
                     });
+                    dayIdx += chunkSize;
+                    weekCounter++;
                 }
             }
 
@@ -1890,6 +1924,7 @@ ${textList.join('\n')}`;
             document.getElementById('badgeVAS').textContent = `${pVAS}%`;
             document.getElementById('barVAS').style.width = `${pVAS}%`;
 
+            // RENDER DAILY INVOICE QTY GRID (DI TAB DAILY REPORT)
             const dailyInvoiceGrid = document.getElementById('dailyInvoiceGrid');
             dailyInvoiceGrid.innerHTML = '';
             let totalStoreUniqueInvoices = 0;
@@ -1904,11 +1939,11 @@ ${textList.join('\n')}`;
                 totalStoreUniqueInvoices += invCount;
 
                 const card = document.createElement('div');
-                card.className = 'liquid-glass-card p-2 rounded-xl text-center flex flex-col justify-between cursor-pointer hover:border-emerald-400/50 hover:scale-105 transition';
+                card.className = 'liquid-glass-card p-2.5 rounded-xl text-center flex flex-col justify-between cursor-pointer hover:border-emerald-400/50 hover:scale-105 transition';
                 card.onclick = () => openClosingReport(dt);
                 card.innerHTML = `
                     <span class="text-[9px] font-mono opacity-60 block">${dt}</span>
-                    <div class="text-xs font-black text-emerald-400 mt-0.5">${invCount} <span class="text-[8px] font-normal opacity-60">Inv</span></div>
+                    <div class="text-xs font-black text-emerald-400 mt-1">${invCount} <span class="text-[8px] font-normal opacity-60">Inv</span></div>
                 `;
                 dailyInvoiceGrid.appendChild(card);
             });
@@ -1950,27 +1985,40 @@ ${textList.join('\n')}`;
                 vasContainerStore.appendChild(card);
             });
 
+            // RENDER RINGKASAN MONTH STAFF DENGAN DUKUNGAN SORTING (% ACH MONTH, NAME, TARGET MONTH)
             const summaryBody = document.getElementById('staffMonthlySummaryBody');
             summaryBody.innerHTML = '';
 
-            activeStaffs.forEach(stf => {
+            let staffSummaryList = activeStaffs.map(stf => {
                 const sData = rawData.filter(r => r.staff === stf);
                 const sAchM = sData.reduce((acc, r) => acc + r.net_price, 0);
-
                 const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
                 const tStaffM = Math.round((tStoreMonth * pctShare) / 100);
                 const pctM = tStaffM ? Math.round((sAchM / tStaffM) * 100) : 0;
                 const role = staffRoleConfig[stf] || 'SA';
+                const name = stf.split('/')[1] || stf;
 
+                return { stf, name, role, pctShare, tStaffM, sAchM, pctM };
+            });
+
+            // LOGIKA SORTING STAFF
+            staffSummaryList.sort((a, b) => {
+                if (staffSummarySort === 'ach-desc') return b.pctM - a.pctM;
+                if (staffSummarySort === 'name-asc') return a.name.localeCompare(b.name);
+                if (staffSummarySort === 'target-desc') return b.tStaffM - a.tStaffM;
+                return 0;
+            });
+
+            staffSummaryList.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-white/5 transition';
                 tr.innerHTML = `
-                    <td class="py-3 px-3 font-bold">${stf.split('/')[1] || stf}</td>
-                    <td class="py-3 px-3 text-center"><span class="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 text-[10px] font-bold border border-indigo-500/30">${role}</span></td>
-                    <td class="py-3 px-3 text-center opacity-70 font-mono">${pctShare}%</td>
-                    <td class="py-3 px-3 text-right opacity-70">${fmtRp(tStaffM)}</td>
-                    <td class="py-3 px-3 text-right font-bold text-indigo-400">${fmtRp(sAchM)}</td>
-                    <td class="py-3 px-3 text-center font-bold ${pctM >= 100 ? 'text-emerald-400' : 'text-indigo-400'}">${pctM}%</td>
+                    <td class="py-3 px-3 font-bold">${item.name}</td>
+                    <td class="py-3 px-3 text-center"><span class="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 text-[10px] font-bold border border-indigo-500/30">${item.role}</span></td>
+                    <td class="py-3 px-3 text-center opacity-70 font-mono">${item.pctShare}%</td>
+                    <td class="py-3 px-3 text-right opacity-70">${fmtRp(item.tStaffM)}</td>
+                    <td class="py-3 px-3 text-right font-bold text-indigo-400">${fmtRp(item.sAchM)}</td>
+                    <td class="py-3 px-3 text-center font-bold ${item.pctM >= 100 ? 'text-emerald-400' : 'text-indigo-400'}">${item.pctM}%</td>
                 `;
                 summaryBody.appendChild(tr);
             });
@@ -2160,12 +2208,6 @@ ${textList.join('\n')}`;
 
                     const sW14Sold = sData.filter(r => weekIntervals[4] && weekIntervals[4].dates.includes(r.date) && matchFn(r)).length;
                     const sW14Tgt = Math.round(((lobItem.w14 || 0) * pctShare) / 100);
-
-                    const w1Lbl = weekIntervals[0] ? weekIntervals[0].wName : 'W1';
-                    const w2Lbl = weekIntervals[1] ? weekIntervals[1].wName : 'W2';
-                    const w3Lbl = weekIntervals[2] ? weekIntervals[2].wName : 'W3';
-                    const w4Lbl = weekIntervals[3] ? weekIntervals[3].wName : 'W4';
-                    const w5Lbl = weekIntervals[4] ? weekIntervals[4].wName : 'W5';
 
                     staffContributionRows += `
                         <tr class="hover:bg-white/5 transition border-b border-white/5 text-xs">
