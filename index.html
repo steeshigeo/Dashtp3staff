@@ -1792,36 +1792,27 @@ ${textList.join('\n')}`;
 
             const appleCal = getAppleCalendarInfo(sampleDate);
 
-            // LOGIKA PEMBAGIAN WEEK (SISA HARIAN < 5 DIGABUNG KE WEEK SEBELUMNYA)
+            // LOGIKA PEMBAGIAN WEEK (STRIKTIF 7 HARI, SISA HARI OOTMASI DITAMPILKAN DI WEEK SELANJUTNYA)
             const weekIntervals = [];
             let dayIdx = 0;
             let weekCounter = 1;
 
             while (dayIdx < allMonthDates.length) {
                 let remainingDaysCount = allMonthDates.length - dayIdx;
-                if (remainingDaysCount < 5 && weekIntervals.length > 0) {
-                    const lastWeek = weekIntervals[weekIntervals.length - 1];
-                    const extraDates = allMonthDates.slice(dayIdx);
-                    lastWeek.dates = lastWeek.dates.concat(extraDates);
-                    lastWeek.endDate = extraDates[extraDates.length - 1];
-                    lastWeek.label = `${lastWeek.startDate} s/d ${lastWeek.endDate}`;
-                    break;
-                } else {
-                    let chunkSize = Math.min(7, remainingDaysCount);
-                    let wDates = allMonthDates.slice(dayIdx, dayIdx + chunkSize);
-                    let wNum = appleCal.startWeekNum + (weekCounter - 1);
-                    weekIntervals.push({
-                        num: weekCounter,
-                        wNum: wNum,
-                        wName: `W${wNum}`,
-                        startDate: wDates[0],
-                        endDate: wDates[wDates.length - 1],
-                        dates: wDates,
-                        label: `${wDates[0]} s/d ${wDates[wDates.length - 1]}`
-                    });
-                    dayIdx += chunkSize;
-                    weekCounter++;
-                }
+                let chunkSize = Math.min(7, remainingDaysCount);
+                let wDates = allMonthDates.slice(dayIdx, dayIdx + chunkSize);
+                let wNum = appleCal.startWeekNum + (weekCounter - 1);
+                weekIntervals.push({
+                    num: weekCounter,
+                    wNum: wNum,
+                    wName: `W${wNum}`,
+                    startDate: wDates[0],
+                    endDate: wDates[wDates.length - 1],
+                    dates: wDates,
+                    label: wDates.length === 1 ? `${wDates[0]}` : `${wDates[0]} s/d ${wDates[wDates.length - 1]}`
+                });
+                dayIdx += chunkSize;
+                weekCounter++;
             }
 
             const last7Dates = uniqueDatesFromData.slice(-7);
@@ -2014,8 +2005,8 @@ ${textList.join('\n')}`;
 
                     const pctShare = staffPercentConfig[stf] || (100 / activeStaffs.length);
                     const tStaffM = Math.round((tStoreMonth * pctShare) / 100);
-                    const tStaffW = Math.round(tStaffM / 4);
                     const tStaffD = Math.round(tStaffM / 30);
+                    const tStaffW = Math.round(tStaffD * wk.dates.length);
                     const pctW = tStaffW ? Math.round((sAchWeek / tStaffW) * 100) : 0;
                     const role = staffRoleConfig[stf] || 'SA';
 
