@@ -13528,5 +13528,192 @@
     "net_price": 1970000.0,
     "category": "VAS",
     "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "23018195 / ACHMAD RAFI KURNIA TSANY",
+    "product_name": "IPHONE 17 PRO MAX 256GB SILVER",
+    "article": "APPMFYM4ID/A",
+    "price": 24999000.0,
+    "receipt": "100044379",
+    "net_price": 24999000.0,
+    "category": "Device",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "23018195 / ACHMAD RAFI KURNIA TSANY",
+    "product_name": "PLATINUM50-12",
+    "article": "IDTPLATINUM50-12",
+    "price": 950000.0,
+    "receipt": "100044379",
+    "net_price": 777000.0,
+    "category": "VAS",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "23026699 / MOH. ASFIYAK KAMIDA",
+    "product_name": "IPHONE 17 PRO MAX 256GB COSMIC",
+    "article": "APPMFYN4ID/A",
+    "price": 24999000.0,
+    "receipt": "100044387",
+    "net_price": 24999000.0,
+    "category": "Device",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "24012033 / LINDA INDI KUSUMANINGRUM",
+    "product_name": "20W USB-C POWER ADAPTER",
+    "article": "APPMD3J4ZA/A",
+    "price": 499000.0,
+    "receipt": "100044386",
+    "net_price": 499000.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "24012033 / LINDA INDI KUSUMANINGRUM",
+    "product_name": "IPHONE 17 PRO MAX 256GB DEEP B",
+    "article": "APPMFYP4ID/A",
+    "price": 24999000.0,
+    "receipt": "100044384",
+    "net_price": 24999000.0,
+    "category": "Device",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "24012033 / LINDA INDI KUSUMANINGRUM",
+    "product_name": "60W USB-C CHARGE CABLE (1M)-IT",
+    "article": "APPMW493ZA/A",
+    "price": 409000.0,
+    "receipt": "100044382",
+    "net_price": 409000.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "24012033 / LINDA INDI KUSUMANINGRUM",
+    "product_name": "60W USB-C CHARGE CABLE (1M)-IT",
+    "article": "APPMW493ZA/A",
+    "price": 409000.0,
+    "receipt": "100044386",
+    "net_price": 409000.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "24012033 / LINDA INDI KUSUMANINGRUM",
+    "product_name": "240W USB-C CHARGE CABLE (2M)-I",
+    "article": "APPMYQT3ZA/A",
+    "price": 549000.0,
+    "receipt": "100044385",
+    "net_price": 549000.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "24017390 / FRANDY PUTRA",
+    "product_name": "IP17 PRO Q3AIR MAG STAND DARK",
+    "article": "T0RX00RP102R000083",
+    "price": 792750.0,
+    "receipt": "100044381",
+    "net_price": 792750.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "25013300 / HYSKIA INDRA APHISTA",
+    "product_name": "USB-C TO LIGHTNING CABLE (1 M)",
+    "article": "APPMUQ93ZA/A",
+    "price": 459000.0,
+    "receipt": "100044377",
+    "net_price": 459000.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "25013300 / HYSKIA INDRA APHISTA",
+    "product_name": "60W USB-C CHARGE CABLE (1M)-IT",
+    "article": "APPMW493ZA/A",
+    "price": 409000.0,
+    "receipt": "100044378",
+    "net_price": 409000.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "25013300 / HYSKIA INDRA APHISTA",
+    "product_name": "AIRPODS 4",
+    "article": "APPMXP63ID/A",
+    "price": 2399000.0,
+    "receipt": "100044375",
+    "net_price": 2399000.0,
+    "category": "Accessories",
+    "lob_focus": "AirPods"
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "25013300 / HYSKIA INDRA APHISTA",
+    "product_name": "OFFICE HOME 2024",
+    "article": "MFTEP2-06796.EC",
+    "price": 2829000.0,
+    "receipt": "100044376",
+    "net_price": 2829000.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "26024322 / NUR INDAH OKTAVIANI",
+    "product_name": "IPHONE 17 PRO MAX 256GB DEEP B",
+    "article": "APPMFYP4ID/A",
+    "price": 24999000.0,
+    "receipt": "100044383",
+    "net_price": 24999000.0,
+    "category": "Device",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "26024322 / NUR INDAH OKTAVIANI",
+    "product_name": "60W USB-C CHARGE CABLE (1M)-IT",
+    "article": "APPMW493ZA/A",
+    "price": 409000.0,
+    "receipt": "100044380",
+    "net_price": 409000.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "26024322 / NUR INDAH OKTAVIANI",
+    "product_name": "IP17 PRO MAX MAG FEATURE KS TR",
+    "article": "CRRCR63528",
+    "price": 599000.0,
+    "receipt": "100044383",
+    "net_price": 599000.0,
+    "category": "Accessories",
+    "lob_focus": null
+  },
+  {
+    "date": "29-09-2026",
+    "staff": "26024322 / NUR INDAH OKTAVIANI",
+    "product_name": "PAY9GET12 DEV/IPH 100K EVENT",
+    "article": "TSL9-12EVENT100K",
+    "price": 999000.0,
+    "receipt": "100044383",
+    "net_price": 999000.0,
+    "category": "VAS",
+    "lob_focus": null
   }
 ]
