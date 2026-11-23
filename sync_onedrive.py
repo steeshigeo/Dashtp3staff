@@ -6,8 +6,8 @@ import requests
 import pandas as pd
 
 # Link OneDrive
-URL_MERCHANDISE_REPORT = "https://1drv.ms/x/c/426713E72C49EDEB/IQB6fEpkF1TaRr1Knh3LPIqaAWi45hl7dda2wv6TXqeRxi0?e=LZvUgj"
-URL_SALESPERSON_WISE = "https://1drv.ms/x/c/426713E72C49EDEB/IQBD3oB0QQCkTZRPXh7HhhWoAQ8oQIHav9BkCWSKDtwxFXI?e=YjQH93"
+URL_MERCHANDISE_REPORT = "https://1drv.ms/x/c/426713E72C49EDEB/IQDQ_mq8wDZETKeEwsf0Xxc3AY8RQIhGAaRPCfipiwy30NU?e=wURarG"
+URL_SALESPERSON_WISE = "https://1drv.ms/x/c/426713E72C49EDEB/IQDQ_mq8wDZETKeEwsf0Xxc3AY8RQIhGAaRPCfipiwy30NU?e=wURarG"
 
 def get_download_url(share_url):
     if not share_url:
